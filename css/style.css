@@ -1,33 +1,45 @@
-/* Navbar starts transparent */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #000;
+  color: #fff;
+  padding-top: 80px;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 .header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 999;
-  /* border-bottom: 1px solid rgba(128, 0, 128, 0.3); */
   background: transparent;
   transition: background 0.4s ease, backdrop-filter 0.4s ease;
 }
 
-/* When scrolled */
 .header.scrolled {
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(147, 51, 234, 0.4);
-}
-
-/* Add top padding so content doesn’t hide behind navbar */
-body {
-  margin: 0;
-  font-family: "Inter", sans-serif;
-  background: #000;
-  color: white;
-  padding-top: 80px; /* adjust based on navbar height */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .container {
   padding: 1rem 1.5rem;
+  max-width: 100%;
 }
 
 .header-inner {
@@ -45,9 +57,10 @@ body {
 
 .logo-text {
   font-size: 1.5rem;
-  font-weight: bold;
+  font-weight: 700;
   background: linear-gradient(to right, #c084fc, #9333ea);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -93,7 +106,7 @@ body {
 .search-box input {
   background: transparent;
   border: none;
-  color: white;
+  color: #fff;
   outline: none;
   font-size: 0.9rem;
 }
@@ -120,7 +133,7 @@ body {
 
 .wallet-btn {
   background: #9333ea;
-  color: white;
+  color: #fff;
 }
 
 .wallet-btn:hover {
@@ -152,7 +165,7 @@ body {
 .bar {
   height: 3px;
   width: 100%;
-  background: white;
+  background: #fff;
   border-radius: 3px;
   transition: 0.3s;
 }
@@ -186,50 +199,190 @@ body {
 }
 
 .main-content {
-    background-image: url('../foto/bg1.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    min-width: 70%;
-    min-height: 100vh; 
-    margin-top: -120px;  
-    margin-left: 450px;  
-}
-.main-content img{
-    margin-left:30cqmax;
-    margin-top:7.3cqmax;
-    width: 400px;
-    height: 700px;
+  position: relative;
+  width: 100%;
+  min-height: calc(100vh - 80px);
+  overflow: hidden;
+  margin-top: -80px;
 }
 
-/* .side-circle{
-    background-image: url('../foto/ellipse.png');
-    background-repeat: no-repeat;
-    width: 31%;
-    height: 100vh;
-    margin-top: -30rem;
-    margin-left: 20cqmax;
+.content-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: calc(100vh - 80px);
 }
 
-.side-circle img{
-    width: 300px;
-    height: 500px;
-    margin-left: 6cqmax;
-    margin-top: -10cqmax;
-} */
-
-
-.side-circle{
-    background-color: #000;
-    width: 30vw;
-    /* height: 100vh; */
-    margin-top: -30rem;
-    margin-left: 20rem;
-    border-radius: 500px;
+.purple-section {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 75%;
+  height: 100%;
+  background: #9333ea;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2% 4% 2% 8%;
+  border-bottom-left-radius: 40% 120%;
 }
 
-.inside-side-circle img{
-    width: 300px;
-    height: 300px;
+.purple-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(192, 132, 252, 0.15) 0%, transparent 50%);
+  pointer-events: none;
+  border-bottom-left-radius: 70% 135%;
+}
+
+.hero-text {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  line-height: 0.85;
+  animation: fadeInUp 0.8s ease-out;
+  margin-left: -2%;
+}
+
+.sports-text {
+  font-size: clamp(4rem, 12vw, 10rem);
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+  line-height: 0.9;
+}
+
+.bet-text {
+  font-size: clamp(4rem, 12vw, 10rem);
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+  align-self: flex-end; /* Align to the end of SPORTS text */
+  text-transform: uppercase;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+  line-height: 0.9;
+}
+
+.player-right {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  height: 100%;
+  width: 45%;
+  animation: fadeInRight 1s ease-out 0.3s both;
+}
+
+.player-right img {
+  width: auto;
+  height: 85vh;
+  max-height: 900px;
+  object-fit: contain;
+  object-position: bottom right;
+  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.4));
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .purple-section {
+    width: 70%;
+    clip-path: none;
+    border-bottom-left-radius: 60% 130%;
+    padding: 3% 2% 2% 6%;
+  }
+  
+  .purple-section::before {
+    border-bottom-left-radius: 60% 130%;
+  }
+
+  .hero-text {
+    margin-left: -1%;
+  }
+
+  .sports-text,
+  .bet-text {
+    font-size: clamp(3.5rem, 12vw, 7rem);
+  }
+
+  .player-right {
+    width: 50%;
+  }
+
+  .player-right img {
+    height: 75vh;
+  }
+}
+
+@media (max-width: 971px) {
+  .main-content{
+    margin-top: -20%;
+  }
+  .nav,
+  .search-box,
+  .wallet-btn {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .purple-section {
+    width: 90%;
+    padding: 3rem 3rem 2rem 6rem;
+    border-bottom-left-radius: 80% 150%;
+  }
+
+  .hero-text {
+    margin-left: -0.5%;
+  }
 }
 
 @media (max-width: 768px) {
@@ -243,20 +396,111 @@ body {
     display: flex;
   }
 
-  .main-content{
-    background-image: url('../foto/responsive_bg.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  .purple-section {
     width: 100%;
-    margin: 0;
-    padding: 0;
+    height: 100%;
+    clip-path: none;
+    border-radius: 0;
+    padding: 2rem;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
   }
 
-.main-content img{
-    margin-left:00px;
-    min-width: 400px;
-    min-height: 700px;
+  .purple-section::before {
+    display: none;
+  }
+
+  .hero-text {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin: 0;
+    align-items: center;
+    text-align: center;
+    margin-top: 5%;
+  }
+
+  .sports-text {
+    font-size: 3rem;
+    margin-bottom: 0;
+  }
+
+  .bet-text {
+    font-size: 3rem;
+    align-self: center; 
+    margin: 0;
+  }
+
+  .player-right {
+    position: relative;
+    width: 100%;
+    justify-content: center;
+    align-items: flex-end;
+    display: flex;
+    margin-top: 2rem;
+  }
+
+  .player-right img {
+    height: 60vh;
+    max-height: 400px;
+    object-position: center;
+  }
 }
 
+@media (max-width: 480px) {
+  .container {
+    padding: 1%;
+  }
+
+  .purple-section {
+    padding: 2rem 1.5rem;
+  }
+
+  .hero-text {
+    top: auto;
+    left: auto;
+  }
+
+  .sports-text,
+  .bet-text {
+    font-size: clamp(2rem, 18vw, 3.5rem);
+  }
+
+  .player-right {
+    width: 100%;
+    justify-content: center;
+    right: auto;
+    margin-top: 1rem;
+  }
+
+  .left-section {
+    gap: 1%;
+  }
+
+  .logo-text {
+    font-size: 125%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  .header,
+  .menu-toggle,
+  .mobile-nav {
+    display: none;
+  }
+
+  .main-content {
+    margin-top: 0;
+  }
 }

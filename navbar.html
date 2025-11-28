@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOOTCAST - Betting Website</title>
+    <link rel="stylesheet" href="/matches/navbar.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <!-- Logo -->
+            <div class="navbar-logo">
+                <a href="#">FOOTCAST</a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <input type="checkbox" id="mobileMenuToggle" class="mobile-menu-checkbox">
+            <label for="mobileMenuToggle" class="navbar-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </label>
+
+            <!-- Navigation Links -->
+            <ul class="navbar-menu">
+                <li class="navbar-item">
+                    <a href="#" class="navbar-link">Matches</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="#" class="navbar-link">Results</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="#" class="navbar-link">Sports</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="#" class="navbar-link">Promotions</a>
+                </li>
+            </ul>
+
+            <!-- Right Side Elements -->
+            <div class="navbar-right">
+                <!-- Search Bar -->
+                <form class="search-container" action="#" method="get">
+                    <input type="text" class="search-input" placeholder="Search..." name="search">
+                    <button type="submit" class="search-button">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.35-4.35"></path>
+                        </svg>
+                    </button>
+                </form>
+
+                <!-- Money Button -->
+                <a href="#" class="money-button">
+                    <span class="money-icon">$</span>
+                    <span class="money-amount">0.00</span>
+                </a>
+
+                <!-- Profile -->
+                <div class="profile-container">
+                    <a href="#" class="profile-button">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </a>
+                    <div class="profile-dropdown">
+                        <a href="#" class="dropdown-item">My Account</a>
+                        <a href="#" class="dropdown-item">Betting History</a>
+                        <a href="#" class="dropdown-item">Settings</a>
+                        <a href="#" class="dropdown-item">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>
+

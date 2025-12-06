@@ -430,7 +430,7 @@ img {
  
   );
   width: 100%;
-  min-height: 100vh;
+    min-height: 100vh; 
   padding: 6rem 8%;
   display: flex;
   align-items: center;
@@ -614,6 +614,135 @@ img {
   align-items: center;
   font-size: 2.4rem;
   font-weight: 700;
+}
+.leagues {
+  width: 100%;
+  padding: 3rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.leagues-inner{
+    width: 300px;
+  height: 350px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  color: #000;
+}
+
+.leagues-inner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60%;
+  background: #4e3cae;
+  clip-path: polygon(0 0, 100% 0, 100% 63%, 0 36%);
+  z-index: 0;
+}
+
+.leagues-inner.premier::before {
+  background: #4e3cae;
+}
+
+.leagues-inner.seriea::before {
+  background: #2c8be3;
+}
+
+.leagues-inner.bundesliga::before {
+  background: #db2c24;
+}
+
+.leagues-inner.laliga::before {
+  background: #f0514a;
+}
+
+.leagues-inner > * {
+  position: relative;
+  z-index: 1;
+}
+
+.img-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 999px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top:50px;
+}
+.league-box {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+.league-stats h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.league-stats p {
+  font-size: 0.5rem;
+  margin-top: -14px;
+}
+
+.leagues-inner h2 {
+  margin-top: 4.5rem;
+  font-size: 1.3rem;
+  line-height: 1.1;
+  margin-left:1.4rem
+}
+
+.inside-leagues {
+  position: absolute;
+  left: 1.4rem;
+  right: 1.4rem;
+  bottom: 1.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.leagues-leftside .label {
+  font-size: 0.9rem;
+  margin-bottom: 0.1rem;
+}
+
+.leagues-leftside .goals {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.leagues-rightside img {
+  height: 90px;
+  width: auto;
+  object-fit: contain;
+}
+
+.leagues-heading h1{
+  text-align: center;
+  font-size:21px
+}
+
+.leagues-heading .underline3 {
+  width: 60px;
+  height: 4px;
+  background-color: #9333ea;
+  border-radius: 999px;
+  animation: fadeInUp 0.8s ease-out;
+  margin: 8px auto 0;
 }
 @media (max-width: 900px) {
   .bet-steps {

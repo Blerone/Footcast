@@ -268,7 +268,7 @@ img {
   font-weight: 900;
   color: #fff;
   margin: 0;
-  align-self: flex-end; /* Align to the end of SPORTS text */
+  align-self: flex-end;
   text-transform: uppercase;
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
@@ -297,6 +297,207 @@ img {
   filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.4));
 }
 
+.trusted-by .trusted-by-text {
+  text-align: center;
+  margin-top: 50px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.trusted-by .underline {
+  width: 60px;
+  height: 4px;
+  margin: 8px auto 0;
+  background-color: #9333ea;
+  border-radius: 999px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-250px * 7));
+  }
+}
+
+.slider {
+  height: 100px;
+  margin: auto;
+  overflow: hidden;
+  position: relative;
+  width: 1200px;
+}
+
+.slider::before,
+.slider::after {
+  content: "";
+  height: 100px;
+  position: absolute;
+  width: 200px;
+  z-index: 2;
+}
+
+.slider::after {
+  right: 0;
+  top: 0;
+  transform: rotateZ(180deg);
+}
+
+.slider::before {
+  left: 0;
+  top: 0;
+}
+
+.slider .slide-track {
+  animation: scroll 40s linear infinite;
+  display: flex;
+  width: calc(250px * 14);
+}
+
+.slider .slide {
+  height: 100px;
+  width: 250px;
+}
+
+
+.about-us {
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,1) 0%,
+    rgba(17,18,23,0.98) 15%,
+    rgba(192,132,252,0.35) 45%,
+    rgba(119,17,191,0.4) 75%,
+    rgba(0,0,0,1) 100%
+ 
+  );
+  width: 100%;
+  min-height: 100vh;
+  padding: 6rem 8%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: 3rem;
+  color: #fff;
+}
+
+.left-text{
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+}
+
+.left-text span{
+  background: linear-gradient(to right, #c084fc, #9333ea);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.left-text p{
+  width: 80%;
+  line-height: 1.8;
+}
+
+.about-us .right-image img{
+  width: 250px;
+  height: auto;
+  align-items: center;
+
+}
+.santiago-banner {
+  background: url('../assets/banners/santiago-banner.png') center/cover no-repeat;
+  max-width: 1400px;
+  width: 100%;
+  min-height: 360px;
+  margin: 3.5rem auto;
+  padding: 2.25rem 2.5rem 2.75rem;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.75rem 2rem;
+  color: #fff;
+  animation: fadeInUp 0.8s ease-out;
+}
+.santiago-banner-img {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 0 0 auto;
+}
+
+.santiago-banner-img img {
+  height: 100px;
+  width: auto;
+}
+
+.time-left {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.inside-time h2 {
+  font-size: 1.3rem;
+  margin: 0 0 0.15rem;
+}
+
+.inside-time p {
+  margin: 0;
+  letter-spacing: 0.08em;
+  opacity: 0.9;
+}
+
+.santiago-banner-text {
+  flex: 1 1 100%;
+}
+
+.santiago-banner-text h2:first-child {
+  margin: 0 0 0.25rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.santiago-banner-text h2:last-child {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.santiago-banner-buttons {
+  flex: 1 1 100%;
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.santiago-banner-buttons button {
+  flex: 0 0 auto;
+  border-radius: 12px;
+  border: none;
+  padding: 0.45rem 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #f3e8ff;
+  color: #4c1d95;
+  width: 80px;
+}
+
+.santiago-banner-buttons button:nth-child(2) {
+  background: #111827;
+  color: #fff;
+}
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -312,17 +513,6 @@ img {
   from {
     opacity: 0;
     transform: translateX(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-50px);
   }
   to {
     opacity: 1;

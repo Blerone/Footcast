@@ -430,7 +430,7 @@ img {
  
   );
   width: 100%;
-    min-height: 100vh; 
+  min-height: 100vh; 
   padding: 6rem 8%;
   display: flex;
   align-items: center;
@@ -483,13 +483,20 @@ img {
 .santiago-banner-img {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
   flex: 0 0 auto;
 }
 
 .santiago-banner-img img {
-  height: 100px;
+  height: 120px;
   width: auto;
+}
+
+.real-madrid-logo{
+  margin-left: -30px;
+}
+
+.barcelona-logo{
+  margin-left: -40px;
 }
 
 .time-left {
@@ -583,6 +590,7 @@ img {
   justify-content: space-between;
   align-items: flex-start;
 }
+
 .underline2 {
   width: 60px;
   height: 4px;
@@ -622,10 +630,11 @@ img {
   flex-wrap: wrap;
   justify-content: center;
   gap: 3rem;
+  animation: fadeInUp 0.8s ease-out;
 }
 
 .leagues-inner{
-    width: 300px;
+  width: 300px;
   height: 350px;
   background-color: #ffffff;
   border-radius: 10px;
@@ -744,6 +753,92 @@ img {
   animation: fadeInUp 0.8s ease-out;
   margin: 8px auto 0;
 }
+
+
+.favorites-heading {
+  max-width: 1400px;
+  width: 100%;
+  margin: 3rem auto 0;
+  padding: 0 2.5rem;
+}
+
+.favorites-heading h1 span{
+  color:#9333ea;
+}
+
+.favorites-heading h1{
+  font-size: 22px;
+  text-align: center;
+}
+
+.favorites-heading .underline3 {
+  width: 60px;
+  height: 4px;
+  background-color: #9333ea;
+  border-radius: 999px;
+  animation: fadeInUp 0.8s ease-out;
+  margin: 6px auto 0;
+}
+
+.favorites{
+  max-width: 1400px;
+  width: 100%;
+  min-height: 220px;
+  margin: 1.5rem auto 3.5rem;
+  padding: 2rem 2.5rem 2.4rem;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  color: #fff;
+  animation: fadeInUp 0.8s ease-out;
+  background-color: #0f061b;
+}
+
+.inside-favorites {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.inside-favorites-img {
+  width: 78px;
+  height: 78px;
+  border-radius: 999px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.inside-favorites-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.inside-favorites-text{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inside-favorites-text p{
+  font-size: 11px;
+  color: #a3a3a3;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+.inside-favorites-text h2{
+  font-size: 13px;
+}
+
 @media (max-width: 900px) {
   .bet-steps {
     padding: 4rem 1.75rem 5rem;
@@ -759,6 +854,18 @@ img {
     width: 120px;
     height: 120px;
     font-size: 2rem;
+  }
+  .favorites {
+    min-height: auto;
+    margin: 1.5rem auto 3rem;
+    padding: 1.75rem 1.5rem 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem 2rem;
+  }
+
+  .inside-favorites {
+    flex: 0 1 22%;
   }
 }
 
@@ -816,6 +923,15 @@ img {
 
   .purple-section::before {
     display: none;
+  }
+
+  .favorites {
+    padding: 1.5rem 1.25rem 1.75rem;
+    gap: 1.25rem 1.5rem;
+  }
+
+  .inside-favorites {
+    flex: 0 1 30%;
   }
 
   .hero-text {
@@ -887,6 +1003,29 @@ img {
 
   .logo-text {
     font-size: 125%;
+  }
+
+
+  .favorites {
+    margin: 1.25rem auto 2.5rem;
+    padding: 1.5rem 1rem 1.75rem;
+    border-radius: 12px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .inside-favorites {
+    flex: 0 1 40%;
+  }
+
+  .inside-favorites-img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .inside-favorites-text h2 {
+    font-size: 12px;
   }
 }
 

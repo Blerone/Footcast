@@ -555,3 +555,375 @@ img {
     font-size: 12px;
   }
 }
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background-color: #1a1d29;
+  margin: 5% auto;
+  padding: 0;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 650px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  animation: slideDown 0.3s ease;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #232632;
+}
+
+.modal-header h2 {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.modal-close {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 32px;
+  font-weight: 300;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+  color: #ffffff;
+}
+
+.modal-body {
+  padding: 25px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.betting-categories {
+  margin-bottom: 20px;
+}
+
+.bet-category {
+  margin-bottom: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.bet-category-header {
+  background: #31185b;
+  color: #ffffff;
+  padding: 12px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  transition: background 0.2s ease;
+  user-select: none;
+}
+
+.category-name {
+  flex: 1;
+}
+
+.bet-category-content {
+  display: block;
+  background-color: rgba(178, 183, 198, 0.05);
+  padding: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bet-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.bet-options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bet-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bet-section-label {
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+
+.bet-option-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 12px 15px;
+  min-width: 120px;
+  flex: 1;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s ease;
+  color: #ffffff;
+}
+
+.bet-option-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+}
+
+.bet-option-btn.selected {
+  background-color: rgba(99, 102, 241, 0.3);
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.option-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.option-odds {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.selected-bet-info {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: rgba(178, 183, 198, 0.11);
+  border-radius: 8px;
+}
+
+.bet-selection-display p {
+  color: #ffffff;
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.bet-selection-display span {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.bet-match-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  padding: 40px 20px;
+}
+
+.bet-teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.bet-team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.bet-team-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.bet-team span {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.bet-vs {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.bet-selection {
+  background-color: rgba(178, 183, 198, 0.11);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.bet-selection p {
+  color: #ffffff;
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.bet-selection span {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.bet-amount {
+  margin-bottom: 20px;
+}
+
+.bet-amount label {
+  display: block;
+  color: #ffffff;
+  font-size: 14px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.bet-amount input {
+  width: 100%;
+  padding: 12px 15px;
+  background-color: rgba(178, 183, 198, 0.11);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.bet-payout {
+  background-color: rgba(178, 183, 198, 0.11);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.bet-payout p {
+  color: #ffffff;
+  font-size: 16px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 15px;
+  padding: 20px 25px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #232632;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.confirm-btn {
+  background: linear-gradient(90deg, #a855f7 0%, #7c3aed 100%);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.confirm-btn:hover {
+  background: linear-gradient(90deg, #9333ea 0%, #6d28d9 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+}
+
+@media screen and (max-width: 480px) {
+  .modal-content {
+    width: 95%;
+    margin: 10% auto;
+  }
+
+  .modal-header h2 {
+    font-size: 20px;
+  }
+
+  .bet-teams {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .bet-vs {
+    margin: 5px 0;
+  }
+
+  .bet-option-btn {
+    min-width: 100px;
+    padding: 10px 12px;
+  }
+
+  .option-label {
+    font-size: 11px;
+  }
+
+  .option-odds {
+    font-size: 14px;
+  }
+
+  .bet-category-header {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .bet-category-content {
+    padding: 12px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

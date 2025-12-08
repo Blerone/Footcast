@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BETZONE - Promotions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="promotions.css" />
+  <script src="promotions.js"></script>
+</head>
+<body>
+   <header class="header">
+    <div class="container">
+      <div class="header-inner">
+        <div class="left-section">
+          <h1 class="logo-text">FOOTCAST</h1>
+          <nav class="nav">
+            <button class="nav-link active">Home</button>
+            <button class="nav-link">Matches</button>
+            <button class="nav-link">Results</button>
+            <button class="nav-link">Stats</button>
+            <button class="nav-link">Promotions</button>
+          </nav>
+        </div>
+        <div class="right-section">
+          <div class="search-box">
+            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              viewBox="0 0 24 24">
+              <path
+                d="M10,18a8,8,0,1,1,5.29-13.71A8,8,0,0,1,10,18Zm9.71,1.29-4.1-4.1A9.94,9.94,0,0,0,20,10a10,10,0,1,0-10,10,9.94,9.94,0,0,0,5.19-1.39l4.1,4.1a1,1,0,0,0,1.42-1.42Z" />
+            </svg>
+            <input type="text" placeholder="Search matches..." />
+          </div>
+          <button class="btn outline-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="user-icon" width="16" height="16" fill="currentColor"
+              viewBox="0 0 24 24">
+              <path d="M12 12c2.67 0 8 1.34 8 4v4H4v-4c0-2.66 5.33-4 8-4zm0-2a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
+            </svg>
+            Login
+          </button>
+          <button class="menu-toggle" id="menu-toggle">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-nav" id="mobile-nav">
+      <button class="nav-link active">Home</button>
+      <button class="nav-link">Matches</button>
+      <button class="nav-link">Results</button>
+      <button class="nav-link">Stats</button>
+      <button class="nav-link">Promotions</button>
+    </div>
+  </header>
+
+
+  <main>
+    <h2 class="page-title">Active Promotions</h2>
+    <p class="page-subtitle">
+      Claim your latest bonuses and offers.
+    </p>
+
+    <section class="promotions-grid">
+      <!--1 -->
+      <article class="promo-card">
+        <div class="promo-card-inner">
+          <div class="promo-header">
+            <div class="promo-icon purple"><img src="photo/gift.png" alt=""></div>
+            <div class="promo-top-right">
+              <span class="promo-main-tag tag-green">New Users</span>
+            </div>
+          </div>
+
+          <div class="promo-body">
+            <div>
+              <h3 class="promo-title">Welcome Bonus</h3>
+              <p class="promo-text">
+                Get 100% match on your first deposit up to $500.
+              </p>
+            </div>
+
+            <div>
+              <p class="promo-label">Promo Code</p>
+              <div class="promo-code-box">
+                <span class="promo-code">WELCOME100</span>
+              </div>
+            </div>
+
+            <div class="promo-footer">
+              <button class="btn-claim" data-code="WELCOME100">Claim Offer</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!--2 -->
+      <article class="promo-card">
+        <div class="promo-card-inner">
+          <div class="promo-header">
+            <div class="promo-icon blue"><img src="photo/calendar.png" alt=""></div>
+            <div class="promo-top-right">
+              <span class="small-pill pill-weekly">Weekly</span>
+            </div>
+          </div>
+
+          <div class="promo-body">
+            <div>
+              <h3 class="promo-title">Free Bet Friday</h3>
+              <p class="promo-text">
+                Place 5 bets during the week, get a free $20 bet on Friday.
+              </p>
+            </div>
+
+            <div>
+              <p class="promo-label">Promo Code</p>
+              <div class="promo-code-box">
+                <span class="promo-code">FRIDAY20</span>
+              </div>
+            </div>
+
+            <div class="promo-footer">
+              <button class="btn-claim" data-code="FRIDAY20">Claim Offer</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!--3 -->
+      <article class="promo-card">
+        <div class="promo-card-inner">
+          <div class="promo-header">
+            <div class="promo-icon orange"><img src="photo/growing.png" alt=""></div>
+            <div class="promo-top-right">
+              <span class="small-pill pill-popular">Popular</span>
+            </div>
+          </div>
+
+          <div class="promo-body">
+            <div>
+              <h3 class="promo-title">Accumulator Boost</h3>
+              <p class="promo-text">
+                Up to 50% profit boost on accumulators with 5+ selections.
+              </p>
+            </div>
+
+            <div>
+              <p class="promo-label">Promo Code</p>
+              <div class="promo-code-box">
+                <span class="promo-code">ACCA50</span>
+              </div>
+            </div>
+
+            <div class="promo-footer">
+              <button class="btn-claim" data-code="ACCA50">Claim Offer</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4 -->
+      <article class="promo-card">
+        <div class="promo-card-inner">
+          <div class="promo-header">
+            <div class="promo-icon pink"><img src="photo/friends.png" alt=""></div>
+            <div class="promo-top-right">
+              <span class="promo-main-tag tag-red">Limited</span>
+            </div>
+          </div>
+
+          <div class="promo-body">
+            <div>
+              <h3 class="promo-title">Refer a Friend</h3>
+              <p class="promo-text">
+                Invite your friends and get a $25 free bet for each successful signup.
+              </p>
+            </div>
+
+            <div>
+              <p class="promo-label">Promo Code</p>
+              <div class="promo-code-box">
+                <span class="promo-code">FRIEND25</span>
+              </div>
+            </div>
+
+            <div class="promo-footer">
+              <button class="btn-claim" data-code="FRIEND25">Claim Offer</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!--  5 -->
+      <article class="promo-card">
+        <div class="promo-card-inner">
+          <div class="promo-header">
+            <div class="promo-icon yellow"><img src="photo/electricity.png" alt=""></div>
+            <div class="promo-top-right">
+              <span class="small-pill pill-daily">Daily</span>
+            </div>
+          </div>
+
+          <div class="promo-body">
+            <div>
+              <h3 class="promo-title">Daily Odds Boost</h3>
+              <p class="promo-text">
+                Get boosted odds on selected matches every day.
+              </p>
+            </div>
+
+            <div>
+              <p class="promo-label">Promo Code</p>
+              <div class="promo-code-box">
+                <span class="promo-code">BOOST10</span>
+              </div>
+            </div>
+
+            <div class="promo-footer">
+              <button class="btn-claim" data-code="BOOST10">Claim Offer</button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 6 -->
+      <article class="promo-card">
+        <div class="promo-card-inner">
+          <div class="promo-header">
+            <div class="promo-icon red"><img src="photo/percent.png" alt=""></div>
+            <div class="promo-top-right">
+              <span class="small-pill pill-weekly-red">Weekly</span>
+            </div>
+          </div>
+
+          <div class="promo-body">
+            <div>
+              <h3 class="promo-title">Cashback Weekend</h3>
+              <p class="promo-text">
+                Get 10% cashback on your net losses every weekend.
+              </p>
+            </div>
+
+            <div>
+              <p class="promo-label">Promo Code</p>
+              <div class="promo-code-box">
+                <span class="promo-code">CASHBACK10</span>
+              </div>
+            </div>
+
+            <div class="promo-footer">
+              <button class="btn-claim" data-code="CASHBACK10">Claim Offer</button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+    
+    <!-- VIP -->
+<section class="vip-section">
+  <div class="vip-card">
+    <div class="vip-card-left">
+      <div class="vip-header-row">
+        <div class="vip-icon-circle">
+          <img src="photo/gift.png" alt="">
+        </div>
+        <div class="vip-title-block">
+          <span class="vip-label">VIP Program</span>
+        </div>
+      </div>
+
+      <h3 class="vip-main-title">Join our exclusive VIP club</h3>
+      <p class="vip-subtext">
+        Unlock premium benefits and rewards as you play. The more you bet, the more you earn!
+      </p>
+
+      <div class="vip-benefits">
+        <ul class="vip-list">
+          <li>Exclusive higher odds</li>
+          <li>Faster withdrawals</li>
+          <li>VIP-only promotions</li>
+        </ul>
+        <ul class="vip-list">
+          <li>Personal account manager</li>
+          <li>Special birthday bonus</li>
+          <li>Priority customer support</li>
+        </ul>
+      </div>
+
+      <button class="vip-btn">
+        Learn More About VIP
+      </button>
+    </div>
+
+    <div class="vip-card-right">
+      <div class="vip-big-circle">
+        <span class="vip-big-icon"><img src="photo/gift.png" alt=""></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </main>
+
+  
+  <script>
+    const toggleBtn = document.getElementById('menu-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    const header = document.querySelector('.header');
+
+    toggleBtn.addEventListener('click', () => {
+      mobileNav.classList.toggle('open');
+      toggleBtn.classList.toggle('open');
+    });
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+  </script>
+</body>
+</html>

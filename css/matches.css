@@ -297,8 +297,6 @@ img {
   box-shadow: 0 8px 20px rgba(192, 132, 252, 0.3);
   border-color: rgba(192, 132, 252, 0.4);
 }
-
-/* Match Header */
 .match-header {
   display: flex;
   justify-content: space-between;
@@ -318,8 +316,6 @@ img {
   align-items: center;
   justify-content: center;
 }
-
-/* Match Score */
 .match-score {
   display: flex;
   justify-content: space-between;

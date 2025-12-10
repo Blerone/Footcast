@@ -2,14 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>BETZONE – Lineups</title>
+  <title>FootCast</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="lineups.css" />
+  <link rel="stylesheet" href="./css/lineups.css" />
 </head>
 <body>
-  <div class="bz-page">
-
-    <!-- HEADER -->
     <header class="header">
       <div class="container">
         <div class="header-inner">
@@ -56,13 +53,12 @@
         <button class="nav-link">Promotions</button>
       </div>
     </header>
-
-    <!-- MATCH HERO -->
+    <div class="bz-page">
     <section class="match-hero">
       <div class="match-hero-inner">
         <div class="team-block">
           <div class="team-logo">
-            <img src="photos/Chelsea.png" alt="Chelsea logo" />
+            <img src="./assets/footlogos/colorfullogos/chels.png" alt="Chelsea logo" />
           </div>
           <div class="team-name">CHELSEA</div>
         </div>
@@ -74,14 +70,13 @@
 
         <div class="team-block team-right">
           <div class="team-logo team-logo-away">
-            <img src="photos/Barcelona.png" alt="Barcelona logo" />
+            <img src="./assets/footlogos/colorfullogos/fcbarca.png" alt="Barcelona logo" />
           </div>
           <div class="team-name team-name-right">BARCELONA</div>
         </div>
       </div>
     </section>
 
-    <!-- TABS / MAIN CONTENT -->
     <section class="match-tabs">
       <div class="tabs-header">
         <button class="tab-btn active" data-tab-target="lineups">Lineups</button>
@@ -89,7 +84,6 @@
       </div>
 
       <div class="match-content">
-        <!-- LINEUPS TAB -->
         <div class="tab-panel active" data-tab="lineups">
           <div class="lineup-wrapper">
             <div class="lineup-header-bar">
@@ -97,7 +91,7 @@
                 <strong>CHELSEA</strong>
                 <span> · 4-3-3</span>
               </div>
-              <span>Coach: Mauricio Pochettino</span>
+              <span>Coach: Enzo Maresca</span>
             </div>
 
             <div class="lineup-header-bar">
@@ -108,9 +102,7 @@
               <span>Coach: Xavi Hernández</span>
             </div>
 
-            <!-- PITCH -->
             <div class="pitch">
-              <!-- CHELSEA (TOP) -->
               <div class="player" style="top: 7%; left: 50%;">
                 <div class="player-circle">
                   <span class="player-number">1</span>
@@ -182,7 +174,6 @@
                 <div class="player-name">Pedro Neto</div>
               </div>
 
-              <!-- BARCELONA (BOTTOM) -->
               <div class="player" style="top: 56%; left: 50%;">
                 <div class="player-circle player-circle-away">
                   <span class="player-number">9</span>
@@ -255,7 +246,6 @@
               </div>
             </div>
 
-            <!-- SUBSTITUTIONS -->
             <div class="subs-card">
               <h3 class="subs-title">Substitutions</h3>
 
@@ -378,7 +368,6 @@
               </div>
             </div>
 
-            <!-- SUBSTITUTE PLAYERS -->
             <div class="bench-card">
               <h3 class="subs-title">Substitute players</h3>
 
@@ -513,7 +502,6 @@
               </div>
             </div>
 
-            <!-- INJURIES & SUSPENSIONS -->
             <section class="injuries-section">
               <h3 class="injuries-title">Injuries &amp; suspensions</h3>
 
@@ -598,65 +586,50 @@
           </div>
         </div>
 
-        <!-- STANDINGS TAB -->
-        <div class="tab-panel" data-tab="standings">
-          <div class="standings-placeholder">
-            Standings për këtë ndeshje ende nuk janë shtuar. Mund të përdorësh këtë hapësirë për tabelë grupi ose statistika të tjera.
-          </div>
-        </div>
+        <div class="tab-panel" data-tab="standings"></div>
       </div>
     </section>
 
-    <!-- FOOTER -->
-    <section class="footer">
-    <div class="left-footer">
-      <h2>FOOTCAST</h2>
-      <p>One click away, from winning it all.</p>
-
-      <div class="social-links">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
-        <a href="#"><i class="fab fa-x-twitter"></i></a>
-      </div>
-
-      <p class="footer-copy">© 2025 Blerona Thaci &amp; Vesa Susuri | All Rights Reserved</p>
-    </div>
-
-    <div class="right-footer">
-      <h2>Company</h2>
-      <ul>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Our Team</a></li>
-        <li><a href="#">Our Work</a></li>
-        <li><a href="#">Partners</a></li>
-        <li><a href="#">Clients</a></li>
-      </ul>
-    </div>
-
-    <div class="right-footer">
-      <h2>Support</h2>
-      <ul>
-        <li><a href="#">Contact Us</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Q &amp; A</a></li>
-        <li><a href="#">Affiliates</a></li>
-      </ul>
-    </div>
-
-    <div class="right-footer">
-      <h2>Trust</h2>
-      <ul>
-        <li><a href="#">User Trust</a></li>
-        <li><a href="#">Guidelines</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of Use</a></li>
-        <li><a href="#">Security</a></li>
-      </ul>
-    </div>
-  </section>
   </div>
 
-  <script src="lineups.js"></script>
+  <script>
+    const toggleBtn = document.getElementById("menu-toggle");
+    const mobileNav = document.getElementById("mobile-nav");
+    const header = document.querySelector(".header");
+
+    if (toggleBtn && mobileNav) {
+      toggleBtn.addEventListener("click", () => {
+        mobileNav.classList.toggle("open");
+        toggleBtn.classList.toggle("open");
+      });
+    }
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 50) {
+        header.classList.add("scrolled");
+      } else {
+        header.classList.remove("scrolled");
+      }
+    });
+
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabPanels = document.querySelectorAll(".tab-panel");
+
+    tabButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.tabTarget;
+
+        tabButtons.forEach((b) => b.classList.remove("active"));
+        tabPanels.forEach((p) => p.classList.remove("active"));
+
+        const targetPanel = document.querySelector(`[data-tab="${target}"]`);
+        if (targetPanel) {
+          btn.classList.add("active");
+          targetPanel.classList.add("active");
+        }
+      });
+    });
+  </script>
+
 </body>
 </html>

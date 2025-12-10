@@ -1,11 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&family=Krona+One&display=swap");
 
-:root {
-  --text-muted: #9ca3af;
-}
-
-/* Base */
-
 * {
   box-sizing: border-box;
 }
@@ -35,8 +29,6 @@ img {
   height: auto;
   display: block;
 }
-
-/* Header */
 
 .header {
   position: fixed;
@@ -209,12 +201,10 @@ img {
   font-size: 1rem;
 }
 
-/* Match hero */
-
 .match-hero {
   width: 100%;
   position: relative;
-  background-image: url("photos/background-lineups.png");
+  background-image: url("../assets/banners/background-lineups.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -225,11 +215,9 @@ img {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at 10% 0,
-    rgba(236, 72, 153, 0.3),
-    transparent 55%
-  );
+  background: radial-gradient(circle at 10% 0,
+      rgba(236, 72, 153, 0.3),
+      transparent 55%);
   opacity: 0.7;
   pointer-events: none;
 }
@@ -297,13 +285,11 @@ img {
 .match-time span {
   display: block;
   font-size: 11px;
-  color: var(--text-muted);
+  color: #9ca3af;
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-
-/* Tabs */
 
 .match-tabs {
   width: 100%;
@@ -312,8 +298,6 @@ img {
   background: #050013;
   padding: 0 20px;
   border-radius: 0;
-  border: 1px solid rgba(88, 28, 135, 0.6);
-  border-top: none;
 }
 
 .tabs-header {
@@ -328,7 +312,7 @@ img {
   font-size: 13px;
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: #9ca3af;
   cursor: pointer;
 }
 
@@ -361,8 +345,6 @@ img {
   display: block;
 }
 
-/* Lineups */
-
 .lineup-wrapper {
   display: flex;
   flex-direction: column;
@@ -377,15 +359,13 @@ img {
 }
 
 .lineup-header-bar span {
-  color: var(--text-muted);
+  color: #9ca3af;
   font-size: 12px;
 }
 
 .lineup-header-bar strong {
   font-size: 14px;
 }
-
-/* Pitch */
 
 .pitch {
   position: relative;
@@ -395,8 +375,7 @@ img {
   aspect-ratio: 2 / 3;
   border-radius: 22px;
   overflow: hidden;
-  background-color: #3e9b3e;
-  background-image: url("photos/fusha.jpg");
+  background-image: url("../assets/banners/fusha.jpg");
   background-size: cover;
   background-position: center;
   box-shadow: 0 32px 60px rgba(0, 0, 0, 0.6);
@@ -444,8 +423,6 @@ img {
   white-space: nowrap;
   font-weight: 500;
 }
-
-/* Substitutions */
 
 .subs-card {
   margin: 24px auto 0;
@@ -540,8 +517,6 @@ img {
   font-weight: 600;
 }
 
-/* Bench */
-
 .bench-card {
   margin: 16px auto 0;
   width: 100%;
@@ -593,8 +568,6 @@ img {
 .bench-name {
   font-size: 12px;
 }
-
-/* Injuries */
 
 .injuries-section {
   margin: 24px auto 0;
@@ -675,18 +648,14 @@ img {
   color: #9ca3af;
 }
 
-/* Standings placeholder */
-
 .standings-placeholder {
   padding: 20px;
   border-radius: 14px;
   background: radial-gradient(circle at top, #0b1120 0, #020617 60%);
   border: 1px dashed rgba(148, 163, 184, 0.4);
-  color: var(--text-muted);
+  color: #9ca3af;
   font-size: 13px;
 }
-
-/* Footer */
 
 footer {
   margin-top: auto;
@@ -703,7 +672,7 @@ footer {
   justify-content: space-between;
   gap: 18px;
   flex-wrap: wrap;
-  color: var(--text-muted);
+  color: #9ca3af;
 }
 
 .footer-brand {
@@ -735,14 +704,12 @@ footer {
 
 .footer-links a {
   text-decoration: none;
-  color: var(--text-muted);
+  color: #9ca3af;
 }
 
 .footer-links a:hover {
   color: #fff;
 }
-
-/* Responsive */
 
 @media (max-width: 768px) {
   .header-inner {

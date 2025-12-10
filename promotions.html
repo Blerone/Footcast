@@ -2,23 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>BETZONE - Promotions</title>
+  <title>Promotions</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="promotions.css" />
-  <script src="promotions.js"></script>
+  <link rel="stylesheet" href="./css/promotions.css" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+  />
 </head>
 <body>
-   <header class="header">
+  <header class="header">
     <div class="container">
       <div class="header-inner">
         <div class="left-section">
           <h1 class="logo-text">FOOTCAST</h1>
-          <nav class="nav">
-            <button class="nav-link active">Home</button>
-            <button class="nav-link">Matches</button>
-            <button class="nav-link">Results</button>
-            <button class="nav-link">Stats</button>
-            <button class="nav-link">Promotions</button>
+          <nav class="">
+            <button class="nav-link active"><a href="index.html" class="nav-link active">Home</a></button>
+            <button class="nav-link"><a href="matches.html">Matches</a></button>
+            <button class="nav-link"><a href="">Results</a></button>
+            <button class="nav-link"><a href="sports.html">Sports</a></button>
+            <button class="nav-link"><a href="promotions.html">Promotions</a></button>
           </nav>
         </div>
         <div class="right-section">
@@ -35,7 +38,7 @@
               viewBox="0 0 24 24">
               <path d="M12 12c2.67 0 8 1.34 8 4v4H4v-4c0-2.66 5.33-4 8-4zm0-2a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
             </svg>
-            Login
+            <a href="login.html" class="login-link">Login</a>
           </button>
           <button class="menu-toggle" id="menu-toggle">
             <span class="bar"></span>
@@ -57,16 +60,14 @@
 
 
   <main>
-    <h2 class="page-title">Active Promotions</h2>
-    <p class="page-subtitle">
-      Claim your latest bonuses and offers.
-    </p>
-
+    <h3 class="page-title">Active Promotions</h3>
     <section class="promotions-grid">
-      <article class="promo-card">
+      <div class="promo-card card-purple">
         <div class="promo-card-inner">
           <div class="promo-header">
-            <div class="promo-icon purple"><img src="photo/gift.png" alt=""></div>
+            <div class="promo-icon purple"><span class="material-symbols-outlined">
+              featured_seasonal_and_gifts
+              </span></div>
             <div class="promo-top-right">
               <span class="promo-main-tag tag-green">New Users</span>
             </div>
@@ -92,12 +93,12 @@
             </div>
           </div>
         </div>
-      </article>
+      </div>
 
-      <article class="promo-card">
+      <div class="promo-card card-blue">
         <div class="promo-card-inner">
           <div class="promo-header">
-            <div class="promo-icon blue"><img src="photo/calendar.png" alt=""></div>
+            <div class="promo-icon blue"><span class="material-symbols-outlined">calendar_today</span></div>
             <div class="promo-top-right">
               <span class="small-pill pill-weekly">Weekly</span>
             </div>
@@ -123,12 +124,12 @@
             </div>
           </div>
         </div>
-      </article>
+      </div>
 
-      <article class="promo-card">
+      <div class="promo-card card-orange">
         <div class="promo-card-inner">
           <div class="promo-header">
-            <div class="promo-icon orange"><img src="photo/growing.png" alt=""></div>
+            <div class="promo-icon orange"><span class="material-symbols-outlined"> call_made</span></div>
             <div class="promo-top-right">
               <span class="small-pill pill-popular">Popular</span>
             </div>
@@ -154,12 +155,12 @@
             </div>
           </div>
         </div>
-      </article>
+      </div>
 
-      <article class="promo-card">
+      <div class="promo-card card-pink">
         <div class="promo-card-inner">
           <div class="promo-header">
-            <div class="promo-icon pink"><img src="photo/friends.png" alt=""></div>
+            <div class="promo-icon pink"><span class="material-symbols-outlined">contacts_product</span></div>
             <div class="promo-top-right">
               <span class="promo-main-tag tag-red">Limited</span>
             </div>
@@ -185,12 +186,12 @@
             </div>
           </div>
         </div>
-      </article>
+      </div>
 
-      <article class="promo-card">
+      <div class="promo-card card-yellow">
         <div class="promo-card-inner">
           <div class="promo-header">
-            <div class="promo-icon yellow"><img src="photo/electricity.png" alt=""></div>
+            <div class="promo-icon yellow"><span class="material-symbols-outlined">bolt </span></div>
             <div class="promo-top-right">
               <span class="small-pill pill-daily">Daily</span>
             </div>
@@ -216,12 +217,14 @@
             </div>
           </div>
         </div>
-      </article>
+      </div>
 
-      <article class="promo-card">
+      <div class="promo-card card-red">
         <div class="promo-card-inner">
           <div class="promo-header">
-            <div class="promo-icon red"><img src="photo/percent.png" alt=""></div>
+            <div class="promo-icon red"><span class="material-symbols-outlined">
+              percent
+              </span></div>
             <div class="promo-top-right">
               <span class="small-pill pill-weekly-red">Weekly</span>
             </div>
@@ -247,54 +250,58 @@
             </div>
           </div>
         </div>
-      </article>
+      </div>
     </section>
+
     
-<section class="vip-section">
-  <div class="vip-card">
-    <div class="vip-card-left">
-      <div class="vip-header-row">
-        <div class="vip-icon-circle">
-          <img src="photo/gift.png" alt="">
-        </div>
-        <div class="vip-title-block">
-          <span class="vip-label">VIP Program</span>
-        </div>
-      </div>
-
-      <h3 class="vip-main-title">Join our exclusive VIP club</h3>
-      <p class="vip-subtext">
-        Unlock premium benefits and rewards as you play. The more you bet, the more you earn!
-      </p>
-
-      <div class="vip-benefits">
-        <ul class="vip-list">
-          <li>Exclusive higher odds</li>
-          <li>Faster withdrawals</li>
-          <li>VIP-only promotions</li>
-        </ul>
-        <ul class="vip-list">
-          <li>Personal account manager</li>
-          <li>Special birthday bonus</li>
-          <li>Priority customer support</li>
-        </ul>
-      </div>
-
-      <button class="vip-btn">
-        Learn More About VIP
-      </button>
-    </div>
-
-    <div class="vip-card-right">
-      <div class="vip-big-circle">
-        <span class="vip-big-icon"><img src="photo/gift.png" alt=""></span>
-      </div>
-    </div>
-  </div>
-</section>
-
   </main>
+  <section class="footer">
+    <div class="left-footer">
+      <h2>FOOTCAST</h2>
+      <p>One click away, from winning it all.</p>
 
+      <div class="social-links">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="#"><i class="fab fa-x-twitter"></i></a>
+      </div>
+
+      <p class="footer-copy">© 2025 Blerona Thaci &amp; Vesa Susuri | All Rights Reserved</p>
+    </div>
+
+    <div class="right-footer">
+      <h2>Company</h2>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Our Team</a></li>
+        <li><a href="#">Our Work</a></li>
+        <li><a href="#">Partners</a></li>
+        <li><a href="#">Clients</a></li>
+      </ul>
+    </div>
+
+    <div class="right-footer">
+      <h2>Support</h2>
+      <ul>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Q &amp; A</a></li>
+        <li><a href="#">Affiliates</a></li>
+      </ul>
+    </div>
+
+    <div class="right-footer">
+      <h2>Trust</h2>
+      <ul>
+        <li><a href="#">User Trust</a></li>
+        <li><a href="#">Guidelines</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Use</a></li>
+        <li><a href="#">Security</a></li>
+      </ul>
+    </div>
+  </section>
   
   <script>
     const toggleBtn = document.getElementById('menu-toggle');

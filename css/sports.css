@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&family=Krona+One&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 * {
   box-sizing: border-box;
 }
@@ -18,10 +18,14 @@ body {
 h1, h2, h3, h4, h5, h6{
   font-family: "Krona One", sans-serif;
 }
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
+
+p,span{
+  font-family: "Nunito Sans", sans-serif;
+}
+
+.league-country, .league-label{
+  font-family: "Nunito Sans", sans-serif;
+  font-weight: 600;
 }
 
 .header {
@@ -33,7 +37,10 @@ img {
   background: transparent;
   transition: background 0.4s ease, backdrop-filter 0.4s ease;
 }
-
+.login-link{
+  text-decoration: none;
+  color: #fff;
+}
 .header.scrolled {
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(10px);
@@ -59,7 +66,10 @@ img {
   align-items: center;
   gap: 2rem;
 }
-
+.nav-link a {
+  text-decoration: none;
+  color: #9ca3af;
+}
 .logo-text {
   font-size: 1.5rem;
   font-weight: 700;
@@ -524,8 +534,104 @@ img {
   line-height: 2.2;
 }
 
+.footer {
+  width: 100%;
+  padding: 3rem 8% 2.5rem;
+  background: #050114;
+  border-top: 1px solid rgba(255, 255, 255, 0.03);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 4rem;
+  color: #ffffff;
+  font-size: 12px;
+}
 
-@media (max-width: 960px) {
+.left-footer {
+  max-width: 320px;
+}
+
+.left-footer h2 {
+  font-size: 22px;
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+}
+
+.left-footer p {
+  color: #d4d4d4;
+  margin-bottom: 1.75rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.social-links a {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: #160b28;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.footer-copy {
+  margin-top: 0.75rem;
+  color: #a1a1aa;
+  font-size: 11px;
+}
+
+.right-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 120px;
+}
+
+.right-footer h2 {
+  font-size: 12px;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.right-footer ul {
+  list-style: none;
+  margin-left: -40px;
+}
+
+.right-footer li+li {
+  margin-top: 0.3rem;
+}
+
+.right-footer a {
+  color: #e5e5e5;
+  text-decoration: none;
+  font-size: 11px;
+  line-height: 2.2;
+}
+
+@media (max-width: 1000px) {
+  .footer {
+    padding: 2.5rem 6% 2rem;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .left-footer {
+    max-width: 100%;
+    flex: 1 1 100%;
+  }
+  
+  .right-footer {
+    flex: 1 1 28%;
+  }
   .main {
     padding-inline: 16px;
   }
@@ -587,17 +693,6 @@ img {
 
 
 @media (max-width: 768px) {
-  .nav,
-  .search-box,
-  .wallet-btn,
-  .nav-link a {
-    display: none;
-  }
-
-  .menu-toggle {
-    display: flex;
-  }
-
   .footer {
     padding: 2.25rem 6% 1.75rem;
     gap: 2rem;

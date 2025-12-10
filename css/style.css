@@ -15,13 +15,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6{
+h1,h2,h3,h4,h5,h6 {
   font-family: "Krona One", sans-serif;
-}
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
 }
 
 .header {
@@ -45,6 +40,11 @@ img {
 .container {
   padding: 1rem 1.5rem;
   max-width: 100%;
+}
+
+.login-link{
+  text-decoration: none;
+  color: #fff;
 }
 
 .header-inner {
@@ -141,15 +141,6 @@ img {
   transition: background 0.3s ease, color 0.3s ease;
 }
 
-.wallet-btn {
-  background: #9333ea;
-  color: #fff;
-}
-
-.wallet-btn:hover {
-  background: #7e22ce;
-}
-
 .outline-btn {
   background: transparent;
   border: 1px solid rgba(147, 51, 234, 0.5);
@@ -183,9 +174,11 @@ img {
 .menu-toggle.open .bar:nth-child(1) {
   transform: rotate(45deg) translateY(6px);
 }
+
 .menu-toggle.open .bar:nth-child(2) {
   opacity: 0;
 }
+
 .menu-toggle.open .bar:nth-child(3) {
   transform: rotate(-45deg) translateY(-6px);
 }
@@ -326,6 +319,7 @@ img {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(calc(-250px * 7));
   }
@@ -425,17 +419,14 @@ img {
 
 
 .about-us {
-  background: linear-gradient(
-    to bottom,
-    rgba(0,0,0,1) 0%,
-    rgba(17,18,23,0.98) 15%,
-    rgba(192,132,252,0.35) 45%,
-    rgba(119,17,191,0.4) 75%,
-    rgba(0,0,0,1) 100%
- 
-  );
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(17, 18, 23, 0.98) 15%,
+      rgba(192, 132, 252, 0.35) 45%,
+      rgba(119, 17, 191, 0.4) 75%,
+      rgba(0, 0, 0, 1) 100%);
   width: 100%;
-  min-height: 100vh; 
+  min-height: 100vh;
   padding: 6rem 8%;
   display: flex;
   align-items: center;
@@ -445,7 +436,7 @@ img {
   color: #fff;
 }
 
-.left-text{
+.left-text {
   width: 50%;
   display: flex;
   flex-direction: column;
@@ -453,23 +444,25 @@ img {
   align-items: left;
 }
 
-.left-text span{
+.left-text span {
   background: linear-gradient(to right, #c084fc, #9333ea);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.left-text p{
+
+.left-text p {
   width: 80%;
   line-height: 1.8;
 }
 
-.about-us .right-image img{
+.about-us .right-image img {
   width: 250px;
   height: auto;
   align-items: center;
 
 }
+
 .santiago-banner {
   background: url('../assets/banners/santiago-banner.png') center/cover no-repeat;
   max-width: 1400px;
@@ -485,6 +478,7 @@ img {
   color: #fff;
   animation: fadeInUp 0.8s ease-out;
 }
+
 .santiago-banner-img {
   display: flex;
   align-items: center;
@@ -496,11 +490,11 @@ img {
   width: auto;
 }
 
-.real-madrid-logo{
+.real-madrid-logo {
   margin-left: -30px;
 }
 
-.barcelona-logo{
+.barcelona-logo {
   margin-left: -40px;
 }
 
@@ -581,7 +575,7 @@ img {
 }
 
 .bet-steps h1 {
-  font-size:21px;
+  font-size: 21px;
 }
 
 .bet-steps h1 span {
@@ -602,7 +596,7 @@ img {
   background-color: #9333ea;
   border-radius: 999px;
   animation: fadeInUp 0.8s ease-out;
-  margin-top:-40px
+  margin-top: -40px
 }
 
 .bet-step {
@@ -614,7 +608,7 @@ img {
 }
 
 .bet-step h2 {
-  font-size:12px;
+  font-size: 12px;
 }
 
 .inside-step {
@@ -628,6 +622,7 @@ img {
   font-size: 2.4rem;
   font-weight: 700;
 }
+
 .leagues {
   width: 100%;
   padding: 3rem 2rem;
@@ -638,7 +633,7 @@ img {
   animation: fadeInUp 0.8s ease-out;
 }
 
-.leagues-inner{
+.leagues-inner {
   width: 300px;
   height: 350px;
   background-color: #ffffff;
@@ -676,7 +671,7 @@ img {
   background: #f0514a;
 }
 
-.leagues-inner > * {
+.leagues-inner>* {
   position: relative;
   z-index: 1;
 }
@@ -689,8 +684,9 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top:50px;
+  margin-top: 50px;
 }
+
 .league-box {
   display: flex;
   justify-content: space-around;
@@ -716,7 +712,7 @@ img {
   margin-top: 4.5rem;
   font-size: 1.3rem;
   line-height: 1.1;
-  margin-left:1.4rem
+  margin-left: 1.4rem
 }
 
 .inside-leagues {
@@ -745,9 +741,9 @@ img {
   object-fit: contain;
 }
 
-.leagues-heading h1{
+.leagues-heading h1 {
   text-align: center;
-  font-size:21px
+  font-size: 21px
 }
 
 .leagues-heading .underline3 {
@@ -759,7 +755,6 @@ img {
   margin: 8px auto 0;
 }
 
-
 .favorites-heading {
   max-width: 1400px;
   width: 100%;
@@ -767,11 +762,11 @@ img {
   padding: 0 2.5rem;
 }
 
-.favorites-heading h1 span{
-  color:#9333ea;
+.favorites-heading h1 span {
+  color: #9333ea;
 }
 
-.favorites-heading h1{
+.favorites-heading h1 {
   font-size: 22px;
   text-align: center;
 }
@@ -785,7 +780,7 @@ img {
   margin: 6px auto 0;
 }
 
-.favorites{
+.favorites {
   max-width: 1400px;
   width: 100%;
   min-height: 220px;
@@ -827,20 +822,20 @@ img {
   object-fit: cover;
 }
 
-.inside-favorites-text{
+.inside-favorites-text {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.inside-favorites-text p{
+.inside-favorites-text p {
   font-size: 11px;
   color: #a3a3a3;
   text-transform: uppercase;
   letter-spacing: 0.7px;
 }
 
-.inside-favorites-text h2{
+.inside-favorites-text h2 {
   font-size: 13px;
 }
 
@@ -913,12 +908,11 @@ img {
 
 .right-footer ul {
   list-style: none;
-  margin-left:-40px;
+  margin-left: -40px;
 }
 
-.right-footer li + li {
+.right-footer li+li {
   margin-top: 0.3rem;
-
 }
 
 .right-footer a {
@@ -928,7 +922,16 @@ img {
   line-height: 2.2;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 960px) {
+  .nav,
+  .search-box,
+  .nav-link a {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
   .bet-steps {
     padding: 4rem 1.75rem 5rem;
   }
@@ -981,7 +984,7 @@ img {
     border-bottom-left-radius: 60% 130%;
     padding: 3% 2% 2% 6%;
   }
-  
+
   .purple-section::before {
     border-bottom-left-radius: 60% 130%;
   }
@@ -1005,17 +1008,6 @@ img {
 }
 
 @media (max-width: 768px) {
-  .nav,
-  .search-box,
-  .wallet-btn,
-  .nav-link a {
-    display: none;
-  }
-
-  .menu-toggle {
-    display: flex;
-  }
-
   .purple-section {
     width: 100%;
     height: 100%;
@@ -1062,7 +1054,7 @@ img {
 
   .bet-text {
     font-size: 3rem;
-    align-self: center; 
+    align-self: center;
     margin: 0;
   }
 
@@ -1156,6 +1148,7 @@ img {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -1166,6 +1159,7 @@ img {
 }
 
 @media print {
+
   .header,
   .menu-toggle,
   .mobile-nav {
@@ -1182,19 +1176,9 @@ img {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translateX(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
   }
 }

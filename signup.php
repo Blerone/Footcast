@@ -79,7 +79,7 @@
             </form>
             
             <p class="register-link">
-                Already have an account? <a href="login.html">Sign In</a>
+                Already have an account? <a href="login.php">Sign In</a>
             </p>
         </div>
     </div>

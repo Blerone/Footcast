@@ -5,10 +5,7 @@
   <title>Promotions</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./css/promotions.css" />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
-  />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"/>
 </head>
 <body>
   <header class="header">
@@ -17,11 +14,11 @@
         <div class="left-section">
           <h1 class="logo-text">FOOTCAST</h1>
           <nav class="">
-            <button class="nav-link active"><a href="index.html" class="nav-link active">Home</a></button>
-            <button class="nav-link"><a href="matches.html">Matches</a></button>
+            <button class="nav-link active"><a href="index.php" class="nav-link active">Home</a></button>
+            <button class="nav-link"><a href="matches.php">Matches</a></button>
             <button class="nav-link"><a href="">Results</a></button>
-            <button class="nav-link"><a href="sports.html">Sports</a></button>
-            <button class="nav-link"><a href="promotions.html">Promotions</a></button>
+            <button class="nav-link"><a href="sports.php">Sports</a></button>
+            <button class="nav-link"><a href="promotions.php">Promotions</a></button>
           </nav>
         </div>
         <div class="right-section">
@@ -38,7 +35,7 @@
               viewBox="0 0 24 24">
               <path d="M12 12c2.67 0 8 1.34 8 4v4H4v-4c0-2.66 5.33-4 8-4zm0-2a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
             </svg>
-            <a href="login.html" class="login-link">Login</a>
+            <a href="login.php" class="login-link">Login</a>
           </button>
           <button class="menu-toggle" id="menu-toggle">
             <span class="bar"></span>

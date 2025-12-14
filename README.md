@@ -11,5 +11,5 @@ Link to github repo: https://github.com/Blerone/Footcast
 - **Standings**: Styled league table with club logos.
 
 ## Getting started
-- **Open**: Simply open `index.html` in your browser (no build step required).
+- **Open**: Simply open `index.php` in your browser (via your local PHP server, e.g. XAMPP).
 - **Navigate**: Use the top navigation to move between Home, Matches, Sports, Promotions, Lineups, and Standings.

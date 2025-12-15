@@ -60,7 +60,7 @@
           <div class="team-logo">
             <img src="./assets/footlogos/colorfullogos/chels.png" alt="Chelsea logo" />
           </div>
-          <div class="team-name">CHELSEA</div>
+          <div class="team-name">CHELSEA</dvght,iv>
         </div>
 
         <div class="match-time">

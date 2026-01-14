@@ -1,10 +1,45 @@
+<?php
+session_start();
+require_once __DIR__ . '/db_connection.php';
+
+$loginError = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $returnUrl = trim($_POST['return_url'] ?? 'matches.php');
+
+    if ($email !== '' && $password !== '') {
+        $db = footcast_db();
+        $stmt = $db->prepare('SELECT id, username, password FROM users WHERE email = ? LIMIT 1');
+        if ($stmt) {
+            $stmt->bind_param('s', $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $user = $result ? $result->fetch_assoc() : null;
+            $stmt->close();
+            $db->close();
+            if ($user && password_verify($password, $user['password'])) {
+                $_SESSION['user_id'] = (int) $user['id'];
+                $_SESSION['username'] = $user['username'];
+                echo "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head><body>";
+                echo "<script>localStorage.setItem('footcastLoggedIn','1');";
+                echo "window.location.href=" . json_encode($returnUrl) . ";</script>";
+                echo "</body></html>";
+                exit;
+            }
+        }
+    }
+
+    $loginError = 'Invalid email or password.';
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="./css/login.css">
+    <link rel="stylesheet" href="./assets/css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -36,7 +71,11 @@
                 <span>OR</span>
             </div>
             
-            <form class="login-form" id="loginForm" action="#" method="post">
+            <form class="login-form" id="loginForm" action="login.php" method="post">
+                <input type="hidden" id="returnUrl" name="return_url" value="matches.php">
+                <?php if ($loginError): ?>
+                    <p class="error-message" style="display: block;"><?php echo htmlspecialchars($loginError, ENT_QUOTES, 'UTF-8'); ?></p>
+                <?php endif; ?>
                 <div class="form-group">
                     <input type="email" id="email" name="email" placeholder="Enter your email..." >
                     <span class="error-message" id="emailError"></span>
@@ -66,144 +105,6 @@
         </div>
     </div>
 
-    <script>
-        const passwordToggle = document.getElementById('passwordToggle');
-        const passwordInput = document.getElementById('password');
-        const eyeIcon = document.getElementById('eyeIcon');
-
-        passwordToggle.addEventListener('click', function() {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            
-            if (type === 'text') {
-                eyeIcon.classList.remove('fa-eye');
-                eyeIcon.classList.add('fa-eye-slash');
-            } else {
-                eyeIcon.classList.remove('fa-eye-slash');
-                eyeIcon.classList.add('fa-eye');
-            }
-        });
-
-        const form = document.getElementById('loginForm');
-        const emailInput = document.getElementById('email');
-        const emailError = document.getElementById('emailError');
-        const passwordError = document.getElementById('passwordError');
-
-        function validateEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!email.trim()) {
-                return 'Email is required';
-            }
-            if (!emailRegex.test(email)) {
-                return 'Please enter a valid email address';
-            }
-            return '';
-        }
-
-        function validatePassword(password) {
-            if (!password) {
-                return 'Password is required';
-            }
-            if (password.length < 6) {
-                return 'Password must be at least 6 characters';
-            }
-            return '';
-        }
-
-        function showError(errorElement, message) {
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-        }
-
-        function clearError(errorElement) {
-            errorElement.textContent = '';
-            errorElement.style.display = 'none';
-        }
-
-        function setFieldError(input, hasError) {
-            if (hasError) {
-                input.style.borderColor = '#ef4444';
-                input.style.backgroundColor = '#fef2f2';
-            } else {
-                input.style.borderColor = '#e5e7eb';
-                input.style.backgroundColor = '#f3f4f6';
-            }
-        }
-
-        emailInput.addEventListener('blur', function() {
-            const error = validateEmail(emailInput.value);
-            if (error) {
-                showError(emailError, error);
-                setFieldError(emailInput, true);
-            } else {
-                clearError(emailError);
-                setFieldError(emailInput, false);
-            }
-        });
-
-        emailInput.addEventListener('input', function() {
-            if (emailError.textContent) {
-                const error = validateEmail(emailInput.value);
-                if (!error) {
-                    clearError(emailError);
-                    setFieldError(emailInput, false);
-                }
-            }
-        });
-
-        passwordInput.addEventListener('blur', function() {
-            const error = validatePassword(passwordInput.value);
-            if (error) {
-                showError(passwordError, error);
-                setFieldError(passwordInput, true);
-            } else {
-                clearError(passwordError);
-                setFieldError(passwordInput, false);
-            }
-        });
-
-        passwordInput.addEventListener('input', function() {
-            if (passwordError.textContent) {
-                const error = validatePassword(passwordInput.value);
-                if (!error) {
-                    clearError(passwordError);
-                    setFieldError(passwordInput, false);
-                }
-            }
-        });
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            let isValid = true;
-
-            const emailErrorMsg = validateEmail(emailInput.value);
-            if (emailErrorMsg) {
-                showError(emailError, emailErrorMsg);
-                setFieldError(emailInput, true);
-                isValid = false;
-            } else {
-                clearError(emailError);
-                setFieldError(emailInput, false);
-            }
-
-            const passwordErrorMsg = validatePassword(passwordInput.value);
-            if (passwordErrorMsg) {
-                showError(passwordError, passwordErrorMsg);
-                setFieldError(passwordInput, true);
-                isValid = false;
-            } else {
-                clearError(passwordError);
-                setFieldError(passwordInput, false);
-            }
-
-            if (!isValid) {
-                const firstError = form.querySelector('.error-message[style*="block"]');
-                if (firstError) {
-                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }
-        });
-    </script>
+    <script src="./assets/js/login.js"></script>
 </body>
 </html>

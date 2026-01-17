@@ -1,3 +1,99 @@
+<?php
+  session_start();
+  require_once __DIR__ . '/config/football_api.php';
+
+  $LEAGUE_OPTIONS = [
+    'PL' => ['name' => 'Premier League', 'code' => 'PL'],
+    'PD' => ['name' => 'La Liga', 'code' => 'PD'],
+    'BL1' => ['name' => 'Bundesliga', 'code' => 'BL1'],
+    'SA' => ['name' => 'Serie A', 'code' => 'SA'],
+    'FL1' => ['name' => 'Ligue 1', 'code' => 'FL1'],
+  ];
+
+  $selectedLeague = $_GET['league'] ?? 'PL';
+  if (!isset($LEAGUE_OPTIONS[$selectedLeague])) {
+    $selectedLeague = 'PL';
+  }
+
+  $standingsData = getLeagueStandings($selectedLeague);
+  $standings = [];
+  $leagueName = 'Premier League';
+  $error = null;
+
+  if ($standingsData && isset($standingsData['success']) && $standingsData['success']) {
+    $standings = $standingsData['standings'] ?? [];
+    $leagueName = $standingsData['league'] ?? $LEAGUE_OPTIONS[$selectedLeague]['name'];
+  } 
+  else {
+    $error = $standingsData['error'] ?? 'Failed to load standings. Please try again later.';
+  }
+
+  function getRankClass($position) {
+    if ($position == 1) return 'rank-1';
+    if ($position == 2) return 'rank-2';
+    if ($position == 3) return 'rank-3';
+    if ($position == 4) return 'rank-4';
+    if ($position == 5) return 'rank-5';
+    if ($position == 6) return 'rank-6';
+    if ($position == 7) return 'rank-7';
+    if ($position == 17) return 'rank-17';
+    if ($position >= 18) return 'rank-bottom';
+    return 'rank-mid';
+  }
+
+  function formatGoalDifference($gd) {
+    if ($gd > 0) {
+      return '+' . $gd;
+    }
+    return (string)$gd;
+  }
+
+  function renderFormBadges($form) {
+    if (empty($form) || !is_string($form)) {
+      return '';
+    }
+      
+    $formArray = str_split($form);
+    $badges = '';
+      
+    foreach ($formArray as $result) {
+      $class = 'form-badge ';
+      if (strtoupper($result) === 'W') {
+        $class .= 'win';    
+      } elseif (strtoupper($result) === 'D') {
+        $class .= 'draw';
+      } elseif (strtoupper($result) === 'L') {
+        $class .= 'loss';
+      } else {
+          continue;
+      }
+          
+      $badges .= '<span class="' . htmlspecialchars($class) . '">' . htmlspecialchars(strtoupper($result)) . '</span>';
+    }    
+    return $badges;
+  }
+
+  function getTeamLogo($crest, $teamName) {
+    if (!empty($crest)) {
+      return htmlspecialchars($crest);
+    }
+      
+    $teamNameLower = strtolower($teamName);
+    $logoMap = [
+      'manchester city' => './assets/images/footlogos/colorfullogos/mancity.png',
+      'arsenal' => './assets/images/footlogos/arsenal.png',
+      'chelsea' => './assets/images/footlogos/colorfullogos/chelscolor.png',
+      'newcastle' => './assets/images/footlogos/colorfullogos/newcastle.svg',
+    ];
+      
+    foreach ($logoMap as $key => $path) {
+      if (strpos($teamNameLower, $key) !== false) {
+        return $path;
+      }
+    }  
+    return null;
+  }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,907 +101,107 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>League Standings</title>
   <link rel="stylesheet" href="./assets/css/standings.css" />
+  <link rel="stylesheet" href="./assets/css/style.css" />
 
 </head>
 <body>
     <?php 
     include("./assets/php/header.php")
-  ?>
+    ?>
   <main class="standings-page">
-    <h1 class="standings-title">Premier League Table</h1>
+    <div class="standings-header">
+      <h1 class="standings-title"><?php echo htmlspecialchars($leagueName); ?> Table</h1>
+      
+      <div class="league-selector-container">
+        <label for="league-select" class="league-selector-label">League:</label>
+        <select id="league-select" class="league-select">
+          <?php foreach ($LEAGUE_OPTIONS as $code => $league): ?>
+            <option value="<?php echo htmlspecialchars($code); ?>" <?php echo $selectedLeague === $code ? 'selected' : ''; ?>>
+              <?php echo htmlspecialchars($league['name']); ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+    </div>
+
+    <?php if ($error): ?>
+      <div class="standings-error">
+        <strong>Error:</strong> <?php echo htmlspecialchars($error); ?>
+      </div>
+    <?php endif; ?>
 
     <section class="standings-list">
-      <article class="team-row rank-1">
-        <div class="team-rank-badge">
-          <span>1</span>
+      <?php if (empty($standings) && !$error): ?>
+        <div class="standings-empty">
+          No standings data available at this time.
         </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <div class="team-main">
-              <span class="team-logo">
-                <img src="./assets/images/footlogos/colorfullogos/mancity.png" alt="Manchester City logo">
-              </span>
-              <span class="team-name">Manchester City</span>
-            </div>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat">
-                <span class="stat-label">P</span>
-                <span class="stat-value">15</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">W</span>
-                <span class="stat-value stat-win">12</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">D</span>
-                <span class="stat-value stat-draw">2</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">L</span>
-                <span class="stat-value stat-loss">1</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GF</span>
-                <span class="stat-value">38</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GA</span>
-                <span class="stat-value">12</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GD</span>
-                <span class="stat-value stat-gd-positive">+26</span>
-              </div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">38</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge draw">D</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-2">
-        <div class="team-rank-badge">
-          <span>2</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <div class="team-main">
-              <span class="team-logo">
-                <img src="./assets/images/footlogos/arsenal.png" alt="Arsenal logo">
-              </span>
-              <span class="team-name">Arsenal</span>
-            </div>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat">
-                <span class="stat-label">P</span>
-                <span class="stat-value">15</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">W</span>
-                <span class="stat-value stat-win">11</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">D</span>
-                <span class="stat-value stat-draw">3</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">L</span>
-                <span class="stat-value stat-loss">1</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GF</span>
-                <span class="stat-value">35</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GA</span>
-                <span class="stat-value">14</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GD</span>
-                <span class="stat-value stat-gd-positive">+21</span>
-              </div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">36</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge draw">D</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge draw">D</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-3">
-        <div class="team-rank-badge">
-          <span>3</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Liverpool</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat">
-                <span class="stat-label">P</span>
-                <span class="stat-value">15</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">W</span>
-                <span class="stat-value stat-win">10</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">D</span>
-                <span class="stat-value stat-draw">4</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">L</span>
-                <span class="stat-value stat-loss">1</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GF</span>
-                <span class="stat-value">32</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GA</span>
-                <span class="stat-value">15</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GD</span>
-                <span class="stat-value stat-gd-positive">+17</span>
-              </div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">34</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge win">W</span>
-              <span class="form-badge draw">D</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-4">
-        <div class="team-rank-badge">
-          <span>4</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Tottenham</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat">
-                <span class="stat-label">P</span>
-                <span class="stat-value">15</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">W</span>
-                <span class="stat-value stat-win">10</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">D</span>
-                <span class="stat-value stat-draw">2</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">L</span>
-                <span class="stat-value stat-loss">3</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GF</span>
-                <span class="stat-value">31</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GA</span>
-                <span class="stat-value">18</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GD</span>
-                <span class="stat-value stat-gd-positive">+13</span>
-              </div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">32</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge win">W</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge draw">D</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-5">
-        <div class="team-rank-badge">
-          <span>5</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Aston Villa</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat">
-                <span class="stat-label">P</span>
-                <span class="stat-value">15</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">W</span>
-                <span class="stat-value stat-win">9</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">D</span>
-                <span class="stat-value stat-draw">3</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">L</span>
-                <span class="stat-value stat-loss">3</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GF</span>
-                <span class="stat-value">29</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GA</span>
-                <span class="stat-value">20</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GD</span>
-                <span class="stat-value stat-gd-positive">+9</span>
-              </div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">30</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge draw">D</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge win">W</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-6">
-        <div class="team-rank-badge">
-          <span>6</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Manchester United</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat">
-                <span class="stat-label">P</span>
-                <span class="stat-value">15</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">W</span>
-                <span class="stat-value stat-win">9</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">D</span>
-                <span class="stat-value stat-draw">2</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">L</span>
-                <span class="stat-value stat-loss">4</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GF</span>
-                <span class="stat-value">26</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GA</span>
-                <span class="stat-value">19</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GD</span>
-                <span class="stat-value stat-gd-positive">+7</span>
-              </div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">29</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge draw">D</span>
-              <span class="form-badge draw">D</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-7">
-        <div class="team-rank-badge">
-          <span>7</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <div class="team-main">
-              <span class="team-logo">
-                <img src="./assets/images/footlogos/colorfullogos/newcastle.svg" alt="Newcastle logo">
-              </span>
-              <span class="team-name">Newcastle</span>
-            </div>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat">
-                <span class="stat-label">P</span>
-                <span class="stat-value">15</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">W</span>
-                <span class="stat-value stat-win">8</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">D</span>
-                <span class="stat-value stat-draw">3</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">L</span>
-                <span class="stat-value stat-loss">4</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GF</span>
-                <span class="stat-value">28</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GA</span>
-                <span class="stat-value">21</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GD</span>
-                <span class="stat-value stat-gd-positive">+7</span>
-              </div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">27</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge draw">D</span>
-              <span class="form-badge draw">D</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge win">W</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-mid">
-        <div class="team-rank-badge">
-          <span>8</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Brighton</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat">
-                <span class="stat-label">P</span>
-                <span class="stat-value">15</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">W</span>
-                <span class="stat-value stat-win">7</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">D</span>
-                <span class="stat-value stat-draw">4</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">L</span>
-                <span class="stat-value stat-loss">4</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GF</span>
-                <span class="stat-value">27</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GA</span>
-                <span class="stat-value">22</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GD</span>
-                <span class="stat-value stat-gd-positive">+5</span>
-              </div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">25</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge win">W</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge draw">D</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-mid">
-        <div class="team-rank-badge">
-          <span>9</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">West Ham</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat">
-                <span class="stat-label">P</span>
-                <span class="stat-value">15</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">W</span>
-                <span class="stat-value stat-win">7</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">D</span>
-                <span class="stat-value stat-draw">3</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">L</span>
-                <span class="stat-value stat-loss">5</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GF</span>
-                <span class="stat-value">24</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GA</span>
-                <span class="stat-value">23</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GD</span>
-                <span class="stat-value stat-gd-positive">+1</span>
-              </div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">24</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge loss">L</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge win">W</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-mid">
-        <div class="team-rank-badge">
-          <span>10</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <div class="team-main">
-              <span class="team-logo">
-                <img src="./assets/images/footlogos/colorfullogos/chelscolor.png" alt="Chelsea logo">
-              </span>
-              <span class="team-name">Chelsea</span>
-            </div>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat">
-                <span class="stat-label">P</span>
-                <span class="stat-value">15</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">W</span>
-                <span class="stat-value stat-win">5</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">D</span>
-                <span class="stat-value stat-draw">4</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">L</span>
-                <span class="stat-value stat-loss">6</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GF</span>
-                <span class="stat-value">24</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GA</span>
-                <span class="stat-value">22</span>
-              </div>
-              <div class="stat">
-                <span class="stat-label">GD</span>
-                <span class="stat-value stat-gd-positive">+2</span>
-              </div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">19</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge win">W</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge draw">D</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-mid">
-        <div class="team-rank-badge">
-          <span>11</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Brentford</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat"><span class="stat-label">P</span><span class="stat-value">15</span></div>
-              <div class="stat"><span class="stat-label">W</span><span class="stat-value stat-win">5</span></div>
-              <div class="stat"><span class="stat-label">D</span><span class="stat-value stat-draw">4</span></div>
-              <div class="stat"><span class="stat-label">L</span><span class="stat-value stat-loss">6</span></div>
-              <div class="stat"><span class="stat-label">GF</span><span class="stat-value">23</span></div>
-              <div class="stat"><span class="stat-label">GA</span><span class="stat-value">21</span></div>
-              <div class="stat"><span class="stat-label">GD</span><span class="stat-value stat-gd-positive">+2</span></div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">19</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge win">W</span>
-              <span class="form-badge draw">D</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-mid">
-        <div class="team-rank-badge">
-          <span>12</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Fulham</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat"><span class="stat-label">P</span><span class="stat-value">15</span></div>
-              <div class="stat"><span class="stat-label">W</span><span class="stat-value stat-win">5</span></div>
-              <div class="stat"><span class="stat-label">D</span><span class="stat-value stat-draw">3</span></div>
-              <div class="stat"><span class="stat-label">L</span><span class="stat-value stat-loss">7</span></div>
-              <div class="stat"><span class="stat-label">GF</span><span class="stat-value">22</span></div>
-              <div class="stat"><span class="stat-label">GA</span><span class="stat-value">24</span></div>
-              <div class="stat"><span class="stat-label">GD</span><span class="stat-value stat-gd-negative">-2</span></div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">18</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge win">W</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-mid">
-        <div class="team-rank-badge">
-          <span>13</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Wolves</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat"><span class="stat-label">P</span><span class="stat-value">15</span></div>
-              <div class="stat"><span class="stat-label">W</span><span class="stat-value stat-win">5</span></div>
-              <div class="stat"><span class="stat-label">D</span><span class="stat-value stat-draw">3</span></div>
-              <div class="stat"><span class="stat-label">L</span><span class="stat-value stat-loss">7</span></div>
-              <div class="stat"><span class="stat-label">GF</span><span class="stat-value">21</span></div>
-              <div class="stat"><span class="stat-label">GA</span><span class="stat-value">26</span></div>
-              <div class="stat"><span class="stat-label">GD</span><span class="stat-value stat-gd-negative">-5</span></div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">18</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge draw">D</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge draw">D</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-mid">
-        <div class="team-rank-badge">
-          <span>14</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Crystal Palace</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat"><span class="stat-label">P</span><span class="stat-value">15</span></div>
-              <div class="stat"><span class="stat-label">W</span><span class="stat-value stat-win">4</span></div>
-              <div class="stat"><span class="stat-label">D</span><span class="stat-value stat-draw">4</span></div>
-              <div class="stat"><span class="stat-label">L</span><span class="stat-value stat-loss">7</span></div>
-              <div class="stat"><span class="stat-label">GF</span><span class="stat-value">18</span></div>
-              <div class="stat"><span class="stat-label">GA</span><span class="stat-value">25</span></div>
-              <div class="stat"><span class="stat-label">GD</span><span class="stat-value stat-gd-negative">-7</span></div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">16</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge loss">L</span>
-              <span class="form-badge draw">D</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge win">W</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-mid">
-        <div class="team-rank-badge">
-          <span>15</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Bournemouth</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat"><span class="stat-label">P</span><span class="stat-value">15</span></div>
-              <div class="stat"><span class="stat-label">W</span><span class="stat-value stat-win">4</span></div>
-              <div class="stat"><span class="stat-label">D</span><span class="stat-value stat-draw">4</span></div>
-              <div class="stat"><span class="stat-label">L</span><span class="stat-value stat-loss">7</span></div>
-              <div class="stat"><span class="stat-label">GF</span><span class="stat-value">20</span></div>
-              <div class="stat"><span class="stat-label">GA</span><span class="stat-value">32</span></div>
-              <div class="stat"><span class="stat-label">GD</span><span class="stat-value stat-gd-negative">-12</span></div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">16</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge draw">D</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-mid">
-        <div class="team-rank-badge">
-          <span>16</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Nott'm Forest</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat"><span class="stat-label">P</span><span class="stat-value">15</span></div>
-              <div class="stat"><span class="stat-label">W</span><span class="stat-value stat-win">3</span></div>
-              <div class="stat"><span class="stat-label">D</span><span class="stat-value stat-draw">4</span></div>
-              <div class="stat"><span class="stat-label">L</span><span class="stat-value stat-loss">8</span></div>
-              <div class="stat"><span class="stat-label">GF</span><span class="stat-value">18</span></div>
-              <div class="stat"><span class="stat-label">GA</span><span class="stat-value">29</span></div>
-              <div class="stat"><span class="stat-label">GD</span><span class="stat-value stat-gd-negative">-11</span></div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">13</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge loss">L</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge draw">D</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge win">W</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-17">
-        <div class="team-rank-badge">
-          <span>17</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Everton *</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat"><span class="stat-label">P</span><span class="stat-value">15</span></div>
-              <div class="stat"><span class="stat-label">W</span><span class="stat-value stat-win">4</span></div>
-              <div class="stat"><span class="stat-label">D</span><span class="stat-value stat-draw">4</span></div>
-              <div class="stat"><span class="stat-label">L</span><span class="stat-value stat-loss">7</span></div>
-              <div class="stat"><span class="stat-label">GF</span><span class="stat-value">18</span></div>
-              <div class="stat"><span class="stat-label">GA</span><span class="stat-value">20</span></div>
-              <div class="stat"><span class="stat-label">GD</span><span class="stat-value stat-gd-negative">-2</span></div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">10</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge win">W</span>
-              <span class="form-badge win">W</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge win">W</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-bottom">
-        <div class="team-rank-badge">
-          <span>18</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Luton Town</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat"><span class="stat-label">P</span><span class="stat-value">15</span></div>
-              <div class="stat"><span class="stat-label">W</span><span class="stat-value stat-win">2</span></div>
-              <div class="stat"><span class="stat-label">D</span><span class="stat-value stat-draw">5</span></div>
-              <div class="stat"><span class="stat-label">L</span><span class="stat-value stat-loss">8</span></div>
-              <div class="stat"><span class="stat-label">GF</span><span class="stat-value">13</span></div>
-              <div class="stat"><span class="stat-label">GA</span><span class="stat-value">28</span></div>
-              <div class="stat"><span class="stat-label">GD</span><span class="stat-value stat-gd-negative">-15</span></div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">11</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge loss">L</span>
-              <span class="form-badge draw">D</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge draw">D</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-bottom">
-        <div class="team-rank-badge">
-          <span>19</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Burnley</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat"><span class="stat-label">P</span><span class="stat-value">15</span></div>
-              <div class="stat"><span class="stat-label">W</span><span class="stat-value stat-win">2</span></div>
-              <div class="stat"><span class="stat-label">D</span><span class="stat-value stat-draw">3</span></div>
-              <div class="stat"><span class="stat-label">L</span><span class="stat-value stat-loss">10</span></div>
-              <div class="stat"><span class="stat-label">GF</span><span class="stat-value">12</span></div>
-              <div class="stat"><span class="stat-label">GA</span><span class="stat-value">32</span></div>
-              <div class="stat"><span class="stat-label">GD</span><span class="stat-value stat-gd-negative">-20</span></div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">9</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge loss">L</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge draw">D</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge loss">L</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <article class="team-row rank-bottom">
-        <div class="team-rank-badge">
-          <span>20</span>
-        </div>
-        <div class="team-row-content">
-          <div class="team-header">
-            <span class="team-name">Sheffield United</span>
-          </div>
-          <div class="team-stats">
-            <div class="stats-cols">
-              <div class="stat"><span class="stat-label">P</span><span class="stat-value">15</span></div>
-              <div class="stat"><span class="stat-label">W</span><span class="stat-value stat-win">1</span></div>
-              <div class="stat"><span class="stat-label">D</span><span class="stat-value stat-draw">2</span></div>
-              <div class="stat"><span class="stat-label">L</span><span class="stat-value stat-loss">12</span></div>
-              <div class="stat"><span class="stat-label">GF</span><span class="stat-value">9</span></div>
-              <div class="stat"><span class="stat-label">GA</span><span class="stat-value">38</span></div>
-              <div class="stat"><span class="stat-label">GD</span><span class="stat-value stat-gd-negative">-29</span></div>
-            </div>
-            <div class="team-points">
-              <span class="points-label">PTS</span>
-              <span class="points-value">5</span>
-            </div>
-            <div class="team-form">
-              <span class="form-badge loss">L</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge draw">D</span>
-              <span class="form-badge loss">L</span>
-              <span class="form-badge loss">L</span>
-            </div>
-          </div>
-        </div>
-      </article>
-
-      <p class="standings-note">* Everton points reflect applied sanctions.</p>
+      <?php else: ?>
+        <?php foreach ($standings as $team): ?>
+          <article class="team-row <?php echo getRankClass($team['position']); ?>">
+            <div class="team-rank-badge">
+              <span><?php echo htmlspecialchars($team['position']); ?></span>
+            </div>
+            <div class="team-row-content">
+              <div class="team-header">
+                <div class="team-main">
+                  <?php 
+                  $logoUrl = getTeamLogo($team['team']['crest'] ?? null, $team['team']['name'] ?? '');
+                  if ($logoUrl): 
+                  ?>
+                    <span class="team-logo">
+                      <img src="<?php echo htmlspecialchars($logoUrl); ?>" alt="<?php echo htmlspecialchars($team['team']['name'] ?? ''); ?> logo" onerror="this.style.display='none';">
+                    </span>
+                  <?php endif; ?>
+                  <span class="team-name"><?php echo htmlspecialchars($team['team']['name'] ?? 'Unknown'); ?></span>
+                </div>
+              </div>
+              <div class="team-stats">
+                <div class="stats-cols">
+                  <div class="stat">
+                    <span class="stat-label">P</span>
+                    <span class="stat-value"><?php echo htmlspecialchars($team['played'] ?? 0); ?></span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-label">W</span>
+                    <span class="stat-value stat-win"><?php echo htmlspecialchars($team['won'] ?? 0); ?></span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-label">D</span>
+                    <span class="stat-value stat-draw"><?php echo htmlspecialchars($team['drawn'] ?? 0); ?></span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-label">L</span>
+                    <span class="stat-value stat-loss"><?php echo htmlspecialchars($team['lost'] ?? 0); ?></span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-label">GF</span>
+                    <span class="stat-value"><?php echo htmlspecialchars($team['goals_for'] ?? 0); ?></span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-label">GA</span>
+                    <span class="stat-value"><?php echo htmlspecialchars($team['goals_against'] ?? 0); ?></span>
+                  </div>
+                  <div class="stat">
+                    <span class="stat-label">GD</span>
+                    <?php 
+                    $gd = $team['goal_difference'] ?? 0;
+                    $gdClass = $gd >= 0 ? 'stat-gd-positive' : 'stat-gd-negative';
+                    ?>
+                    <span class="stat-value <?php echo $gdClass; ?>"><?php echo formatGoalDifference($gd); ?></span>
+                  </div>
+                </div>
+                <div class="team-points">
+                  <span class="points-label">PTS</span>
+                  <span class="points-value"><?php echo htmlspecialchars($team['points'] ?? 0); ?></span>
+                </div>
+                <div class="team-form">
+                  <?php echo renderFormBadges($team['form'] ?? ''); ?>
+                </div>
+              </div>
+            </div>
+          </article>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </section>
   </main>
 </body>
@@ -928,4 +224,12 @@
       header.classList.remove('scrolled');
     }
   });
+
+  const leagueSelect = document.getElementById('league-select');
+  if (leagueSelect) {
+    leagueSelect.addEventListener('change', function() {
+      const selectedLeague = this.value;
+      window.location.href = '?league=' + encodeURIComponent(selectedLeague);
+    });
+  }
 </script>

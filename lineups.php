@@ -4,61 +4,19 @@
   <meta charset="UTF-8" />
   <title>FootCast</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="./css/lineups.css" />
+  <link rel="stylesheet" href="./assets/css/lineups.css" />
 </head>
 <body>
-    <header class="header">
-      <div class="container">
-        <div class="header-inner">
-          <div class="left-section">
-            <h1 class="logo-text">FOOTCAST</h1>
-            <nav class="nav">
-              <button class="nav-link active">Home</button>
-              <button class="nav-link">Matches</button>
-              <button class="nav-link">Results</button>
-              <button class="nav-link">Stats</button>
-              <button class="nav-link">Promotions</button>
-            </nav>
-          </div>
+ <?php 
+  include("./assets/php/header.php")
+ ?>
 
-          <div class="right-section">
-            <div class="search-box">
-              <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M10,18a8,8,0,1,1,5.29-13.71A8,8,0,0,1,10,18Zm9.71,1.29-4.1-4.1A9.94,9.94,0,0,0,20,10a10,10,0,1,0-10,10,9.94,9.94,0,0,0,5.19-1.39l4.1,4.1a1,1,0,0,0,1.42-1.42Z" />
-              </svg>
-              <input type="text" placeholder="Search matches..." />
-            </div>
-
-            <button class="btn outline-btn">
-              <svg xmlns="http://www.w3.org/2000/svg" class="user-icon" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 12c2.67 0 8 1.34 8 4v4H4v-4c0-2.66 5.33-4 8-4zm0-2a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
-              </svg>
-              Login
-            </button>
-
-            <button class="menu-toggle" id="menu-toggle">
-              <span class="bar"></span>
-              <span class="bar"></span>
-              <span class="bar"></span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="mobile-nav" id="mobile-nav">
-        <button class="nav-link active">Home</button>
-        <button class="nav-link">Matches</button>
-        <button class="nav-link">Results</button>
-        <button class="nav-link">Stats</button>
-        <button class="nav-link">Promotions</button>
-      </div>
-    </header>
-    <div class="bz-page">
+ <div class="bz-page">
     <section class="match-hero">
       <div class="match-hero-inner">
         <div class="team-block">
           <div class="team-logo">
-            <img src="./assets/footlogos/colorfullogos/chels.png" alt="Chelsea logo" />
+            <img src="./assets/images/footlogos/colorfullogos/chels.png" alt="Chelsea logo" />
           </div>
           <div class="team-name">CHELSEA</dvght,iv>
         </div>
@@ -70,7 +28,7 @@
 
         <div class="team-block team-right">
           <div class="team-logo team-logo-away">
-            <img src="./assets/footlogos/colorfullogos/fcbarca.png" alt="Barcelona logo" />
+            <img src="./assets/images/footlogos/colorfullogos/fcbarca.png" alt="Barcelona logo" />
           </div>
           <div class="team-name team-name-right">BARCELONA</div>
         </div>
@@ -591,7 +549,9 @@
     </section>
 
   </div>
-
+  <?php
+    include('./assets/php/footer.php');
+  ?>
   <script>
     const toggleBtn = document.getElementById("menu-toggle");
     const mobileNav = document.getElementById("mobile-nav");

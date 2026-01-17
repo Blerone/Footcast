@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FootCast</title>
-  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./assets/css/style.css" />
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=arrow_upward" />
   <link rel="stylesheet"
@@ -13,53 +13,9 @@
 </head>
 
 <body>
-  <header class="header">
-    <div class="container">
-      <div class="header-inner">
-        <div class="left-section">
-          <h1 class="logo-text">FOOTCAST</h1>
-          <nav class="">
-            <button class="nav-link active"><a href="index.php" class="nav-link active">Home</a></button>
-            <button class="nav-link"><a href="matches.php">Matches</a></button>
-            <button class="nav-link"><a href="">Results</a></button>
-            <button class="nav-link"><a href="sports.php">Sports</a></button>
-            <button class="nav-link"><a href="promotions.php">Promotions</a></button>
-          </nav>
-        </div>
-        <div class="right-section">
-          <div class="search-box">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-              viewBox="0 0 24 24">
-              <path
-                d="M10,18a8,8,0,1,1,5.29-13.71A8,8,0,0,1,10,18Zm9.71,1.29-4.1-4.1A9.94,9.94,0,0,0,20,10a10,10,0,1,0-10,10,9.94,9.94,0,0,0,5.19-1.39l4.1,4.1a1,1,0,0,0,1.42-1.42Z" />
-            </svg>
-            <input type="text" placeholder="Search matches..." />
-          </div>
-          <button class="btn outline-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" class="user-icon" width="16" height="16" fill="currentColor"
-              viewBox="0 0 24 24">
-              <path d="M12 12c2.67 0 8 1.34 8 4v4H4v-4c0-2.66 5.33-4 8-4zm0-2a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
-            </svg>
-            <a href="login.php" class="login-link">Login</a>
-          </button>
-          <button class="menu-toggle" id="menu-toggle">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="mobile-nav" id="mobile-nav">
-      <button class="nav-link active">Home</button>
-      <button class="nav-link">Matches</button>
-      <button class="nav-link">Results</button>
-      <button class="nav-link">Stats</button>
-      <button class="nav-link">Promotions</button>
-    </div>
-  </header>
-
+ <?php 
+  include("./assets/php/header.php")
+ ?>
   <div class="main-content">
     <div class="content-wrapper">
       <div class="purple-section">
@@ -68,7 +24,7 @@
           <h2 class="bet-text">BET</h2>
         </div>
         <div class="player-right">
-          <img src="./assets/players/enzo.png" alt="Enzo">
+          <img src="./assets/images/players/enzo.png" alt="Enzo">
         </div>
       </div>
     </div>
@@ -83,34 +39,34 @@
   <div class="slider">
     <div class="slide-track">
       <div class="slide">
-        <img src="./assets/footlogos/chelses.png" alt="Logo 1" style="width: 100px; height: 100px;">
+        <img src="./assets/images/footlogos/chelses.png" alt="Logo 1" style="width: 100px; height: 100px;">
       </div>
       <div class="slide">
-        <img src="./assets/footlogos/barca.png" alt="Logo 2" style="width: 160px; height: 120px;">
+        <img src="./assets/images/footlogos/barca.png" alt="Logo 2" style="width: 160px; height: 120px;">
       </div>
       <div class="slide">
-        <img src="./assets/footlogos/real.png" alt="Logo 3" style="width: 140px; height: 100px;">
+        <img src="./assets/images/footlogos/real.png" alt="Logo 3" style="width: 140px; height: 100px;">
       </div>
       <div class="slide">
-        <img src="./assets/footlogos/psg.png" alt="Logo 4" style="width: 120px; height: 100px;">
+        <img src="./assets/images/footlogos/psg.png" alt="Logo 4" style="width: 120px; height: 100px;">
       </div>
       <div class="slide">
-        <img src="./assets/footlogos/arsenal.png" alt="Logo 5" style="width: 130px; height: 100px;">
+        <img src="./assets/images/footlogos/arsenal.png" alt="Logo 5" style="width: 130px; height: 100px;">
       </div>
       <div class="slide">
-        <img src="./assets/footlogos/chelses.png" alt="Logo 1" style="width: 100px; height: 100px;">
+        <img src="./assets/images/footlogos/chelses.png" alt="Logo 1" style="width: 100px; height: 100px;">
       </div>
       <div class="slide">
-        <img src="./assets/footlogos/barca.png" alt="Logo 2" style="width: 160px; height: 120px;">
+        <img src="./assets/images/footlogos/barca.png" alt="Logo 2" style="width: 160px; height: 120px;">
       </div>
       <div class="slide">
-        <img src="./assets/footlogos/real.png" alt="Logo 3" style="width: 140px; height: 100px;">
+        <img src="./assets/images/footlogos/real.png" alt="Logo 3" style="width: 140px; height: 100px;">
       </div>
       <div class="slide">
-        <img src="./assets/footlogos/psg.png" alt="Logo 4" style="width: 120px; height: 100px;">
+        <img src="./assets/images/footlogos/psg.png" alt="Logo 4" style="width: 120px; height: 100px;">
       </div>
       <div class="slide">
-        <img src="./assets/footlogos/arsenal.png" alt="Logo 5" style="width: 130px; height: 100px;">
+        <img src="./assets/images/footlogos/arsenal.png" alt="Logo 5" style="width: 130px; height: 100px;">
       </div>
     </div>
   </div>
@@ -124,7 +80,7 @@
         your passion for football meets the thrill of winning.</p>
     </div>
     <div class="right-image">
-      <img src="./assets/banners/phone.png" alt="">
+      <img src="./assets/images/banners/phone.png" alt="">
     </div>
   </section>
 
@@ -163,8 +119,8 @@
   </section>
   <section class="santiago-banner">
     <div class="santiago-banner-img">
-      <img src="./assets/footlogos/whitelogos/real1.png" alt="Real Madrid Logo" class="real-madrid-logo">
-      <img src="./assets/footlogos/whitelogos/barca1.png" alt="Barcelona Logo" class="barcelona-logo">
+      <img src="./assets/images/footlogos/whitelogos/real1.png" alt="Real Madrid Logo" class="real-madrid-logo">
+      <img src="./assets/images/footlogos/whitelogos/barca1.png" alt="Barcelona Logo" class="barcelona-logo">
     </div>
 
     <div class="time-left">
@@ -211,7 +167,7 @@
     <div class="leagues-inner premier">
       <div class="league-box">
         <div class="img-circle">
-          <img src="./assets/footlogos/leagues/premierleague.png" alt="Premier League"
+          <img src="./assets/images/footlogos/leagues/premierleague.png" alt="Premier League"
             style="width:50px; height: auto;">
         </div>
         <div class="league-stats">
@@ -228,7 +184,7 @@
           <p class="goals">60 G/A</p>
         </div>
         <div class="leagues-rightside">
-          <img src="./assets/players/haaland.png" alt="Erling Haaland">
+          <img src="./assets/images/players/haaland.png" alt="Erling Haaland">
         </div>
       </div>
     </div>
@@ -236,7 +192,7 @@
     <div class="leagues-inner seriea">
       <div class="league-box">
         <div class="img-circle">
-          <img src="./assets/footlogos/leagues/seria.png" alt="Serie A" style="width: 50px; height: auto;">
+          <img src="./assets/images/footlogos/leagues/seria.png" alt="Serie A" style="width: 50px; height: auto;">
         </div>
         <div class="league-stats">
           <h4>194 <span class="material-symbols-outlined"> arrow_downward</span></h4>
@@ -252,7 +208,7 @@
           <p class="goals">30 G/A</p>
         </div>
         <div class="leagues-rightside">
-          <img src="./assets/players/calhanoglu.png" alt="">
+          <img src="./assets/images/players/calhanoglu.png" alt="">
         </div>
       </div>
     </div>
@@ -260,7 +216,7 @@
     <div class="leagues-inner bundesliga">
       <div class="league-box">
         <div class="img-circle">
-          <img src="./assets/footlogos/leagues/bundesliga.png" alt="Serie A" style="width: 60px; height: auto;">
+          <img src="./assets/images/footlogos/leagues/bundesliga.png" alt="Serie A" style="width: 60px; height: auto;">
         </div>
         <div class="league-stats">
           <h4>194 <span class="material-symbols-outlined">arrow_downward</span></h4>
@@ -276,7 +232,7 @@
           <p class="goals">30 G/A</p>
         </div>
         <div class="leagues-rightside">
-          <img src="./assets/players/kane.png" alt="">
+          <img src="./assets/images/players/kane.png" alt="">
         </div>
       </div>
     </div>
@@ -285,7 +241,7 @@
     <div class="leagues-inner laliga">
       <div class="league-box">
         <div class="img-circle">
-          <img src="./assets/footlogos/leagues/laliga1.png" alt="Serie A">
+          <img src="./assets/images/footlogos/leagues/laliga1.png" alt="Serie A">
         </div>
         <div class="league-stats">
           <h4>194 <span class="material-symbols-outlined">arrow_downward</span></h4>
@@ -301,7 +257,7 @@
           <p class="goals">30 G/A</p>
         </div>
         <div class="leagues-rightside">
-          <img src="./assets/players/mbappe1.png" alt="">
+          <img src="./assets/images/players/mbappe1.png" alt="">
         </div>
       </div>
     </div>
@@ -316,7 +272,7 @@
   <section class="favorites">
     <div class="inside-favorites">
       <div class="inside-favorites-img">
-        <img src="./assets/players/haaland.png" alt="">
+        <img src="./assets/images/players/haaland.png" alt="">
       </div>
       <div class="inside-favorites-text">
         <p>Player</p>
@@ -326,7 +282,7 @@
 
     <div class="inside-favorites">
       <div class="inside-favorites-img">
-        <img src="./assets/players/maresca.png" alt="">
+        <img src="./assets/images/players/maresca.png" alt="">
       </div>
       <div class="inside-favorites-text">
         <p>Coach</p>
@@ -336,7 +292,7 @@
 
     <div class="inside-favorites">
       <div class="inside-favorites-img">
-        <img src="./assets/footlogos/colorfullogos/chelscolor.png" alt="" style="width: 60px; height: 60px;">
+        <img src="./assets/images/footlogos/colorfullogos/chelscolor.png" alt="" style="width: 60px; height: 60px;">
       </div>
       <div class="inside-favorites-text">
         <p>Club</p>
@@ -347,7 +303,7 @@
 
     <div class="inside-favorites">
       <div class="inside-favorites-img">
-        <img src="./assets/footlogos/colorfullogos/realcolor.png" alt="" style="width: 70px; height: 70px;">
+        <img src="./assets/images/footlogos/colorfullogos/realcolor.png" alt="" style="width: 70px; height: 70px;">
       </div>
       <div class="inside-favorites-text">
         <p>Club</p>
@@ -356,7 +312,7 @@
     </div>
     <div class="inside-favorites">
       <div class="inside-favorites-img">
-        <img src="./assets/footlogos/colorfullogos/bayerncolor.png" alt="" style="width: 60px; height: 60px;">
+        <img src="./assets/images/footlogos/colorfullogos/bayerncolor.png" alt="" style="width: 60px; height: 60px;">
       </div>
       <div class="inside-favorites-text">
         <p>Club</p>
@@ -366,7 +322,7 @@
 
     <div class="inside-favorites">
       <div class="inside-favorites-img">
-        <img src="./assets/players/mbappe1.png" alt="">
+        <img src="./assets/images/players/mbappe1.png" alt="">
       </div>
       <div class="inside-favorites-text">
         <p>Player</p>
@@ -376,7 +332,7 @@
 
     <div class="inside-favorites">
       <div class="inside-favorites-img">
-        <img src="./assets/players/estevao.png" alt="">
+        <img src="./assets/images/players/estevao.png" alt="">
       </div>
       <div class="inside-favorites-text">
         <p>Player</p>
@@ -386,7 +342,7 @@
 
     <div class="inside-favorites">
       <div class="inside-favorites-img">
-        <img src="./assets/footlogos/colorfullogos/intercolor.png" alt="" style="width: 60px; height: 60px;">
+        <img src="./assets/images/footlogos/colorfullogos/intercolor.png" alt="" style="width: 60px; height: 60px;">
       </div>
       <div class="inside-favorites-text">
         <p>Club</p>
@@ -396,7 +352,7 @@
 
     <div class="inside-favorites">
       <div class="inside-favorites-img">
-        <img src="./assets/players/alonso.png" alt="">
+        <img src="./assets/images/players/alonso.png" alt="">
       </div>
       <div class="inside-favorites-text">
         <p>Coach</p>
@@ -405,55 +361,9 @@
     </div>
   </section>
 
-
-  <section class="footer">
-    <div class="left-footer">
-      <h2>FOOTCAST</h2>
-      <p>One click away, from winning it all.</p>
-
-      <div class="social-links">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
-        <a href="#"><i class="fab fa-x-twitter"></i></a>
-      </div>
-
-      <p class="footer-copy">© 2025 Blerona Thaci &amp; Vesa Susuri | All Rights Reserved</p>
-    </div>
-
-    <div class="right-footer">
-      <h2>Company</h2>
-      <ul>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Our Team</a></li>
-        <li><a href="#">Our Work</a></li>
-        <li><a href="#">Partners</a></li>
-        <li><a href="#">Clients</a></li>
-      </ul>
-    </div>
-
-    <div class="right-footer">
-      <h2>Support</h2>
-      <ul>
-        <li><a href="#">Contact Us</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Q &amp; A</a></li>
-        <li><a href="#">Affiliates</a></li>
-      </ul>
-    </div>
-
-    <div class="right-footer">
-      <h2>Trust</h2>
-      <ul>
-        <li><a href="#">User Trust</a></li>
-        <li><a href="#">Guidelines</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of Use</a></li>
-        <li><a href="#">Security</a></li>
-      </ul>
-    </div>
-  </section>
-
+  <?php
+    include('./assets/php/footer.php');
+  ?>
   <script>
     const toggleBtn = document.getElementById('menu-toggle');
     const mobileNav = document.getElementById('mobile-nav');

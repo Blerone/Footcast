@@ -204,7 +204,7 @@ img {
 .match-hero {
   width: 100%;
   position: relative;
-  background-image: url("../assets/banners/background-lineups.png");
+  background-image: url("..assets/images/banners/background-lineups.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -375,7 +375,7 @@ img {
   aspect-ratio: 2 / 3;
   border-radius: 22px;
   overflow: hidden;
-  background-image: url("../assets/banners/fusha.jpg");
+  background-image: url("../assets/images/banners/fusha.jpg");
   background-size: cover;
   background-position: center;
   box-shadow: 0 32px 60px rgba(0, 0, 0, 0.6);

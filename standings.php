@@ -4,9 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>League Standings</title>
-  <link rel="stylesheet" href="./css/standings.css" />
+  <link rel="stylesheet" href="./assets/css/standings.css" />
+
 </head>
 <body>
+    <?php 
+    include("./assets/php/header.php")
+  ?>
   <main class="standings-page">
     <h1 class="standings-title">Premier League Table</h1>
 
@@ -19,7 +23,7 @@
           <div class="team-header">
             <div class="team-main">
               <span class="team-logo">
-                <img src="./assets/footlogos/colorfullogos/mancity.png" alt="Manchester City logo">
+                <img src="./assets/images/footlogos/colorfullogos/mancity.png" alt="Manchester City logo">
               </span>
               <span class="team-name">Manchester City</span>
             </div>
@@ -78,7 +82,7 @@
           <div class="team-header">
             <div class="team-main">
               <span class="team-logo">
-                <img src="./assets/footlogos/arsenal.png" alt="Arsenal logo">
+                <img src="./assets/images/footlogos/arsenal.png" alt="Arsenal logo">
               </span>
               <span class="team-name">Arsenal</span>
             </div>
@@ -353,7 +357,7 @@
           <div class="team-header">
             <div class="team-main">
               <span class="team-logo">
-                <img src="./assets/footlogos/colorfullogos/newcastle.svg" alt="Newcastle logo">
+                <img src="./assets/images/footlogos/colorfullogos/newcastle.svg" alt="Newcastle logo">
               </span>
               <span class="team-name">Newcastle</span>
             </div>
@@ -520,7 +524,7 @@
           <div class="team-header">
             <div class="team-main">
               <span class="team-logo">
-                <img src="./assets/footlogos/colorfullogos/chelscolor.png" alt="Chelsea logo">
+                <img src="./assets/images/footlogos/colorfullogos/chelscolor.png" alt="Chelsea logo">
               </span>
               <span class="team-name">Chelsea</span>
             </div>
@@ -906,3 +910,22 @@
   </main>
 </body>
 </html>
+
+<script>
+  const toggleBtn = document.getElementById('menu-toggle');
+  const mobileNav = document.getElementById('mobile-nav');
+  const header = document.querySelector('.header');
+
+  toggleBtn.addEventListener('click', () => {
+    mobileNav.classList.toggle('open');
+    toggleBtn.classList.toggle('open');
+  });
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  });
+</script>

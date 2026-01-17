@@ -23,7 +23,7 @@ body {
     width: 100%;
     height: 100%;
     z-index: 0;
-    background-image: url('../assets/banners/loginbn2.png');
+    background-image: url('../images/banners/loginbn2.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -37,7 +37,7 @@ body {
     width: 100%;
     height: 100%;
     z-index: 0;
-    background-image: url('../assets/banners/loginbn.png');
+    background-image: url('../images/banners/loginbn.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

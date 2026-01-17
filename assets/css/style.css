@@ -464,7 +464,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .santiago-banner {
-  background: url('../assets/banners/santiago-banner.png') center/cover no-repeat;
+  background: url('../images/banners/santiago-banner.png') center/cover no-repeat;
   max-width: 1400px;
   width: 100%;
   min-height: 360px;

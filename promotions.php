@@ -4,58 +4,13 @@
   <meta charset="UTF-8" />
   <title>Promotions</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="./css/promotions.css" />
+  <link rel="stylesheet" href="./assets/css/promotions.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"/>
 </head>
 <body>
-  <header class="header">
-    <div class="container">
-      <div class="header-inner">
-        <div class="left-section">
-          <h1 class="logo-text">FOOTCAST</h1>
-          <nav class="">
-            <button class="nav-link active"><a href="index.php" class="nav-link active">Home</a></button>
-            <button class="nav-link"><a href="matches.php">Matches</a></button>
-            <button class="nav-link"><a href="">Results</a></button>
-            <button class="nav-link"><a href="sports.php">Sports</a></button>
-            <button class="nav-link"><a href="promotions.php">Promotions</a></button>
-          </nav>
-        </div>
-        <div class="right-section">
-          <div class="search-box">
-            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-              viewBox="0 0 24 24">
-              <path
-                d="M10,18a8,8,0,1,1,5.29-13.71A8,8,0,0,1,10,18Zm9.71,1.29-4.1-4.1A9.94,9.94,0,0,0,20,10a10,10,0,1,0-10,10,9.94,9.94,0,0,0,5.19-1.39l4.1,4.1a1,1,0,0,0,1.42-1.42Z" />
-            </svg>
-            <input type="text" placeholder="Search matches..." />
-          </div>
-          <button class="btn outline-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" class="user-icon" width="16" height="16" fill="currentColor"
-              viewBox="0 0 24 24">
-              <path d="M12 12c2.67 0 8 1.34 8 4v4H4v-4c0-2.66 5.33-4 8-4zm0-2a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
-            </svg>
-            <a href="login.php" class="login-link">Login</a>
-          </button>
-          <button class="menu-toggle" id="menu-toggle">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div class="mobile-nav" id="mobile-nav">
-      <button class="nav-link active">Home</button>
-      <button class="nav-link">Matches</button>
-      <button class="nav-link">Results</button>
-      <button class="nav-link">Stats</button>
-      <button class="nav-link">Promotions</button>
-    </div>
-  </header>
-
-
+  <?php 
+    include("./assets/php/header.php")
+  ?>
   <main>
     <h3 class="page-title">Active Promotions</h3>
     <section class="promotions-grid">
@@ -252,54 +207,9 @@
 
     
   </main>
-  <section class="footer">
-    <div class="left-footer">
-      <h2>FOOTCAST</h2>
-      <p>One click away, from winning it all.</p>
-
-      <div class="social-links">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-youtube"></i></a>
-        <a href="#"><i class="fab fa-x-twitter"></i></a>
-      </div>
-
-      <p class="footer-copy">© 2025 Blerona Thaci &amp; Vesa Susuri | All Rights Reserved</p>
-    </div>
-
-    <div class="right-footer">
-      <h2>Company</h2>
-      <ul>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Our Team</a></li>
-        <li><a href="#">Our Work</a></li>
-        <li><a href="#">Partners</a></li>
-        <li><a href="#">Clients</a></li>
-      </ul>
-    </div>
-
-    <div class="right-footer">
-      <h2>Support</h2>
-      <ul>
-        <li><a href="#">Contact Us</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Q &amp; A</a></li>
-        <li><a href="#">Affiliates</a></li>
-      </ul>
-    </div>
-
-    <div class="right-footer">
-      <h2>Trust</h2>
-      <ul>
-        <li><a href="#">User Trust</a></li>
-        <li><a href="#">Guidelines</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of Use</a></li>
-        <li><a href="#">Security</a></li>
-      </ul>
-    </div>
-  </section>
-  
+    <?php
+        include('./assets/php/footer.php');
+    ?>
   <script>
     const toggleBtn = document.getElementById('menu-toggle');
     const mobileNav = document.getElementById('mobile-nav');

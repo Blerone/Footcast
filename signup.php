@@ -1,10 +1,69 @@
+<?php
+session_start();
+require_once __DIR__ . '/db_connection.php';
+
+$signupError = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $confirmPassword = $_POST['confirmPassword'] ?? '';
+    $termsAccepted = isset($_POST['terms']);
+    $returnUrl = trim($_POST['return_url'] ?? 'matches.php');
+
+    if ($name === '' || $email === '' || $password === '' || $confirmPassword === '') {
+        $signupError = 'All fields are required.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $signupError = 'Please enter a valid email address.';
+    } elseif ($password !== $confirmPassword) {
+        $signupError = 'Passwords do not match.';
+    } elseif (!$termsAccepted) {
+        $signupError = 'You must agree to the Terms & Conditions.';
+    } else {
+        $db = footcast_db();
+        $stmt = $db->prepare('SELECT id FROM users WHERE email = ? LIMIT 1');
+        if ($stmt) {
+            $stmt->bind_param('s', $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result && $result->fetch_assoc()) {
+                $signupError = 'Email is already registered.';
+            }
+            $stmt->close();
+        }
+
+        if ($signupError === '') {
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $db->prepare('INSERT INTO users (username, email, password) VALUES (?, ?, ?)');
+            if ($stmt) {
+                $stmt->bind_param('sss', $name, $email, $passwordHash);
+                if ($stmt->execute()) {
+                    $_SESSION['user_id'] = (int) $stmt->insert_id;
+                    $_SESSION['username'] = $name;
+                    $stmt->close();
+                    $db->close();
+                    echo "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head><body>";
+                    echo "<script>localStorage.setItem('footcastLoggedIn','1');";
+                    echo "window.location.href=" . json_encode($returnUrl) . ";</script>";
+                    echo "</body></html>";
+                    exit;
+                }
+                $stmt->close();
+            }
+            $signupError = 'Unable to create account right now.';
+        }
+
+        $db->close();
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up </title>
-    <link rel="stylesheet" href="./css/login.css">
+    <link rel="stylesheet" href="./assets/css/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -36,7 +95,11 @@
                 <span>OR</span>
             </div>
             
-            <form class="login-form" id="signupForm" action="#" method="post">
+            <form class="login-form" id="signupForm" action="signup.php" method="post">
+                <input type="hidden" id="returnUrl" name="return_url" value="matches.php">
+                <?php if ($signupError): ?>
+                    <p class="error-message" style="display: block;"><?php echo htmlspecialchars($signupError, ENT_QUOTES, 'UTF-8'); ?></p>
+                <?php endif; ?>
                 <div class="form-group">
                     <input type="text" id="name" name="name" placeholder="Enter your name..." >
                     <span class="error-message" id="nameError"></span>
@@ -69,11 +132,11 @@
                 
                 <div class="form-options">
                     <label class="remember-me">
-                        <input type="checkbox" id="terms">
-                        <span>I agree to the Terms & Conditions</span>
-                    </label>
-                    <span class="error-message" id="termsError"></span>
-                </div>
+                    <input type="checkbox" id="terms" name="terms" value="1">
+                    <span>I agree to the Terms & Conditions</span>
+                </label>
+                <span class="error-message" id="termsError"></span>
+            </div>
                 
                 <button type="submit" class="sign-in-btn">Sign Up</button>
             </form>
@@ -84,272 +147,6 @@
         </div>
     </div>
 
-    <script>
-        const form = document.getElementById('signupForm');
-        const nameInput = document.getElementById('name');
-        const emailInput = document.getElementById('email');
-        const termsCheckbox = document.getElementById('terms');
-
-        const nameError = document.getElementById('nameError');
-        const emailError = document.getElementById('emailError');
-        const passwordError = document.getElementById('passwordError');
-        const confirmPasswordError = document.getElementById('confirmPasswordError');
-        const termsError = document.getElementById('termsError');
-
-        function validateName(name) {
-            const nameRegex = /^[a-zA-Z\s]{2,50}$/;
-            if (!name.trim()) {
-                return 'Name is required';
-            }
-            if (name.trim().length < 2) {
-                return 'Name must be at least 2 characters';
-            }
-            if (!nameRegex.test(name.trim())) {
-                return 'Name can only contain letters and spaces';
-            }
-            return '';
-        }
-
-        function validateEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!email.trim()) {
-                return 'Email is required';
-            }
-            if (!emailRegex.test(email)) {
-                return 'Please enter a valid email address';
-            }
-            return '';
-        }
-
-        function validatePassword(password) {
-            if (!password) {
-                return 'Password is required';
-            }
-            if (password.length < 8) {
-                return 'Password must be at least 8 characters';
-            }
-            if (!/[A-Z]/.test(password)) {
-                return 'Password must contain at least one uppercase letter';
-            }
-            if (!/[a-z]/.test(password)) {
-                return 'Password must contain at least one lowercase letter';
-            }
-            if (!/[0-9]/.test(password)) {
-                return 'Password must contain at least one number';
-            }
-            return '';
-        }
-
-        function validateConfirmPassword(password, confirmPassword) {
-            if (!confirmPassword) {
-                return 'Please confirm your password';
-            }
-            if (password !== confirmPassword) {
-                return 'Passwords do not match';
-            }
-            return '';
-        }
-
-        function validateTerms(checked) {
-            if (!checked) {
-                return 'You must agree to the Terms & Conditions';
-            }
-            return '';
-        }
-
-        function showError(errorElement, message) {
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-        }
-
-        function clearError(errorElement) {
-            errorElement.textContent = '';
-            errorElement.style.display = 'none';
-        }
-
-        function setFieldError(input, hasError) {
-            if (hasError) {
-                input.style.borderColor = '#ef4444';
-                input.style.backgroundColor = '#fef2f2';
-            } else {
-                input.style.borderColor = '#e5e7eb';
-                input.style.backgroundColor = '#f3f4f6';
-            }
-        }
-
-        nameInput.addEventListener('blur', function() {
-            const error = validateName(nameInput.value);
-            if (error) {
-                showError(nameError, error);
-                setFieldError(nameInput, true);
-            } else {
-                clearError(nameError);
-                setFieldError(nameInput, false);
-            }
-        });
-
-        nameInput.addEventListener('input', function() {
-            if (nameError.textContent) {
-                const error = validateName(nameInput.value);
-                if (!error) {
-                    clearError(nameError);
-                    setFieldError(nameInput, false);
-                }
-            }
-        });
-
-        emailInput.addEventListener('blur', function() {
-            const error = validateEmail(emailInput.value);
-            if (error) {
-                showError(emailError, error);
-                setFieldError(emailInput, true);
-            } else {
-                clearError(emailError);
-                setFieldError(emailInput, false);
-            }
-        });
-
-        emailInput.addEventListener('input', function() {
-            if (emailError.textContent) {
-                const error = validateEmail(emailInput.value);
-                if (!error) {
-                    clearError(emailError);
-                    setFieldError(emailInput, false);
-                }
-            }
-        });
-
-        passwordInput.addEventListener('blur', function() {
-            const error = validatePassword(passwordInput.value);
-            if (error) {
-                showError(passwordError, error);
-                setFieldError(passwordInput, true);
-            } else {
-                clearError(passwordError);
-                setFieldError(passwordInput, false);
-            }
-            if (confirmPasswordInput.value) {
-                const confirmError = validateConfirmPassword(passwordInput.value, confirmPasswordInput.value);
-                if (confirmError) {
-                    showError(confirmPasswordError, confirmError);
-                    setFieldError(confirmPasswordInput, true);
-                } else {
-                    clearError(confirmPasswordError);
-                    setFieldError(confirmPasswordInput, false);
-                }
-            }
-        });
-
-        passwordInput.addEventListener('input', function() {
-            if (passwordError.textContent) {
-                const error = validatePassword(passwordInput.value);
-                if (!error) {
-                    clearError(passwordError);
-                    setFieldError(passwordInput, false);
-                }
-            }
-            if (confirmPasswordInput.value) {
-                const confirmError = validateConfirmPassword(passwordInput.value, confirmPasswordInput.value);
-                if (confirmError) {
-                    showError(confirmPasswordError, confirmError);
-                    setFieldError(confirmPasswordInput, true);
-                } else {
-                    clearError(confirmPasswordError);
-                    setFieldError(confirmPasswordInput, false);
-                }
-            }
-        });
-
-        confirmPasswordInput.addEventListener('blur', function() {
-            const error = validateConfirmPassword(passwordInput.value, confirmPasswordInput.value);
-            if (error) {
-                showError(confirmPasswordError, error);
-                setFieldError(confirmPasswordInput, true);
-            } else {
-                clearError(confirmPasswordError);
-                setFieldError(confirmPasswordInput, false);
-            }
-        });
-
-        confirmPasswordInput.addEventListener('input', function() {
-            if (confirmPasswordError.textContent) {
-                const error = validateConfirmPassword(passwordInput.value, confirmPasswordInput.value);
-                if (!error) {
-                    clearError(confirmPasswordError);
-                    setFieldError(confirmPasswordInput, false);
-                }
-            }
-        });
-
-        termsCheckbox.addEventListener('change', function() {
-            const error = validateTerms(termsCheckbox.checked);
-            if (error) {
-                showError(termsError, error);
-            } else {
-                clearError(termsError);
-            }
-        });
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            let isValid = true;
-
-            const nameErrorMsg = validateName(nameInput.value);
-            if (nameErrorMsg) {
-                showError(nameError, nameErrorMsg);
-                setFieldError(nameInput, true);
-                isValid = false;
-            } else {
-                clearError(nameError);
-                setFieldError(nameInput, false);
-            }
-
-            const emailErrorMsg = validateEmail(emailInput.value);
-            if (emailErrorMsg) {
-                showError(emailError, emailErrorMsg);
-                setFieldError(emailInput, true);
-                isValid = false;
-            } else {
-                clearError(emailError);
-                setFieldError(emailInput, false);
-            }
-
-            const passwordErrorMsg = validatePassword(passwordInput.value);
-            if (passwordErrorMsg) {
-                showError(passwordError, passwordErrorMsg);
-                setFieldError(passwordInput, true);
-                isValid = false;
-            } else {
-                clearError(passwordError);
-                setFieldError(passwordInput, false);
-            }
-
-            const confirmPasswordErrorMsg = validateConfirmPassword(passwordInput.value, confirmPasswordInput.value);
-            if (confirmPasswordErrorMsg) {
-                showError(confirmPasswordError, confirmPasswordErrorMsg);
-                setFieldError(confirmPasswordInput, true);
-                isValid = false;
-            } else {
-                clearError(confirmPasswordError);
-                setFieldError(confirmPasswordInput, false);
-            }
-
-            const termsErrorMsg = validateTerms(termsCheckbox.checked);
-            if (termsErrorMsg) {
-                showError(termsError, termsErrorMsg);
-                isValid = false;
-            } else {
-                clearError(termsError);
-            }
-
-            if (!isValid) {
-                const firstError = form.querySelector('.error-message[style*="block"]');
-                if (firstError) {
-                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }
-        });
-    </script>
+    <script src="./assets/js/signup.js"></script>
 </body>
 </html>

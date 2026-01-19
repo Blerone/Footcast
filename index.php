@@ -6,10 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FootCast</title>
   <link rel="stylesheet" href="./assets/css/style.css" />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=arrow_upward" />
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=arrow_downward" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=arrow_upward" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=arrow_downward" />
 </head>
 
 <body>
@@ -364,24 +362,5 @@
   <?php
     include('./assets/php/footer.php');
   ?>
-  <script>
-    const toggleBtn = document.getElementById('menu-toggle');
-    const mobileNav = document.getElementById('mobile-nav');
-    const header = document.querySelector('.header');
-
-    toggleBtn.addEventListener('click', () => {
-      mobileNav.classList.toggle('open');
-      toggleBtn.classList.toggle('open');
-    });
-
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    });
-  </script>
 </body>
-
 </html>

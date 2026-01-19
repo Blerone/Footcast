@@ -59,6 +59,9 @@ $db->close();
     <link rel="stylesheet" href="./assets/css/dashboard.css">
 </head>
 <body>
+    <?php
+        include("./assets/php/nav.php")
+    ?>
     <div class="parlay-wrapper">
         <h1>Your Parlays</h1>
         <?php if (empty($parlays)): ?>
@@ -92,5 +95,6 @@ $db->close();
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
+    <script src="assets/js/nav.js"></script>
 </body>
 </html>

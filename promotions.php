@@ -207,26 +207,8 @@
 
     
   </main>
-    <?php
-        include('./assets/php/footer.php');
-    ?>
-  <script>
-    const toggleBtn = document.getElementById('menu-toggle');
-    const mobileNav = document.getElementById('mobile-nav');
-    const header = document.querySelector('.header');
-
-    toggleBtn.addEventListener('click', () => {
-      mobileNav.classList.toggle('open');
-      toggleBtn.classList.toggle('open');
-    });
-
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    });
-  </script>
+  <?php
+    include('./assets/php/footer.php');
+  ?>
 </body>
 </html>

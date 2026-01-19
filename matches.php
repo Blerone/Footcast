@@ -146,6 +146,7 @@ $matchesError = null;
 $matches = [];
 $selectedLeagueRaw = $_GET['league'] ?? '2021';
 $selectedLeague = array_key_exists($selectedLeagueRaw, LEAGUE_OPTIONS) ? $selectedLeagueRaw : '2021';
+$selectedLeagueCode = LEAGUE_OPTIONS[$selectedLeague]['code'] ?? $selectedLeague;
 $selectedStatus = $_GET['status'] ?? 'SCHEDULED';
 $selectedStatus = array_key_exists($selectedStatus, STATUS_OPTIONS) ? $selectedStatus : 'SCHEDULED';
 
@@ -164,8 +165,13 @@ if ($selectedStatus === 'FINISHED') {
     $emptyMessage = 'No upcoming matches in the next 7 days.';
 }
 
-$apiStatus = $selectedStatus === 'LIVE' ? 'LIVE,IN_PLAY' : $selectedStatus;
-$apiMatches = fetchFootballMatches($fromDate, $toDate, $apiStatus, $selectedLeague, $matchesError);
+$apiStatusMap = [
+    'SCHEDULED' => 'SCHEDULED,TIMED',
+    'LIVE' => 'LIVE,IN_PLAY,PAUSED',
+    'FINISHED' => 'FINISHED',
+];
+$apiStatus = $apiStatusMap[$selectedStatus] ?? $selectedStatus;
+$apiMatches = fetchFootballMatches($fromDate, $toDate, $apiStatus, $selectedLeagueCode, $matchesError);
 
 if (!$matchesError) {
     foreach ($apiMatches as $match) {
@@ -247,7 +253,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
                             Debug: League: <?php echo htmlspecialchars($selectedLeague, ENT_QUOTES, 'UTF-8'); ?>, 
                             Status: <?php echo htmlspecialchars($selectedStatus, ENT_QUOTES, 'UTF-8'); ?>, 
                             API Status: <?php echo htmlspecialchars($apiStatus, ENT_QUOTES, 'UTF-8'); ?>, 
-                            League ID: <?php echo htmlspecialchars($leagueNumericId, ENT_QUOTES, 'UTF-8'); ?>
+                            League Code: <?php echo htmlspecialchars($selectedLeagueCode, ENT_QUOTES, 'UTF-8'); ?>
                         </p>
                     <?php endif; ?>
                 </div>

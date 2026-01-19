@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <header class="header">
     <div class="container">
         <div class="header-inner">
@@ -5,6 +8,9 @@
                 <h1 class="logo-text">FOOTCAST</h1>
                 <nav class="">
                     <button class="nav-link active"><a href="index.php" class="nav-link active">Home</a></button>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <button class="nav-link"><a href="user-dashboard/index.php">Dashboard</a></button>
+                    <?php endif; ?>
                     <button class="nav-link"><a href="matches.php">Matches</a></button>
                     <button class="nav-link"><a href="standings.php">Standings</a></button>
                     <button class="nav-link"><a href="sports.php">Sports</a></button>
@@ -13,12 +19,8 @@
             </div>
             <div class="right-section">
                 <?php
-                    session_start();
                     if (isset($_SESSION['user_id'])) {
-                        echo '<button class="btn outline-btn">
-                            <a href="user-dashboard/index.php" class="login-link">Dashboard</a>
-                        </button>
-                        <button class="btn outline-btn" style="margin-left: 10px;">
+                        echo '<button class="btn outline-btn" style="margin-left: 10px;">
                             <a href="logout.php" class="login-link">Logout</a>
                         </button>';
                     } else {
@@ -40,10 +42,35 @@
     </div>
 
     <div class="mobile-nav" id="mobile-nav">
-        <button class="nav-link active">Home</button>
-        <button class="nav-link">Matches</button>
-        <button class="nav-link">Results</button>
-        <button class="nav-link">Stats</button>
-        <button class="nav-link">Promotions</button>
+        <button class="nav-link active"><a href="index.php">Home</a></button>
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <button class="nav-link"><a href="user-dashboard/index.php">Dashboard</a></button>
+        <?php endif; ?>
+        <button class="nav-link"><a href="matches.php">Matches</a></button>
+        <button class="nav-link"><a href="standings.php">Standings</a></button>
+        <button class="nav-link"><a href="sports.php">Sports</a></button>
+        <button class="nav-link"><a href="promotions.php">Promotions</a></button>
     </div>
 </header>
+
+
+<script>
+    const toggleBtn = document.getElementById("menu-toggle");
+    const mobileNav = document.getElementById("mobile-nav");
+    const header = document.querySelector(".header");
+
+    if (toggleBtn && mobileNav) {
+      toggleBtn.addEventListener("click", () => {
+        mobileNav.classList.toggle("open");
+        toggleBtn.classList.toggle("open");
+      });
+    }
+
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 50) {
+        header.classList.add("scrolled");
+      } else {
+        header.classList.remove("scrolled");
+      }
+    });
+</script>

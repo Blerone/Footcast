@@ -3,8 +3,10 @@ const API_BASE = '..';
 document.addEventListener('DOMContentLoaded', () => {
     loadUserInfo();
     loadStatistics();
-    loadPendingBets();
-    setupTabs();
+    if (document.querySelector('.tab-btn')) {
+        loadPendingBets();
+        setupTabs();
+    }
 });
 
 function setupTabs() {
@@ -37,8 +39,7 @@ async function loadUserInfo() {
         const data = await response.json();
 
         if (data.success && data.user) {
-            document.getElementById('balance-amount').textContent = 
-                `$${parseFloat(data.user.balance).toFixed(2)}`;
+            setText('balance-amount', `$${parseFloat(data.user.balance).toFixed(2)}`);
         }
     } catch (error) {
         console.error('Error loading user info:', error);
@@ -62,12 +63,12 @@ async function loadStatistics() {
             .filter(p => p.status === 'won')
             .reduce((sum, p) => sum + parseFloat(p.potential_payout || 0), 0);
 
-        document.getElementById('total-bets').textContent = totalBets;
-        document.getElementById('won-bets').textContent = wonBets;
-        document.getElementById('lost-bets').textContent = lostBets;
-        document.getElementById('pending-bets').textContent = pendingBets;
-        document.getElementById('win-rate').textContent = `${winRate}%`;
-        document.getElementById('total-winnings').textContent = `$${totalWinnings.toFixed(2)}`;
+        setText('total-bets', totalBets);
+        setText('won-bets', wonBets);
+        setText('lost-bets', lostBets);
+        setText('pending-bets', pendingBets);
+        setText('win-rate', `${winRate}%`);
+        setText('total-winnings', `$${totalWinnings.toFixed(2)}`);
     } catch (error) {
         console.error('Error loading statistics:', error);
     }
@@ -75,6 +76,9 @@ async function loadStatistics() {
 
 async function loadPendingBets() {
     const container = document.getElementById('pending-bets-list');
+    if (!container) {
+        return;
+    }
     container.innerHTML = '<div class="loading">Loading pending bets...</div>';
 
     try {
@@ -94,6 +98,9 @@ async function loadPendingBets() {
 
 async function loadBetHistory() {
     const container = document.getElementById('history-bets-list');
+    if (!container) {
+        return;
+    }
     container.innerHTML = '<div class="loading">Loading bet history...</div>';
 
     try {
@@ -116,6 +123,9 @@ async function loadBetHistory() {
 
 async function loadParlays() {
     const container = document.getElementById('parlays-list');
+    if (!container) {
+        return;
+    }
     container.innerHTML = '<div class="loading">Loading parlays...</div>';
 
     try {
@@ -270,4 +280,11 @@ function formatBetType(betType, betValue = null, betCategory = null) {
     }
 
     return label;
+}
+
+function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.textContent = value;
+    }
 }

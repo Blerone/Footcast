@@ -49,11 +49,43 @@ $db = footcast_db();
 $db->begin_transaction();
 
 try {
+    $userId = (int) $_SESSION['user_id'];
+    $stmtBalance = $db->prepare('SELECT balance FROM users WHERE id = ? FOR UPDATE');
+    if (!$stmtBalance) {
+        throw new RuntimeException('Failed to prepare balance lookup.');
+    }
+    $stmtBalance->bind_param('i', $userId);
+    $stmtBalance->execute();
+    $balanceResult = $stmtBalance->get_result();
+    $balanceRow = $balanceResult ? $balanceResult->fetch_assoc() : null;
+    $stmtBalance->close();
+
+    if (!$balanceRow) {
+        throw new RuntimeException('User balance not found.');
+    }
+
+    $currentBalance = (float) $balanceRow['balance'];
+    if ($currentBalance < $stake) {
+        http_response_code(400);
+        echo json_encode(['message' => 'Insufficient balance.']);
+        $db->rollback();
+        $db->close();
+        exit;
+    }
+
+    $newBalance = $currentBalance - $stake;
+    $stmtUpdateBalance = $db->prepare('UPDATE users SET balance = ? WHERE id = ?');
+    if (!$stmtUpdateBalance) {
+        throw new RuntimeException('Failed to prepare balance update.');
+    }
+    $stmtUpdateBalance->bind_param('di', $newBalance, $userId);
+    $stmtUpdateBalance->execute();
+    $stmtUpdateBalance->close();
+
     $stmt = $db->prepare('INSERT INTO parlays (user_id, stake, total_odds, potential_payout) VALUES (?, ?, ?, ?)');
     if (!$stmt) {
         throw new RuntimeException('Failed to prepare parlay insert.');
     }
-    $userId = (int) $_SESSION['user_id'];
     $totalOdds = round($combinedOdds, 2);
     $stmt->bind_param('iddd', $userId, $stake, $totalOdds, $potentialPayout);
     $stmt->execute();
@@ -123,7 +155,11 @@ try {
     $db->commit();
     $db->close();
 
-    echo json_encode(['success' => true, 'parlayId' => $parlayId]);
+    echo json_encode([
+        'success' => true,
+        'parlayId' => $parlayId,
+        'new_balance' => $newBalance,
+    ]);
 } catch (Throwable $error) {
     $db->rollback();
     $db->close();

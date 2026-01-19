@@ -1,24 +1,3 @@
-const toggleBtn = document.getElementById('menu-toggle');
-const mobileNav = document.getElementById('mobile-nav');
-const header = document.querySelector('.header');
-
-if (toggleBtn && mobileNav) {
-  toggleBtn.addEventListener('click', () => {
-    mobileNav.classList.toggle('open');
-    toggleBtn.classList.toggle('open');
-  });
-}
-
-if (header) {
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      header.classList.add('scrolled');
-    } else {
-      header.classList.remove('scrolled');
-    }
-  });
-}
-
 const betSlipModal = document.getElementById('betSlipModal');
 const betSlipSelections = document.getElementById('betSlipSelections');
 const betSlipEmpty = document.getElementById('betSlipEmpty');
@@ -349,6 +328,7 @@ const handlePickClick = (event) => {
   }
 
   setCurrentMatchFromBox(matchBox);
+  openModal();
   const odds = Number(button.dataset.odds);
   if (Number.isNaN(odds) || odds <= 0) {
     return;
@@ -377,10 +357,22 @@ const handlePickClick = (event) => {
 
   selectionData.summary = buildSummary(selectionData);
   addSelection(selectionData);
-  openModal();
 };
 
 document.addEventListener('click', handlePickClick);
+
+document.addEventListener('click', (event) => {
+  const infoButton = event.target.closest('.more-info-btn');
+  if (!infoButton) {
+    return;
+  }
+  const matchBox = infoButton.closest('.match-box');
+  if (!matchBox) {
+    return;
+  }
+  setCurrentMatchFromBox(matchBox);
+  openModal();
+});
 
 document.addEventListener('click', (event) => {
   const button = event.target.closest('.bet-option-btn');

@@ -1,0 +1,113 @@
+.admin-table-wrapper {
+    background: linear-gradient(135deg, #7611bf42 0%, #000000 100%);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(192, 132, 252, 0.2);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.6px;
+}
+
+.admin-table td.admin-pill{
+    display: table-cell !important;
+    padding: 10px 12px;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 10px 12px;
+    text-align: left;
+}
+
+.admin-table th {
+    font-weight: 600;
+    color: #a5b4fc;
+}
+
+.admin-table tbody tr:nth-child(even) {
+    border: 1px solid rgba(192, 132, 252, 0.2);
+}
+
+.admin-table tbody tr:nth-child(odd) {
+    border: 1px solid rgba(192, 132, 252, 0.2);
+}
+
+.admin-table tbody tr:hover {
+    background: #7611bf0e;
+}
+
+
+
+.admin-empty-cell {
+    text-align: center;
+    padding: 30px 10px;
+    color: #9ca3af;
+}
+
+@media (max-width: 1100px) {
+    .admin-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .admin-table {
+        min-width: 980px;
+    }
+}
+
+@media (max-width: 720px) {
+    .admin-table-wrapper {
+        background: transparent;
+        border: none;
+    }
+
+    .admin-table,
+    .admin-table thead,
+    .admin-table tbody,
+    .admin-table th,
+    .admin-table td,
+    .admin-table tr {
+        display: block;
+        width: 100%;
+    }
+
+    .admin-table thead {
+        display: none;
+    }
+
+    .admin-table tr {
+        background: rgba(15, 23, 42, 0.9);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        border-radius: 16px;
+        margin-bottom: 16px;
+        padding: 12px 14px;
+    }
+
+    .admin-table td {
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .admin-table td:last-child {
+        border-bottom: none;
+    }
+
+    .admin-table td::before {
+        content: attr(data-label);
+        color: #94a3b8;
+        font-weight: 600;
+    }
+
+    .admin-pill {
+        justify-content: flex-start;
+        padding: 0;
+        background: none;
+    }
+}

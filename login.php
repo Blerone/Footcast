@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($email !== '' && $password !== '') {
         $db = footcast_db();
-        $stmt = $db->prepare('SELECT id, username, password FROM users WHERE email = ? LIMIT 1');
+        $stmt = $db->prepare('SELECT id, username, password, role FROM users WHERE email = ? LIMIT 1');
         if ($stmt) {
             $stmt->bind_param('s', $email);
             $stmt->execute();
@@ -21,9 +21,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = (int) $user['id'];
                 $_SESSION['username'] = $user['username'];
+                $role = $user['role'] ?? 'user';
+
+                if ($role === 'admin') {
+                    $redirect = 'admin-dashboard/index.php';
+                } else {
+                    $redirect = $returnUrl !== '' ? $returnUrl : 'matches.php';
+                }
+
                 echo "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head><body>";
                 echo "<script>localStorage.setItem('footcastLoggedIn','1');";
-                echo "window.location.href=" . json_encode($returnUrl) . ";</script>";
+                echo "window.location.href=" . json_encode($redirect) . ";</script>";
                 echo "</body></html>";
                 exit;
             }

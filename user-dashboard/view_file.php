@@ -1,53 +1,52 @@
 <?php
-declare(strict_types=1);
+    declare(strict_types=1);
 
-session_start();
-require_once __DIR__ . '/../db_connection.php';
-
-if (!isset($_SESSION['user_id'])) {
-    header('Location: ../login.php');
-    exit;
-}
-
-$db = footcast_db();
-$userId = (int) $_SESSION['user_id'];
-
-$parlays = [];
-$stmt = $db->prepare('SELECT id, stake, total_odds, potential_payout, status, created_at FROM parlays WHERE user_id = ? ORDER BY created_at DESC');
-if ($stmt) {
-    $stmt->bind_param('i', $userId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result) {
-        while ($row = $result->fetch_assoc()) {
-            $parlays[] = $row;
-        }
+    session_start();
+    include("../../db_connection.php");
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: ../login.php');
+        exit;
     }
-    $stmt->close();
-}
 
-$selectionsByParlay = [];
-if (!empty($parlays)) {
-    $ids = array_map(static fn($row) => (int) $row['id'], $parlays);
-    $placeholders = implode(',', array_fill(0, count($ids), '?'));
-    $types = str_repeat('i', count($ids));
-    $stmtSel = $db->prepare(
-        "SELECT parlay_id, match_id, bet_type, bet_value, bet_category, odds, status FROM parlay_selections WHERE parlay_id IN ({$placeholders}) ORDER BY id ASC"
-    );
-    if ($stmtSel) {
-        $stmtSel->bind_param($types, ...$ids);
-        $stmtSel->execute();
-        $result = $stmtSel->get_result();
+    $db = footcast_db();
+    $userId = (int) $_SESSION['user_id'];
+
+    $parlays = [];
+    $stmt = $db->prepare('SELECT id, stake, total_odds, potential_payout, status, created_at FROM parlays WHERE user_id = ? ORDER BY created_at DESC');
+    if ($stmt) {
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
         if ($result) {
             while ($row = $result->fetch_assoc()) {
-                $selectionsByParlay[$row['parlay_id']][] = $row;
+                $parlays[] = $row;
             }
         }
-        $stmtSel->close();
+        $stmt->close();
     }
-}
 
-$db->close();
+    $selectionsByParlay = [];
+    if (!empty($parlays)) {
+        $ids = array_map(static fn($row) => (int) $row['id'], $parlays);
+        $placeholders = implode(',', array_fill(0, count($ids), '?'));
+        $types = str_repeat('i', count($ids));
+        $stmtSel = $db->prepare(
+            "SELECT parlay_id, match_id, bet_type, bet_value, bet_category, odds, status FROM parlay_selections WHERE parlay_id IN ({$placeholders}) ORDER BY id ASC"
+        );
+        if ($stmtSel) {
+            $stmtSel->bind_param($types, ...$ids);
+            $stmtSel->execute();
+            $result = $stmtSel->get_result();
+            if ($result) {
+                while ($row = $result->fetch_assoc()) {
+                    $selectionsByParlay[$row['parlay_id']][] = $row;
+                }
+            }
+            $stmtSel->close();
+        }
+    }
+
+    $db->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,6 +56,7 @@ $db->close();
     <title>Your Parlays</title>
     <link rel="stylesheet" href="../assets/css/style.css" />
     <link rel="stylesheet" href="./assets/css/dashboard.css">
+    <link rel="stylesheet" href="./assets/css/bets.css">
 </head>
 <body>
     <?php
@@ -94,7 +94,7 @@ $db->close();
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>
-    </div>
+    </div
     <script src="assets/js/nav.js"></script>
 </body>
 </html>

@@ -7,6 +7,50 @@ document.addEventListener('DOMContentLoaded', () => {
         loadPendingBets();
         setupTabs();
     }
+
+    const settleBtn = document.getElementById('settle-bets-btn');
+    if (settleBtn) {
+        settleBtn.addEventListener('click', async () => {
+            settleBtn.disabled = true;
+            const originalText = settleBtn.textContent;
+            settleBtn.textContent = 'Settling...';
+
+            const pendingContainer = document.getElementById('pending-bets-list');
+            if (pendingContainer) {
+                pendingContainer.innerHTML = '<div class="loading">Settling pending bets...</div>';
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/settle_bets.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action: 'settle_all' }),
+                });
+
+                if (!response.ok) {
+                    console.error('Failed to settle bets', await response.text());
+                } else {
+                    const data = await response.json().catch(() => null);
+                    if (!data || !data.success) {
+                        console.error('Settle API error', data);
+                    }
+                }
+            } catch (err) {
+                console.error('Error calling settle_bets.php', err);
+            }
+
+            // Refresh all bet views and stats
+            await loadPendingBets();
+            await loadBetHistory();
+            await loadParlays();
+            await loadStatistics();
+
+            settleBtn.disabled = false;
+            settleBtn.textContent = originalText || 'Settle Pending Bets';
+        });
+    }
 });
 
 function setupTabs() {

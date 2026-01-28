@@ -1,0 +1,245 @@
+
+.settle-bets-btn{
+    background: #9333ea;
+    color: #fff;
+    border:1px solid #9333ea;
+    padding:10px 15px;
+    border-radius: 15px;
+    font-weight: 600;
+}
+
+.bets-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+} 
+
+.bet-card {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(147, 51, 234, 0.18);
+    border-radius: 0;
+    padding: 16px 0;
+    transition: all 0.3s ease;
+}
+
+.bet-card:hover {
+    border-bottom-color: rgba(147, 51, 234, 0.4);
+    box-shadow: none;
+}
+
+.bet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.bet-match {
+    flex: 1;
+    min-width: 200px;
+}
+
+.bet-match-teams {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #e5e7eb;
+    margin-bottom: 5px;
+}
+
+.bet-match-date {
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.bet-status {
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.bet-status.pending {
+    background: rgba(147, 51, 234, 0.18);
+    color: #c084fc;
+    border: 1px solid rgba(147, 51, 234, 0.35);
+}
+
+.bet-status.won {
+    background: rgba(147, 51, 234, 0.12);
+    color: #9333ea;
+    border: 1px solid rgba(147, 51, 234, 0.4);
+}
+
+.bet-status.lost {
+    background: rgba(148, 163, 184, 0.12);
+    color: #94a3b8;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.bet-status.cancelled {
+    background: rgba(148, 163, 184, 0.12);
+    color: #94a3b8;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.bet-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.bet-detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.bet-detail-label {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+}
+
+.bet-detail-value {
+    color: #e5e7eb;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.bet-type-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    background: rgba(147, 51, 234, 0.18);
+    color: #c084fc;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+.parlay-card {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(147, 51, 234, 0.18);
+    border-radius: 0;
+    padding: 16px 0 18px;
+    margin-bottom: 15px;
+}
+
+.parlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.parlay-info h3 {
+    color: #e5e7eb;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.parlay-info p {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.parlay-selections {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(147, 51, 234, 0.12);
+}
+
+.parlay-selection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.parlay-selection:last-child {
+    margin-bottom: 0;
+}
+
+.selection-match {
+    flex: 1;
+}
+
+.selection-match-teams {
+    color: #e5e7eb;
+    font-size: 0.95rem;
+    margin-bottom: 3px;
+}
+
+.selection-bet-type {
+    color: #94a3b8;
+    font-size: 0.85rem;
+}
+
+.selection-odds {
+    color: #c084fc;
+    font-weight: bold;
+}
+
+.loading,
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
+}
+
+.empty-state {
+    font-size: 1.1rem;
+}
+
+.parlay-wrapper {
+    max-width: 960px;
+    margin: 40px auto;
+    padding: 0 20px;
+    color: #e5e7eb;
+}
+
+.parlay-card {
+    background: transparent;
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+}
+
+.parlay-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.parlay-meta {
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.parlay-status {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.parlay-list {
+    margin-top: 12px;
+    padding-left: 18px;
+}
+
+.parlay-list li {
+    margin-bottom: 6px;
+    font-size: 14px;
+}

@@ -1,8 +1,5 @@
 <?php
 session_start();
-
-// League mapping: Frontend IDs to API league codes
-// The API functions accept both numeric IDs and league codes (PL, PD, etc.)
     const LEAGUE_OPTIONS = [
     '2021' => ['name' => 'Premier League', 'code' => 'PL', 'id' => 39],
     '2014' => ['name' => 'La Liga', 'code' => 'PD', 'id' => 140],

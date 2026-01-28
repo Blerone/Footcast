@@ -118,20 +118,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit User</title>
     <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../user-dashboard/assets/css/dashboard.css">
     <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/users.css">
 </head>
 <body>
     <?php include("../assets/php/header.php"); ?>
 
     <main class="admin-main">
-        <section class="admin-hero">
-            <div class="admin-hero-text">
-                <h1>Edit User</h1>
-                <p>Update account details and role.</p>
-            </div>
-        </section>
-
         <section class="admin-section admin-section-active">
             <?php if (!empty($errors)): ?>
                 <div class="admin-alert admin-alert-error">
@@ -144,6 +137,9 @@
             <?php endif; ?>
 
             <?php if ($userRow): ?>
+                <div class="admin-form-header">
+                    <h1>Edit User</h1>
+                </div>
                 <form class="admin-form" method="post" action="">
                     <input type="hidden" name="id" value="<?php echo (int) $userRow['id']; ?>">
                     <div class="admin-form-grid">

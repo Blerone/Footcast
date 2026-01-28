@@ -67,6 +67,80 @@ CREATE TABLE `matches` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `lineup_matches`
+--
+
+CREATE TABLE `lineup_matches` (
+  `id` int(11) NOT NULL,
+  `home_team` varchar(100) NOT NULL,
+  `away_team` varchar(100) NOT NULL,
+  `competition` varchar(120) NOT NULL,
+  `match_date` datetime NOT NULL,
+  `home_logo` varchar(255) DEFAULT NULL,
+  `away_logo` varchar(255) DEFAULT NULL,
+  `home_formation` varchar(20) DEFAULT NULL,
+  `away_formation` varchar(20) DEFAULT NULL,
+  `home_coach` varchar(100) DEFAULT NULL,
+  `away_coach` varchar(100) DEFAULT NULL,
+  `status` enum('scheduled','live','finished') DEFAULT 'scheduled',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lineup_players`
+--
+
+CREATE TABLE `lineup_players` (
+  `id` int(11) NOT NULL,
+  `lineup_match_id` int(11) NOT NULL,
+  `team_side` enum('home','away') NOT NULL,
+  `player_name` varchar(100) NOT NULL,
+  `player_number` int(11) DEFAULT NULL,
+  `position_label` varchar(20) DEFAULT NULL,
+  `pos_x` decimal(5,2) DEFAULT NULL,
+  `pos_y` decimal(5,2) DEFAULT NULL,
+  `is_starter` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lineup_substitutions`
+--
+
+CREATE TABLE `lineup_substitutions` (
+  `id` int(11) NOT NULL,
+  `lineup_match_id` int(11) NOT NULL,
+  `team_side` enum('home','away') NOT NULL,
+  `minute` int(11) DEFAULT NULL,
+  `player_out` varchar(100) NOT NULL,
+  `player_in` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lineup_injuries`
+--
+
+CREATE TABLE `lineup_injuries` (
+  `id` int(11) NOT NULL,
+  `lineup_match_id` int(11) NOT NULL,
+  `team_side` enum('home','away') NOT NULL,
+  `player_name` varchar(100) NOT NULL,
+  `reason` varchar(120) DEFAULT NULL,
+  `type` enum('injury','suspension') NOT NULL DEFAULT 'injury',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `parlays`
 --
 
@@ -147,6 +221,40 @@ ALTER TABLE `matches`
   ADD KEY `idx_match_date` (`match_date`);
 
 --
+-- Indexes for table `lineup_matches`
+--
+ALTER TABLE `lineup_matches`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_match_date` (`match_date`),
+  ADD KEY `idx_status` (`status`);
+
+--
+-- Indexes for table `lineup_players`
+--
+ALTER TABLE `lineup_players`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_lineup_match_id` (`lineup_match_id`),
+  ADD KEY `idx_team_side` (`team_side`),
+  ADD KEY `idx_is_starter` (`is_starter`),
+  ADD UNIQUE KEY `uniq_lineup_player` (`lineup_match_id`, `team_side`, `player_name`, `player_number`, `pos_x`, `pos_y`, `is_starter`);
+
+--
+-- Indexes for table `lineup_substitutions`
+--
+ALTER TABLE `lineup_substitutions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_lineup_match_id` (`lineup_match_id`),
+  ADD KEY `idx_team_side` (`team_side`);
+
+--
+-- Indexes for table `lineup_injuries`
+--
+ALTER TABLE `lineup_injuries`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_lineup_match_id` (`lineup_match_id`),
+  ADD KEY `idx_team_side` (`team_side`);
+
+--
 -- Indexes for table `parlays`
 --
 ALTER TABLE `parlays`
@@ -189,6 +297,30 @@ ALTER TABLE `matches`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `lineup_matches`
+--
+ALTER TABLE `lineup_matches`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `lineup_players`
+--
+ALTER TABLE `lineup_players`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `lineup_substitutions`
+--
+ALTER TABLE `lineup_substitutions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `lineup_injuries`
+--
+ALTER TABLE `lineup_injuries`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `parlays`
 --
 ALTER TABLE `parlays`
@@ -216,6 +348,24 @@ ALTER TABLE `users`
 ALTER TABLE `bets`
   ADD CONSTRAINT `fk_bets_match` FOREIGN KEY (`match_id`) REFERENCES `matches` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_bets_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `lineup_players`
+--
+ALTER TABLE `lineup_players`
+  ADD CONSTRAINT `fk_lineup_players_match` FOREIGN KEY (`lineup_match_id`) REFERENCES `lineup_matches` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `lineup_substitutions`
+--
+ALTER TABLE `lineup_substitutions`
+  ADD CONSTRAINT `fk_lineup_substitutions_match` FOREIGN KEY (`lineup_match_id`) REFERENCES `lineup_matches` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `lineup_injuries`
+--
+ALTER TABLE `lineup_injuries`
+  ADD CONSTRAINT `fk_lineup_injuries_match` FOREIGN KEY (`lineup_match_id`) REFERENCES `lineup_matches` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `parlays`

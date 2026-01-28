@@ -34,31 +34,6 @@ body {
     color: #a855f7;
 }
 
-.admin-tabs {
-    display: inline-flex;
-    gap: 8px;
-    background: rgba(15, 23, 42, 0.7);
-    padding: 4px;
-    border-radius: 999px;
-    border: 1px solid rgba(148, 163, 184, 0.4);
-}
-
-.admin-tab-btn {
-    border: none;
-    padding: 6px 14px;
-    border-radius: 999px;
-    font-size: 13.6px;
-    cursor: pointer;
-    background: transparent;
-    color: #cbd5f5;
-    transition: all 0.2s ease;
-}
-
-.admin-tab-btn.active {
-    background: linear-gradient(to right, #a855f7, #6366f1);
-    color: #0b1120;
-    font-weight: 600;
-}
 
 .admin-stats-grid {
     display: grid;
@@ -157,60 +132,6 @@ body {
     color: #a855f7;
 }
 
-.admin-form {
-    background: rgba(15, 23, 42, 0.85);
-    border-radius: 16px;
-    border: 1px solid rgba(148, 163, 184, 0.35);
-    padding: 18px 20px;
-    max-width: 720px;
-}
-
-.admin-form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-    margin-bottom: 16px;
-}
-
-.admin-form-row {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    font-size: 13.6px;
-    color: #cbd5f5;
-}
-
-.admin-input,
-.admin-select {
-    background: rgba(15, 23, 42, 0.9);
-    border: 1px solid rgba(148, 163, 184, 0.4);
-    border-radius: 10px;
-    padding: 10px 12px;
-    color: #e2e8f0;
-    font-size: 14px;
-}
-
-.admin-form-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-}
-
-.admin-btn {
-    border: none;
-    border-radius: 999px;
-    padding: 8px 18px;
-    font-size: 13.6px;
-    cursor: pointer;
-}
-
-.admin-btn-primary {
-    background: linear-gradient(to right, #a855f7, #6366f1);
-    color: #0b1120;
-    font-weight: 600;
-}
-
 .admin-link {
     color: #a855f7;
     text-decoration: none;
@@ -221,23 +142,13 @@ body {
     color: #64748b;
 }
 
-.admin-alert {
-    margin-bottom: 16px;
-    padding: 12px 14px;
-    border-radius: 10px;
-    font-size: 13.6px;
-}
-
-.admin-alert-error {
-    background: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.4);
-    color: #fecaca;
-}
-
-.admin-alert-success {
-    background: rgba(34, 197, 94, 0.15);
-    border: 1px solid rgba(34, 197, 94, 0.4);
-    color: #bbf7d0;
+.admin-btn-primary{
+    background:#9333ea;
+    color: white;
+    padding: 8px 15px;
+    border: 1px solid #9333ea;
+    border-radius: 13px;
+    font-weight: 600;
 }
 
 @media (max-width: 900px) {
@@ -251,7 +162,4 @@ body {
         align-items: flex-start;
     }
 
-    .admin-table {
-        font-size: 12.48px;
-    }
 }

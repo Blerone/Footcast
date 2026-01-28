@@ -29,6 +29,27 @@
         exit;
     }
 
+    $deleteMessage = null;
+    $deleteError = null;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user_id'])) {
+        $deleteId = (int) $_POST['delete_user_id'];
+        if ($deleteId === $userId) {
+            $deleteError = 'You cannot delete your own account.';
+        } elseif ($deleteId > 0) {
+            $stmtDelete = $db->prepare('DELETE FROM users WHERE id = ?');
+            if ($stmtDelete) {
+                $stmtDelete->bind_param('i', $deleteId);
+                $stmtDelete->execute();
+                $stmtDelete->close();
+                $deleteMessage = 'User deleted successfully.';
+            } else {
+                $deleteError = 'Unable to delete user.';
+            }
+        } else {
+            $deleteError = 'Invalid user ID.';
+        }
+    }
+
     $users = [];
     $usersSql = "
         SELECT
@@ -98,8 +119,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Users</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="../user-dashboard/assets/css/dashboard.css">
-    <link rel="stylesheet" href="./assets/css/admin.css">
     <link rel="stylesheet" href="./assets/css/users.css">
 </head>
 <body>
@@ -109,11 +128,25 @@
         <section class="admin-hero">
             <div class="admin-hero-text">
                 <h1>All Users</h1>
-                <p>Overview of users and their betting activity.</p>
             </div>
         </section>
 
         <section class="admin-section admin-section-active">
+            <?php if ($deleteMessage): ?>
+                <script>
+                    alert('<?php echo htmlspecialchars($deleteMessage, ENT_QUOTES, 'UTF-8'); ?>');
+                </script>
+                <div class="admin-alert admin-alert-success">
+                    <?php echo htmlspecialchars($deleteMessage, ENT_QUOTES, 'UTF-8'); ?>
+                </div>
+            <?php elseif ($deleteError): ?>
+                <script>
+                    alert('<?php echo htmlspecialchars($deleteError, ENT_QUOTES, 'UTF-8'); ?>');
+                </script>
+                <div class="admin-alert admin-alert-error">
+                    <?php echo htmlspecialchars($deleteError, ENT_QUOTES, 'UTF-8'); ?>
+                </div>
+            <?php endif; ?>
             <div class="admin-table-wrapper">
                 <table class="admin-table">
                     <thead>
@@ -156,7 +189,14 @@
                                         <a class="admin-link" href="edit/edit_users.php?id=<?php echo (int) $u['id']; ?>">Edit</a>
                                     </td>
                                     <td data-label="Delete">
-                                        <span class="admin-muted">—</span>
+                                        <?php if ((int) $u['id'] === $userId): ?>
+                                            <span class="admin-muted">—</span>
+                                        <?php else: ?>
+                                            <form method="post" action="" onsubmit="return confirm('Delete this user?');">
+                                                <input type="hidden" name="delete_user_id" value="<?php echo (int) $u['id']; ?>">
+                                                <button class="users-delete-btn" type="submit">Delete</button>
+                                            </form>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

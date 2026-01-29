@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 session_start();
 require_once __DIR__ . '/../db_connection.php';
+require_once __DIR__ . '/assets/includes/LineupRepository.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../login.php');
@@ -10,6 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $db = footcast_db();
+$lineupRepository = new LineupRepository($db);
 $userId = (int) $_SESSION['user_id'];
 
 $stmtUser = $db->prepare('SELECT id, username, role FROM users WHERE id = ? LIMIT 1');
@@ -42,11 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'delete_match') {
         $deleteId = (int) ($_POST['id'] ?? 0);
         if ($deleteId > 0) {
-            $stmtDelete = $db->prepare('DELETE FROM lineup_matches WHERE id = ?');
-            if ($stmtDelete) {
-                $stmtDelete->bind_param('i', $deleteId);
-                $stmtDelete->execute();
-                $stmtDelete->close();
+            if ($lineupRepository->deleteMatch($deleteId)) {
                 $message = 'Lineup match deleted successfully.';
             } else {
                 $errors[] = 'Unable to delete lineup.';
@@ -58,11 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $playerId = (int) ($_POST['player_id'] ?? 0);
         $lineupMatchId = (int) ($_POST['lineup_match_id'] ?? 0);
         if ($playerId > 0) {
-            $stmtDelete = $db->prepare('DELETE FROM lineup_players WHERE id = ?');
-            if ($stmtDelete) {
-                $stmtDelete->bind_param('i', $playerId);
-                $stmtDelete->execute();
-                $stmtDelete->close();
+            if ($lineupRepository->deletePlayer($playerId)) {
                 $message = 'Player deleted successfully.';
                 $selectedMatchId = $lineupMatchId;
             } else {
@@ -75,11 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $subId = (int) ($_POST['sub_id'] ?? 0);
         $lineupMatchId = (int) ($_POST['lineup_match_id'] ?? 0);
         if ($subId > 0) {
-            $stmtDelete = $db->prepare('DELETE FROM lineup_substitutions WHERE id = ?');
-            if ($stmtDelete) {
-                $stmtDelete->bind_param('i', $subId);
-                $stmtDelete->execute();
-                $stmtDelete->close();
+            if ($lineupRepository->deleteSubstitution($subId)) {
                 $message = 'Substitution deleted successfully.';
                 $selectedMatchId = $lineupMatchId;
             } else {
@@ -92,11 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $injuryId = (int) ($_POST['injury_id'] ?? 0);
         $lineupMatchId = (int) ($_POST['lineup_match_id'] ?? 0);
         if ($injuryId > 0) {
-            $stmtDelete = $db->prepare('DELETE FROM lineup_injuries WHERE id = ?');
-            if ($stmtDelete) {
-                $stmtDelete->bind_param('i', $injuryId);
-                $stmtDelete->execute();
-                $stmtDelete->close();
+            if ($lineupRepository->deleteInjury($injuryId)) {
                 $message = 'Injury deleted successfully.';
                 $selectedMatchId = $lineupMatchId;
             } else {
@@ -108,22 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$lineups = [];
-$stmtList = $db->prepare(
-    'SELECT id, home_team, away_team, competition, match_date, status
-     FROM lineup_matches
-     ORDER BY match_date DESC'
-);
-if ($stmtList) {
-    $stmtList->execute();
-    $result = $stmtList->get_result();
-    if ($result) {
-        while ($row = $result->fetch_assoc()) {
-            $lineups[] = $row;
-        }
-    }
-    $stmtList->close();
-}
+$lineups = $lineupRepository->getMatches();
 
 $postMatchId = isset($_POST['lineup_match_id']) ? (int) $_POST['lineup_match_id'] : 0;
 $getMatchId = isset($_GET['match_id']) ? (int) $_GET['match_id'] : 0;
@@ -144,59 +115,9 @@ $injuriesList = [];
 $suspensionsList = [];
 
 if ($selectedMatchId > 0) {
-    $stmtPlayers = $db->prepare(
-        'SELECT id, team_side, player_name, player_number, position_label, pos_x, pos_y, is_starter
-         FROM lineup_players
-         WHERE lineup_match_id = ?
-         ORDER BY is_starter DESC, team_side ASC, id ASC'
-    );
-    if ($stmtPlayers) {
-        $stmtPlayers->bind_param('i', $selectedMatchId);
-        $stmtPlayers->execute();
-        $result = $stmtPlayers->get_result();
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
-                $players[] = $row;
-            }
-        }
-        $stmtPlayers->close();
-    }
-
-    $stmtSubs = $db->prepare(
-        'SELECT id, team_side, minute, player_out, player_in
-         FROM lineup_substitutions
-         WHERE lineup_match_id = ?
-         ORDER BY minute ASC, id ASC'
-    );
-    if ($stmtSubs) {
-        $stmtSubs->bind_param('i', $selectedMatchId);
-        $stmtSubs->execute();
-        $result = $stmtSubs->get_result();
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
-                $subs[] = $row;
-            }
-        }
-        $stmtSubs->close();
-    }
-
-    $stmtInjuries = $db->prepare(
-        'SELECT id, team_side, player_name, reason, type
-         FROM lineup_injuries
-         WHERE lineup_match_id = ?
-         ORDER BY id ASC'
-    );
-    if ($stmtInjuries) {
-        $stmtInjuries->bind_param('i', $selectedMatchId);
-        $stmtInjuries->execute();
-        $result = $stmtInjuries->get_result();
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
-                $injuries[] = $row;
-            }
-        }
-        $stmtInjuries->close();
-    }
+    $players = $lineupRepository->getPlayersByMatch($selectedMatchId);
+    $subs = $lineupRepository->getSubstitutionsByMatch($selectedMatchId);
+    $injuries = $lineupRepository->getInjuriesByMatch($selectedMatchId);
 }
 
 foreach ($injuries as $injury) {
@@ -347,7 +268,7 @@ function renderMatchOptions(array $lineups, int $selectedId): string
                             <th>ID</th>
                             <th>Side</th>
                             <th>Player</th>
-                            <th>#</th>
+                            <th>
                             <th>Starter</th>
                             <th>Pos X</th>
                             <th>Pos Y</th>

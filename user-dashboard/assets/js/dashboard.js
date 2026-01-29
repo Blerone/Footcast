@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error calling settle_bets.php', err);
             }
 
-            // Refresh all bet views and stats
+            
             await loadPendingBets();
             await loadBetHistory();
             await loadParlays();

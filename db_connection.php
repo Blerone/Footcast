@@ -18,10 +18,7 @@ if (file_exists(__DIR__ . '/php/config/database.php')) {
     }
 }
 
-/**
- * Legacy function for backward compatibility
- * @return mysqli
- */
+
 function footcast_db(): mysqli{
     return Database::getConnection();
 }

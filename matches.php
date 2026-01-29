@@ -1,198 +1,196 @@
 <?php
-session_start();
+    session_start();
     const LEAGUE_OPTIONS = [
-    '2021' => ['name' => 'Premier League', 'code' => 'PL', 'id' => 39],
-    '2014' => ['name' => 'La Liga', 'code' => 'PD', 'id' => 140],
-    '2002' => ['name' => 'Bundesliga', 'code' => 'BL1', 'id' => 78],
-    '2019' => ['name' => 'Serie A', 'code' => 'SA', 'id' => 135],
-    '2015' => ['name' => 'Ligue 1', 'code' => 'FL1', 'id' => 61],
+        '2021' => ['name' => 'Premier League', 'code' => 'PL', 'id' => 39],
+        '2014' => ['name' => 'La Liga', 'code' => 'PD', 'id' => 140],
+        '2002' => ['name' => 'Bundesliga', 'code' => 'BL1', 'id' => 78],
+        '2019' => ['name' => 'Serie A', 'code' => 'SA', 'id' => 135],
+        '2015' => ['name' => 'Ligue 1', 'code' => 'FL1', 'id' => 61],
+        ];
+
+        const STATUS_OPTIONS = [
+        'SCHEDULED' => 'upcoming',
+        'LIVE' => 'live',
+        'FINISHED' => 'finished',
     ];
 
-    const STATUS_OPTIONS = [
-    'SCHEDULED' => 'upcoming',
-    'LIVE' => 'live',
-    'FINISHED' => 'finished',
-    ];
+    require_once __DIR__ . '/config/football_api.php';
 
-define('FOOTBALL_API_KEY', '92a4c2f60d3e47fbb17ea21881d6838c');
-define('FOOTBALL_API_URL', 'https://api.football-data.org/v4');
+    function buildOddsFromSeed(string $seed): array {
+        $hash = md5($seed);
+        $nums = [];
+        for ($i = 0; $i < 20; $i++) {
+            $nums[] = hexdec(substr($hash, $i * 2, 2)) % 100;
+        }
+        $homeWin = round(1.5 + ($nums[0] / 100), 2);
+        $draw = round(2.5 + ($nums[1] / 100), 2);
+        $awayWin = round(1.8 + ($nums[2] / 100), 2);
 
-function buildOddsFromSeed(string $seed): array
-{
-    $hash = md5($seed);
-    $nums = [];
-    for ($i = 0; $i < 20; $i++) {
-        $nums[] = hexdec(substr($hash, $i * 2, 2)) % 100;
-    }
-    $homeWin = round(1.5 + ($nums[0] / 100), 2);
-    $draw = round(2.5 + ($nums[1] / 100), 2);
-    $awayWin = round(1.8 + ($nums[2] / 100), 2);
-
-    return [
-        'home_win' => $homeWin,
-        'draw' => $draw,
-        'away_win' => $awayWin,
-        '1h_home_win' => round($homeWin * 1.3, 2),
-        '1h_draw' => round($draw * 1.2, 2),
-        '1h_away_win' => round($awayWin * 1.3, 2),
-        '2h_home_win' => round($homeWin * 1.2, 2),
-        '2h_draw' => round($draw * 1.1, 2),
-        '2h_away_win' => round($awayWin * 1.2, 2),
-        'corners_over_8.5' => round(1.6 + ($nums[3] / 200), 2),
-        'corners_under_8.5' => round(2.2 + ($nums[4] / 200), 2),
-        'corners_over_9.5' => round(1.7 + ($nums[5] / 200), 2),
-        'corners_under_9.5' => round(2.0 + ($nums[6] / 200), 2),
-        'corners_over_10.5' => round(1.8 + ($nums[7] / 200), 2),
-        'corners_under_10.5' => round(1.9 + ($nums[8] / 200), 2),
-        'corners_1h_over_4.5' => round(1.7 + ($nums[11] / 200), 2),
-        'corners_1h_under_4.5' => round(2.0 + ($nums[12] / 200), 2),
-        'corners_1h_over_5.5' => round(1.9 + ($nums[13] / 200), 2),
-        'corners_1h_under_5.5' => round(1.8 + ($nums[14] / 200), 2),
-        'yellow_cards_over_3.5' => round(1.6 + ($nums[15] / 200), 2),
-        'yellow_cards_under_3.5' => round(2.2 + ($nums[16] / 200), 2),
-        'yellow_cards_over_4.5' => round(1.8 + ($nums[17] / 200), 2),
-        'yellow_cards_under_4.5' => round(1.9 + ($nums[18] / 200), 2),
-        'yellow_cards_1h_over_1.5' => round(1.8 + ($nums[1] / 200), 2),
-        'yellow_cards_1h_under_1.5' => round(1.9 + ($nums[2] / 200), 2),
-        'yellow_cards_1h_over_2.5' => round(2.2 + ($nums[3] / 200), 2),
-        'yellow_cards_1h_under_2.5' => round(1.65 + ($nums[4] / 200), 2),
-        'cards_over_4.5' => round(1.7 + ($nums[5] / 200), 2),
-        'cards_under_4.5' => round(2.0 + ($nums[6] / 200), 2),
-        'cards_over_5.5' => round(1.9 + ($nums[7] / 200), 2),
-        'cards_under_5.5' => round(1.8 + ($nums[8] / 200), 2),
-        'shots_on_target_over_4.5' => round(1.6 + ($nums[9] / 200), 2),
-        'shots_on_target_under_4.5' => round(2.2 + ($nums[10] / 200), 2),
-        'shots_on_target_over_5.5' => round(1.8 + ($nums[11] / 200), 2),
-        'shots_on_target_under_5.5' => round(1.9 + ($nums[12] / 200), 2),
-        'shots_on_target_1h_over_2.5' => round(1.7 + ($nums[13] / 200), 2),
-        'shots_on_target_1h_under_2.5' => round(2.0 + ($nums[14] / 200), 2),
-        'offsides_over_2.5' => round(1.7 + ($nums[15] / 200), 2),
-        'offsides_under_2.5' => round(2.0 + ($nums[16] / 200), 2),
-        'offsides_over_3.5' => round(2.1 + ($nums[17] / 200), 2),
-        'offsides_under_3.5' => round(1.75 + ($nums[18] / 200), 2),
-        'offsides_1h_over_1.5' => round(1.8 + ($nums[19] / 200), 2),
-        'offsides_1h_under_1.5' => round(1.9 + ($nums[0] / 200), 2),
-        'fouls_over_20.5' => round(1.7 + ($nums[1] / 200), 2),
-        'fouls_under_20.5' => round(2.0 + ($nums[2] / 200), 2),
-        'fouls_over_25.5' => round(1.9 + ($nums[3] / 200), 2),
-        'fouls_under_25.5' => round(1.8 + ($nums[4] / 200), 2),
-        'fouls_1h_over_10.5' => round(1.8 + ($nums[5] / 200), 2),
-        'fouls_1h_under_10.5' => round(1.9 + ($nums[6] / 200), 2),
-        'posts_crossbars_over_0.5' => round(2.5 + ($nums[7] / 200), 2),
-        'posts_crossbars_under_0.5' => round(1.5 + ($nums[8] / 200), 2),
-        'posts_crossbars_over_1.5' => round(4.0 + ($nums[9] / 200), 2),
-        'posts_crossbars_under_1.5' => round(1.25 + ($nums[10] / 200), 2),
-        'posts_crossbars_1h_over_0.5' => round(3.0 + ($nums[11] / 200), 2),
-        'posts_crossbars_1h_under_0.5' => round(1.4 + ($nums[12] / 200), 2),
-        'throw_ins_over_40.5' => round(1.7 + ($nums[13] / 200), 2),
-        'throw_ins_under_40.5' => round(2.0 + ($nums[14] / 200), 2),
-        'throw_ins_over_45.5' => round(1.9 + ($nums[15] / 200), 2),
-        'throw_ins_under_45.5' => round(1.8 + ($nums[16] / 200), 2),
-        'throw_ins_1h_over_20.5' => round(1.8 + ($nums[17] / 200), 2),
-        'throw_ins_1h_under_20.5' => round(1.9 + ($nums[18] / 200), 2),
-        'shots_towards_goal_over_10.5' => round(1.6 + ($nums[19] / 200), 2),
-        'shots_towards_goal_under_10.5' => round(2.2 + ($nums[0] / 200), 2),
-        'shots_towards_goal_over_12.5' => round(1.8 + ($nums[1] / 200), 2),
-        'shots_towards_goal_under_12.5' => round(1.9 + ($nums[2] / 200), 2),
-    ];
-}
-
-function fetchFootballMatches(string $fromDate, string $toDate, string $status, string $competitionId, ?string &$error): array
-{
-    $error = null;
-    $query = "status={$status}&dateFrom={$fromDate}&dateTo={$toDate}&competitions={$competitionId}";
-    $url = FOOTBALL_API_URL . "/matches?{$query}";
-    $curl = curl_init($url);
-    curl_setopt_array($curl, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER => [
-            'X-Auth-Token: ' . FOOTBALL_API_KEY,
-            'Accept: application/json',
-        ],
-        CURLOPT_CONNECTTIMEOUT => 3,
-        CURLOPT_TIMEOUT => 6,
-    ]);
-    $response = curl_exec($curl);
-    if ($response === false && curl_errno($curl) === 60) {
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-        $response = curl_exec($curl);
-    }
-    if ($response === false) {
-        $error = 'Request failed: ' . curl_error($curl);
-        curl_close($curl);
-        return [];
-    }
-    $statusCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
-    curl_close($curl);
-    if ($statusCode >= 400) {
-        $error = "API error ({$statusCode}).";
-        return [];
-    }
-
-    $data = json_decode($response, true);
-    if (!is_array($data) || !isset($data['matches']) || !is_array($data['matches'])) {
-        $error = 'Invalid match data received.';
-        return [];
-    }
-
-    return $data['matches'];
-}
-
-$matchesError = null;
-$matches = [];
-$selectedLeagueRaw = $_GET['league'] ?? '2021';
-$selectedLeague = array_key_exists($selectedLeagueRaw, LEAGUE_OPTIONS) ? $selectedLeagueRaw : '2021';
-$selectedLeagueCode = LEAGUE_OPTIONS[$selectedLeague]['code'] ?? $selectedLeague;
-$selectedStatus = $_GET['status'] ?? 'SCHEDULED';
-$selectedStatus = array_key_exists($selectedStatus, STATUS_OPTIONS) ? $selectedStatus : 'SCHEDULED';
-
-$nowUtc = new DateTimeImmutable('now', new DateTimeZone('UTC'));
-if ($selectedStatus === 'FINISHED') {
-    $fromDate = $nowUtc->modify('-7 days')->format('Y-m-d');
-    $toDate = $nowUtc->format('Y-m-d');
-    $emptyMessage = 'No finished matches in the last 7 days.';
-} elseif ($selectedStatus === 'LIVE') {
-    $fromDate = $nowUtc->format('Y-m-d');
-    $toDate = $nowUtc->modify('+1 day')->format('Y-m-d');
-    $emptyMessage = 'No live matches right now.';
-} else {
-    $fromDate = $nowUtc->format('Y-m-d');
-    $toDate = $nowUtc->modify('+7 days')->format('Y-m-d');
-    $emptyMessage = 'No upcoming matches in the next 7 days.';
-}
-
-$apiStatusMap = [
-    'SCHEDULED' => 'SCHEDULED,TIMED',
-    'LIVE' => 'LIVE,IN_PLAY,PAUSED',
-    'FINISHED' => 'FINISHED',
-];
-$apiStatus = $apiStatusMap[$selectedStatus] ?? $selectedStatus;
-$apiMatches = fetchFootballMatches($fromDate, $toDate, $apiStatus, $selectedLeagueCode, $matchesError);
-
-if (!$matchesError) {
-    foreach ($apiMatches as $match) {
-        $matchId = $match['id'] ?? null;
-        $home = $match['homeTeam'] ?? [];
-        $away = $match['awayTeam'] ?? [];
-        $matchDate = $match['utcDate'] ?? '';
-        $matches[] = [
-            'id' => $matchId,
-            'api_fixture_id' => $matchId,
-            'home_team' => $home['name'] ?? 'Home',
-            'away_team' => $away['name'] ?? 'Away',
-            'home_team_crest' => $home['crest'] ?? '',
-            'away_team_crest' => $away['crest'] ?? '',
-            'match_date' => $matchDate,
-            'home_score' => $match['score']['fullTime']['home'] ?? null,
-            'away_score' => $match['score']['fullTime']['away'] ?? null,
-            'status' => $selectedStatus,
-            'odds' => buildOddsFromSeed((string) $matchId),
+        return [
+            'home_win' => $homeWin,
+            'draw' => $draw,
+            'away_win' => $awayWin,
+            '1h_home_win' => round($homeWin * 1.3, 2),
+            '1h_draw' => round($draw * 1.2, 2),
+            '1h_away_win' => round($awayWin * 1.3, 2),
+            '2h_home_win' => round($homeWin * 1.2, 2),
+            '2h_draw' => round($draw * 1.1, 2),
+            '2h_away_win' => round($awayWin * 1.2, 2),
+            'corners_over_8.5' => round(1.6 + ($nums[3] / 200), 2),
+            'corners_under_8.5' => round(2.2 + ($nums[4] / 200), 2),
+            'corners_over_9.5' => round(1.7 + ($nums[5] / 200), 2),
+            'corners_under_9.5' => round(2.0 + ($nums[6] / 200), 2),
+            'corners_over_10.5' => round(1.8 + ($nums[7] / 200), 2),
+            'corners_under_10.5' => round(1.9 + ($nums[8] / 200), 2),
+            'corners_1h_over_4.5' => round(1.7 + ($nums[11] / 200), 2),
+            'corners_1h_under_4.5' => round(2.0 + ($nums[12] / 200), 2),
+            'corners_1h_over_5.5' => round(1.9 + ($nums[13] / 200), 2),
+            'corners_1h_under_5.5' => round(1.8 + ($nums[14] / 200), 2),
+            'yellow_cards_over_3.5' => round(1.6 + ($nums[15] / 200), 2),
+            'yellow_cards_under_3.5' => round(2.2 + ($nums[16] / 200), 2),
+            'yellow_cards_over_4.5' => round(1.8 + ($nums[17] / 200), 2),
+            'yellow_cards_under_4.5' => round(1.9 + ($nums[18] / 200), 2),
+            'yellow_cards_1h_over_1.5' => round(1.8 + ($nums[1] / 200), 2),
+            'yellow_cards_1h_under_1.5' => round(1.9 + ($nums[2] / 200), 2),
+            'yellow_cards_1h_over_2.5' => round(2.2 + ($nums[3] / 200), 2),
+            'yellow_cards_1h_under_2.5' => round(1.65 + ($nums[4] / 200), 2),
+            'cards_over_4.5' => round(1.7 + ($nums[5] / 200), 2),
+            'cards_under_4.5' => round(2.0 + ($nums[6] / 200), 2),
+            'cards_over_5.5' => round(1.9 + ($nums[7] / 200), 2),
+            'cards_under_5.5' => round(1.8 + ($nums[8] / 200), 2),
+            'shots_on_target_over_4.5' => round(1.6 + ($nums[9] / 200), 2),
+            'shots_on_target_under_4.5' => round(2.2 + ($nums[10] / 200), 2),
+            'shots_on_target_over_5.5' => round(1.8 + ($nums[11] / 200), 2),
+            'shots_on_target_under_5.5' => round(1.9 + ($nums[12] / 200), 2),
+            'shots_on_target_1h_over_2.5' => round(1.7 + ($nums[13] / 200), 2),
+            'shots_on_target_1h_under_2.5' => round(2.0 + ($nums[14] / 200), 2),
+            'offsides_over_2.5' => round(1.7 + ($nums[15] / 200), 2),
+            'offsides_under_2.5' => round(2.0 + ($nums[16] / 200), 2),
+            'offsides_over_3.5' => round(2.1 + ($nums[17] / 200), 2),
+            'offsides_under_3.5' => round(1.75 + ($nums[18] / 200), 2),
+            'offsides_1h_over_1.5' => round(1.8 + ($nums[19] / 200), 2),
+            'offsides_1h_under_1.5' => round(1.9 + ($nums[0] / 200), 2),
+            'fouls_over_20.5' => round(1.7 + ($nums[1] / 200), 2),
+            'fouls_under_20.5' => round(2.0 + ($nums[2] / 200), 2),
+            'fouls_over_25.5' => round(1.9 + ($nums[3] / 200), 2),
+            'fouls_under_25.5' => round(1.8 + ($nums[4] / 200), 2),
+            'fouls_1h_over_10.5' => round(1.8 + ($nums[5] / 200), 2),
+            'fouls_1h_under_10.5' => round(1.9 + ($nums[6] / 200), 2),
+            'posts_crossbars_over_0.5' => round(2.5 + ($nums[7] / 200), 2),
+            'posts_crossbars_under_0.5' => round(1.5 + ($nums[8] / 200), 2),
+            'posts_crossbars_over_1.5' => round(4.0 + ($nums[9] / 200), 2),
+            'posts_crossbars_under_1.5' => round(1.25 + ($nums[10] / 200), 2),
+            'posts_crossbars_1h_over_0.5' => round(3.0 + ($nums[11] / 200), 2),
+            'posts_crossbars_1h_under_0.5' => round(1.4 + ($nums[12] / 200), 2),
+            'throw_ins_over_40.5' => round(1.7 + ($nums[13] / 200), 2),
+            'throw_ins_under_40.5' => round(2.0 + ($nums[14] / 200), 2),
+            'throw_ins_over_45.5' => round(1.9 + ($nums[15] / 200), 2),
+            'throw_ins_under_45.5' => round(1.8 + ($nums[16] / 200), 2),
+            'throw_ins_1h_over_20.5' => round(1.8 + ($nums[17] / 200), 2),
+            'throw_ins_1h_under_20.5' => round(1.9 + ($nums[18] / 200), 2),
+            'shots_towards_goal_over_10.5' => round(1.6 + ($nums[19] / 200), 2),
+            'shots_towards_goal_under_10.5' => round(2.2 + ($nums[0] / 200), 2),
+            'shots_towards_goal_over_12.5' => round(1.8 + ($nums[1] / 200), 2),
+            'shots_towards_goal_under_12.5' => round(1.9 + ($nums[2] / 200), 2),
         ];
     }
-}
 
-$isLoggedIn = isset($_SESSION['user_id']);
+    function fetchFootballMatches(string $fromDate, string $toDate, string $status, string $competitionId, ?string &$error): array
+    {
+        $error = null;
+        $query = "status={$status}&dateFrom={$fromDate}&dateTo={$toDate}&competitions={$competitionId}";
+        $url = FOOTBALL_API_URL . "/matches?{$query}";
+        $curl = curl_init($url);
+        curl_setopt_array($curl, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                'X-Auth-Token: ' . FOOTBALL_API_KEY,
+                'Accept: application/json',
+            ],
+            CURLOPT_CONNECTTIMEOUT => 3,
+            CURLOPT_TIMEOUT => 6,
+        ]);
+        $response = curl_exec($curl);
+        if ($response === false && curl_errno($curl) === 60) {
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+            $response = curl_exec($curl);
+        }
+        if ($response === false) {
+            $error = 'Request failed: ' . curl_error($curl);
+            curl_close($curl);
+            return [];
+        }
+        $statusCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+        curl_close($curl);
+        if ($statusCode >= 400) {
+            $error = "API error ({$statusCode}).";
+            return [];
+        }
+
+        $data = json_decode($response, true);
+        if (!is_array($data) || !isset($data['matches']) || !is_array($data['matches'])) {
+            $error = 'Invalid match data received.';
+            return [];
+        }
+
+        return $data['matches'];
+    }
+
+    $matchesError = null;
+    $matches = [];
+    $selectedLeagueRaw = $_GET['league'] ?? '2021';
+    $selectedLeague = array_key_exists($selectedLeagueRaw, LEAGUE_OPTIONS) ? $selectedLeagueRaw : '2021';
+    $selectedLeagueCode = LEAGUE_OPTIONS[$selectedLeague]['code'] ?? $selectedLeague;
+    $selectedStatus = $_GET['status'] ?? 'SCHEDULED';
+    $selectedStatus = array_key_exists($selectedStatus, STATUS_OPTIONS) ? $selectedStatus : 'SCHEDULED';
+
+    $nowUtc = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+    if ($selectedStatus === 'FINISHED') {
+        $fromDate = $nowUtc->modify('-7 days')->format('Y-m-d');
+        $toDate = $nowUtc->format('Y-m-d');
+        $emptyMessage = 'No finished matches in the last 7 days.';
+    } elseif ($selectedStatus === 'LIVE') {
+        $fromDate = $nowUtc->format('Y-m-d');
+        $toDate = $nowUtc->modify('+1 day')->format('Y-m-d');
+        $emptyMessage = 'No live matches right now.';
+    } else {
+        $fromDate = $nowUtc->format('Y-m-d');
+        $toDate = $nowUtc->modify('+7 days')->format('Y-m-d');
+        $emptyMessage = 'No upcoming matches in the next 7 days.';
+    }
+
+    $apiStatusMap = [
+        'SCHEDULED' => 'SCHEDULED,TIMED',
+        'LIVE' => 'LIVE,IN_PLAY,PAUSED',
+        'FINISHED' => 'FINISHED',
+    ];
+    $apiStatus = $apiStatusMap[$selectedStatus] ?? $selectedStatus;
+    $apiMatches = fetchFootballMatches($fromDate, $toDate, $apiStatus, $selectedLeagueCode, $matchesError);
+
+    if (!$matchesError) {
+        foreach ($apiMatches as $match) {
+            $matchId = $match['id'] ?? null;
+            $home = $match['homeTeam'] ?? [];
+            $away = $match['awayTeam'] ?? [];
+            $matchDate = $match['utcDate'] ?? '';
+            $matches[] = [
+                'id' => $matchId,
+                'api_fixture_id' => $matchId,
+                'home_team' => $home['name'] ?? 'Home',
+                'away_team' => $away['name'] ?? 'Away',
+                'home_team_crest' => $home['crest'] ?? '',
+                'away_team_crest' => $away['crest'] ?? '',
+                'match_date' => $matchDate,
+                'home_score' => $match['score']['fullTime']['home'] ?? null,
+                'away_score' => $match['score']['fullTime']['away'] ?? null,
+                'status' => $selectedStatus,
+                'odds' => buildOddsFromSeed((string) $matchId),
+            ];
+        }
+    }
+
+    $isLoggedIn = isset($_SESSION['user_id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -257,7 +255,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
             <?php else: ?>
                 <?php foreach (array_slice($matches, 0, 9) as $match): ?>
                     <?php
-                    // Extract match data from new API format
+                    
                     $matchId = $match['id'] ?? $match['api_fixture_id'] ?? '';
                     $homeName = $match['home_team'] ?? 'Home';
                     $awayName = $match['away_team'] ?? 'Away';
@@ -278,7 +276,7 @@ $isLoggedIn = isset($_SESSION['user_id']);
                     $scoreHomeText = $scoreHome === null ? '-' : (string) $scoreHome;
                     $scoreAwayText = $scoreAway === null ? '-' : (string) $scoreAway;
                     
-                    // Get odds from API response
+                    
                     $odds = $match['odds'] ?? [];
                     $homeWinOdds = $odds['home_win'] ?? '2.10';
                     $drawOdds = $odds['draw'] ?? '3.10';

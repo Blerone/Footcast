@@ -15,9 +15,7 @@ function getDBConnection() {
     return $conn;
 }
 
-/**
- * Close database connection
- */
+
 function closeDBConnection($conn) {
     if ($conn && $conn instanceof mysqli && !$conn->connect_error) {
         try {

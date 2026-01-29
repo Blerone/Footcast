@@ -3,14 +3,16 @@
 
     session_start();
 require_once __DIR__ . '/../../db_connection.php';
+require_once __DIR__ . '/../assets/includes/LineupRepository.php';
 
     if (!isset($_SESSION['user_id'])) {
         header('Location: ../login.php');
         exit;
     }
 
-    $db = footcast_db();
-    $userId = (int) $_SESSION['user_id'];
+$db = footcast_db();
+$userId = (int) $_SESSION['user_id'];
+$lineupRepository = new LineupRepository($db);
 
     $stmtUser = $db->prepare('SELECT id, username, role FROM users WHERE id = ? LIMIT 1');
     if (!$stmtUser) {
@@ -64,35 +66,27 @@ require_once __DIR__ . '/../../db_connection.php';
 
         $matchDate = $matchDateRaw === '' ? '' : date('Y-m-d H:i:s', strtotime($matchDateRaw));
 
-        if (empty($errors)) {
-            $stmtSave = $db->prepare(
-                'INSERT INTO lineup_matches
-                (home_team, away_team, competition, match_date, home_logo, away_logo, home_formation, away_formation, home_coach, away_coach, status)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-            );
-            if ($stmtSave) {
-                $stmtSave->bind_param(
-                    'sssssssssss',
-                    $homeTeam,
-                    $awayTeam,
-                    $competition,
-                    $matchDate,
-                    $homeLogo,
-                    $awayLogo,
-                    $homeFormation,
-                    $awayFormation,
-                    $homeCoach,
-                    $awayCoach,
-                    $status
-                );
-                $stmtSave->execute();
-                $stmtSave->close();
-                $message = 'Lineup added successfully.';
-            } else {
-                $errors[] = 'Unable to add lineup.';
-            }
+    if (empty($errors)) {
+        $payload = [
+            'home_team' => $homeTeam,
+            'away_team' => $awayTeam,
+            'competition' => $competition,
+            'match_date' => $matchDate,
+            'home_logo' => $homeLogo,
+            'away_logo' => $awayLogo,
+            'home_formation' => $homeFormation,
+            'away_formation' => $awayFormation,
+            'home_coach' => $homeCoach,
+            'away_coach' => $awayCoach,
+            'status' => $status,
+        ];
+        if ($lineupRepository->createMatch($payload)) {
+            $message = 'Lineup added successfully.';
+        } else {
+            $errors[] = 'Unable to add lineup.';
         }
     }
+}
 
     $db->close();
 ?>

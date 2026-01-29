@@ -3,14 +3,16 @@
 
     session_start();
 require_once __DIR__ . '/../../db_connection.php';
+require_once __DIR__ . '/../assets/includes/LineupRepository.php';
 
     if (!isset($_SESSION['user_id'])) {
         header('Location: ../login.php');
         exit;
     }
 
-    $db = footcast_db();
-    $userId = (int) $_SESSION['user_id'];
+$db = footcast_db();
+$userId = (int) $_SESSION['user_id'];
+$lineupRepository = new LineupRepository($db);
 
     $stmtUser = $db->prepare('SELECT id, username, role FROM users WHERE id = ? LIMIT 1');
     if (!$stmtUser) {
@@ -33,22 +35,7 @@ require_once __DIR__ . '/../../db_connection.php';
     $errors = [];
     $selectedMatchId = isset($_GET['match_id']) ? (int) $_GET['match_id'] : 0;
 
-    $lineups = [];
-    $stmtList = $db->prepare(
-        'SELECT id, home_team, away_team
-        FROM lineup_matches
-        ORDER BY match_date DESC'
-    );
-    if ($stmtList) {
-        $stmtList->execute();
-        $result = $stmtList->get_result();
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
-                $lineups[] = $row;
-            }
-        }
-        $stmtList->close();
-    }
+$lineups = $lineupRepository->getMatches();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $lineupMatchId = (int) ($_POST['lineup_match_id'] ?? 0);
@@ -75,32 +62,24 @@ require_once __DIR__ . '/../../db_connection.php';
             $posXValue = $posX === '' ? null : (float) $posX;
             $posYValue = $posY === '' ? null : (float) $posY;
 
-            $stmtSave = $db->prepare(
-                'INSERT INTO lineup_players
-                (lineup_match_id, team_side, player_name, player_number, position_label, pos_x, pos_y, is_starter)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
-            );
-            if ($stmtSave) {
-                $stmtSave->bind_param(
-                    'ississdi',
-                    $lineupMatchId,
-                    $teamSide,
-                    $playerName,
-                    $playerNumberValue,
-                    $positionLabel,
-                    $posXValue,
-                    $posYValue,
-                    $isStarter
-                );
-                $stmtSave->execute();
-                $stmtSave->close();
-                $message = 'Player added successfully.';
-                $selectedMatchId = $lineupMatchId;
-            } else {
-                $errors[] = 'Unable to add player.';
-            }
+        $payload = [
+            'lineup_match_id' => $lineupMatchId,
+            'team_side' => $teamSide,
+            'player_name' => $playerName,
+            'player_number' => $playerNumberValue,
+            'position_label' => $positionLabel,
+            'pos_x' => $posXValue,
+            'pos_y' => $posYValue,
+            'is_starter' => $isStarter,
+        ];
+        if ($lineupRepository->createPlayer($payload)) {
+            $message = 'Player added successfully.';
+            $selectedMatchId = $lineupMatchId;
+        } else {
+            $errors[] = 'Unable to add player.';
         }
     }
+}
 
     if ($selectedMatchId === 0 && !empty($lineups)) {
         $selectedMatchId = (int) $lineups[0]['id'];

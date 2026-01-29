@@ -3,14 +3,16 @@
 
     session_start();
 require_once __DIR__ . '/../../db_connection.php';
+require_once __DIR__ . '/../assets/includes/LineupRepository.php';
 
     if (!isset($_SESSION['user_id'])) {
         header('Location: ../login.php');
         exit;
     }
 
-    $db = footcast_db();
-    $userId = (int) $_SESSION['user_id'];
+$db = footcast_db();
+$userId = (int) $_SESSION['user_id'];
+$lineupRepository = new LineupRepository($db);
 
     $stmtUser = $db->prepare('SELECT id, username, role FROM users WHERE id = ? LIMIT 1');
     if (!$stmtUser) {
@@ -33,22 +35,7 @@ require_once __DIR__ . '/../../db_connection.php';
     $errors = [];
     $selectedMatchId = isset($_GET['match_id']) ? (int) $_GET['match_id'] : 0;
 
-    $lineups = [];
-    $stmtList = $db->prepare(
-        'SELECT id, home_team, away_team
-        FROM lineup_matches
-        ORDER BY match_date DESC'
-    );
-    if ($stmtList) {
-        $stmtList->execute();
-        $result = $stmtList->get_result();
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
-                $lineups[] = $row;
-            }
-        }
-        $stmtList->close();
-    }
+$lineups = $lineupRepository->getMatches();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $lineupMatchId = (int) ($_POST['lineup_match_id'] ?? 0);
@@ -67,23 +54,21 @@ require_once __DIR__ . '/../../db_connection.php';
         }
 
         if (empty($errors)) {
-            $stmtSave = $db->prepare(
-                'INSERT INTO lineup_injuries
-                (lineup_match_id, team_side, player_name, reason, type)
-                VALUES (?, ?, ?, ?, ?)'
-            );
-            if ($stmtSave) {
-                $type = 'suspension';
-                $stmtSave->bind_param('issss', $lineupMatchId, $teamSide, $playerName, $reason, $type);
-                $stmtSave->execute();
-                $stmtSave->close();
-                $message = 'Suspension added successfully.';
-                $selectedMatchId = $lineupMatchId;
-            } else {
-                $errors[] = 'Unable to add suspension.';
-            }
+        $payload = [
+            'lineup_match_id' => $lineupMatchId,
+            'team_side' => $teamSide,
+            'player_name' => $playerName,
+            'reason' => $reason,
+            'type' => 'suspension',
+        ];
+        if ($lineupRepository->createInjury($payload)) {
+            $message = 'Suspension added successfully.';
+            $selectedMatchId = $lineupMatchId;
+        } else {
+            $errors[] = 'Unable to add suspension.';
         }
     }
+}
 
     if ($selectedMatchId === 0 && !empty($lineups)) {
         $selectedMatchId = (int) $lineups[0]['id'];

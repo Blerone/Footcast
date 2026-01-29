@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/db_connection.php';
+require_once __DIR__ . '/assets/includes/AuthService.php';
 
 $signupError = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -21,34 +22,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $signupError = 'You must agree to the Terms & Conditions.';
     } else {
         $db = footcast_db();
-        $stmt = $db->prepare('SELECT id FROM users WHERE email = ? LIMIT 1');
-        if ($stmt) {
-            $stmt->bind_param('s', $email);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            if ($result && $result->fetch_assoc()) {
-                $signupError = 'Email is already registered.';
-            }
-            $stmt->close();
+        $authRepository = new AuthRepository($db);
+        $authService = new AuthService($authRepository);
+
+        if ($authService->emailExists($email)) {
+            $signupError = 'Email is already registered.';
         }
 
         if ($signupError === '') {
-            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $db->prepare('INSERT INTO users (username, email, password) VALUES (?, ?, ?)');
-            if ($stmt) {
-                $stmt->bind_param('sss', $name, $email, $passwordHash);
-                if ($stmt->execute()) {
-                    $_SESSION['user_id'] = (int) $stmt->insert_id;
-                    $_SESSION['username'] = $name;
-                    $stmt->close();
-                    $db->close();
-                    echo "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head><body>";
-                    echo "<script>localStorage.setItem('footcastLoggedIn','1');";
-                    echo "window.location.href=" . json_encode($returnUrl) . ";</script>";
-                    echo "</body></html>";
-                    exit;
-                }
-                $stmt->close();
+            $newUserId = $authService->register($name, $email, $password);
+            if ($newUserId > 0) {
+                $_SESSION['user_id'] = $newUserId;
+                $_SESSION['username'] = $name;
+                $db->close();
+                echo "<!DOCTYPE html><html><head><meta charset=\"UTF-8\"></head><body>";
+                echo "<script>localStorage.setItem('footcastLoggedIn','1');";
+                echo "window.location.href=" . json_encode($returnUrl) . ";</script>";
+                echo "</body></html>";
+                exit;
             }
             $signupError = 'Unable to create account right now.';
         }

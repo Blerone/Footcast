@@ -10,12 +10,12 @@ echo "<h2>Matches API Test</h2>";
 echo "<pre>";
 
 echo "1. Checking API Configuration...\n";
-if (FOOTBALL_API_KEY === 'your_rapidapi_key_here' || FOOTBALL_API_KEY === 'YOUR_FOOTBALL_DATA_TOKEN_HERE') {
+if (FOOTBALL_API_KEY === '' || FOOTBALL_API_KEY === 'your_rapidapi_key_here' || FOOTBALL_API_KEY === 'YOUR_FOOTBALL_DATA_TOKEN_HERE') {
     echo "FAILED: API key not configured\n";
-    echo "Please set FOOTBALL_API_KEY in php/config/football_api.php\n\n";
+    echo "Please set FOOTBALL_API_KEY in .env or your environment\n\n";
 } else {
     echo "API key is configured\n";
-    echo "Key: " . substr(FOOTBALL_API_KEY, 0, 20) . "...\n\n";
+    echo "Key: " . substr(FOOTBALL_API_KEY, 0, 6) . "...\n\n";
 }
 
 echo "2. Testing getUpcomingMatches('PL', 30)...\n";

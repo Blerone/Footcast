@@ -272,7 +272,7 @@ const setCurrentMatchFromBox = (matchBox) => {
   }
   const teamLogos = matchBox.querySelectorAll('.team-logo img');
   
-  // Parse odds from data attribute
+  
   let odds = {};
   try {
     const oddsData = matchBox.dataset.odds;

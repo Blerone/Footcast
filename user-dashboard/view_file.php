@@ -71,7 +71,7 @@
                 <div class="parlay-card">
                     <div class="parlay-header">
                         <div>
-                            <strong>Parlay #<?php echo htmlspecialchars($parlay['id'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                            <strong>Parlay 
                             <div class="parlay-meta">
                                 Stake: <?php echo htmlspecialchars($parlay['stake'], ENT_QUOTES, 'UTF-8'); ?> |
                                 Odds: <?php echo htmlspecialchars($parlay['total_odds'], ENT_QUOTES, 'UTF-8'); ?> |

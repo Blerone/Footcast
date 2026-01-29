@@ -1,24 +1,21 @@
 <?php
-session_start();
-require_once __DIR__ . '/db_connection.php';
+    session_start();
+    require_once __DIR__ . '/db_connection.php';
+    require_once __DIR__ . '/assets/includes/AuthService.php';
 
-$loginError = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email'] ?? '');
-    $password = $_POST['password'] ?? '';
-    $returnUrl = trim($_POST['return_url'] ?? 'matches.php');
+    $loginError = '';
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $email = trim($_POST['email'] ?? '');
+        $password = $_POST['password'] ?? '';
+        $returnUrl = trim($_POST['return_url'] ?? 'matches.php');
 
-    if ($email !== '' && $password !== '') {
-        $db = footcast_db();
-        $stmt = $db->prepare('SELECT id, username, password, role FROM users WHERE email = ? LIMIT 1');
-        if ($stmt) {
-            $stmt->bind_param('s', $email);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $user = $result ? $result->fetch_assoc() : null;
-            $stmt->close();
+        if ($email !== '' && $password !== '') {
+            $db = footcast_db();
+            $authRepository = new AuthRepository($db);
+            $authService = new AuthService($authRepository);
+            $user = $authService->authenticate($email, $password);
             $db->close();
-            if ($user && password_verify($password, $user['password'])) {
+            if ($user) {
                 $_SESSION['user_id'] = (int) $user['id'];
                 $_SESSION['username'] = $user['username'];
                 $role = $user['role'] ?? 'user';
@@ -36,10 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
         }
-    }
 
-    $loginError = 'Invalid email or password.';
-}
+        $loginError = 'Invalid email or password.';
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">

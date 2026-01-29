@@ -379,6 +379,29 @@ ALTER TABLE `parlays`
 ALTER TABLE `parlay_selections`
   ADD CONSTRAINT `fk_parlay_selections_match` FOREIGN KEY (`match_id`) REFERENCES `matches` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_parlay_selections_parlay` FOREIGN KEY (`parlay_id`) REFERENCES `parlays` (`id`) ON DELETE CASCADE;
+  
+CREATE TABLE `promotions` (
+  `id` int(11) NOT NULL,
+  `title` varchar(120) NOT NULL,
+  `description` text NOT NULL,
+  `promo_code` varchar(50) DEFAULT NULL,
+  `tag_label` varchar(60) DEFAULT NULL,
+  `tag_style` varchar(40) DEFAULT NULL,
+  `icon_name` varchar(80) DEFAULT NULL,
+  `card_style` varchar(40) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `start_date` datetime DEFAULT NULL,
+  `end_date` datetime DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+ALTER TABLE `promotions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_promotions_active` (`is_active`),
+  ADD KEY `idx_promotions_sort` (`sort_order`);
+ALTER TABLE `promotions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

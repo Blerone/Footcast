@@ -1,12 +1,49 @@
 <?php
 
-define('FOOTBALL_API_KEY', '92a4c2f60d3e47fbb17ea21881d6838c');
+function loadEnvFile(string $path): void{
+    if (!is_file($path) || !is_readable($path)) {
+        return;
+    }
+    $lines = file($path, FILE_IGNORE_NEW_LINES);
+    if (!$lines) {
+        return;
+    }
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if ($line === '' || strpos($line, '#') === 0) {
+            continue;
+        }
+        $parts = explode('=', $line, 2);
+        if (count($parts) !== 2) {
+            continue;
+        }
+        $key = trim($parts[0]);
+        $value = trim($parts[1]);
+        if ($key === '') {
+            continue;
+        }
+        if ((strlen($value) >= 2) && (($value[0] === '"' && substr($value, -1) === '"') || ($value[0] === "'" && substr($value, -1) === "'"))) {
+            $value = substr($value, 1, -1);
+        }
+        if (getenv($key) === false) {
+            putenv($key . '=' . $value);
+            $_ENV[$key] = $value;
+        }
+    }
+}
+
+loadEnvFile(__DIR__ . '/../.env');
+
+if (!defined('FOOTBALL_API_KEY')) {
+    $envKey = getenv('FOOTBALL_API_KEY');
+    define('FOOTBALL_API_KEY', $envKey !== false ? $envKey : '');
+}
 define('FOOTBALL_API_URL', 'https://api.football-data.org/v4');
 define('FOOTBALL_API_HOST', 'api.football-data.org');
 define('USE_RAPIDAPI', false); 
 
 
-function getCachedResponse($cacheKey, $ttl = 300) { // 5 minutes default
+function getCachedResponse($cacheKey, $ttl = 300) { 
     $cacheDir = __DIR__ . '/../cache';
     if (!is_dir($cacheDir)) {
         @mkdir($cacheDir, 0755, true);
@@ -38,14 +75,13 @@ function setCachedResponse($cacheKey, $data) {
 }
 
 function makeFootballAPIRequest($endpoint, $params = [], $useCache = true, $cacheTTL = 300) {
-    if (FOOTBALL_API_KEY === 'your_rapidapi_key_here' || FOOTBALL_API_KEY === 'YOUR_FOOTBALL_DATA_TOKEN_HERE') {
+    if (FOOTBALL_API_KEY === '' || FOOTBALL_API_KEY === 'your_rapidapi_key_here' || FOOTBALL_API_KEY === 'YOUR_FOOTBALL_DATA_TOKEN_HERE') {
         return [
             'success' => false,
-            'error' => 'Football API key/token not configured. Please set FOOTBALL_API_KEY in config/football_api.php with your Football-Data.org token'
+            'error' => 'Football API key/token not configured. Set FOOTBALL_API_KEY in .env or your environment before running the app.'
         ];
     }
     
-    // Check cache first
     $cacheKey = $endpoint . '?' . http_build_query($params);
     if ($useCache) {
         $cached = getCachedResponse($cacheKey, $cacheTTL);
@@ -92,10 +128,8 @@ function makeFootballAPIRequest($endpoint, $params = [], $useCache = true, $cach
     curl_close($ch);
     
     if ($error) {
-        // Provide more helpful error messages based on error type
         $errorMessage = 'CURL Error: ' . $error;
         
-        // Check for common error types
         if ($curlErrno === CURLE_COULDNT_RESOLVE_HOST) {
             $errorMessage = 'Network Error: Could not resolve host "' . parse_url($url, PHP_URL_HOST) . '". ' .
                           'Please check your internet connection and DNS settings. ' .
@@ -113,12 +147,10 @@ function makeFootballAPIRequest($endpoint, $params = [], $useCache = true, $cach
         ];
     }
     
-    // Handle rate limiting (HTTP 429)
     if ($httpCode === 429) {
         $responseData = json_decode($response, true);
         $message = 'Rate limit exceeded. ';
         
-        // Try to get retry-after header or provide default message
         if (isset($responseData['message'])) {
             $message .= $responseData['message'];
         } else {
@@ -152,7 +184,6 @@ function makeFootballAPIRequest($endpoint, $params = [], $useCache = true, $cach
     
     $data = json_decode($response, true);
     
-    // Cache successful responses
     if ($useCache && $data !== null) {
         setCachedResponse($cacheKey, $data);
     }
@@ -163,23 +194,17 @@ function makeFootballAPIRequest($endpoint, $params = [], $useCache = true, $cach
     ];
 }
 
-/**
- * Get upcoming matches from a specific league
- * @param int $leagueId - League ID (e.g., PL for Premier League, PD for La Liga, BL1 for Bundesliga)
- * @param int $days - Number of days ahead to fetch matches
- */
+
 function getUpcomingMatches($leagueId = 'PL', $days = 7) {
-    // Football-Data.org uses competition codes, not IDs
-    // Map common league IDs to Football-Data.org codes
+    
     $leagueMap = [
-        39 => 'PL',      // Premier League
-        140 => 'PD',     // La Liga
-        78 => 'BL1',     // Bundesliga
-        135 => 'SA',     // Serie A
-        61 => 'FL1'      // Ligue 1
+        39 => 'PL',
+        140 => 'PD',    
+        78 => 'BL1',  
+        135 => 'SA', 
+        61 => 'FL1'    
     ];
     
-    // Convert numeric ID to code if needed
     $competitionCode = isset($leagueMap[$leagueId]) ? $leagueMap[$leagueId] : $leagueId;
     
     $result = makeFootballAPIRequest("/competitions/{$competitionCode}/matches", [
@@ -235,11 +260,7 @@ function getUpcomingMatches($leagueId = 'PL', $days = 7) {
     ];
 }
 
-/**
- * Get finished matches from a specific league
- * @param int $leagueId - League ID or code
- * @param int $days - Number of days back to fetch matches
- */
+
 function getFinishedMatches($leagueId = 'PL', $days = 7) {
     $leagueMap = [
         39 => 'PL', 140 => 'PD', 78 => 'BL1', 135 => 'SA', 61 => 'FL1'
@@ -299,10 +320,7 @@ function getFinishedMatches($leagueId = 'PL', $days = 7) {
     ];
 }
 
-/**
- * Get live matches from a specific league
- * @param int $leagueId - League ID or code
- */
+
 function getLiveMatches($leagueId = 'PL') {
     $leagueMap = [
         39 => 'PL', 140 => 'PD', 78 => 'BL1', 135 => 'SA', 61 => 'FL1'
@@ -389,10 +407,7 @@ function getLiveMatches($leagueId = 'PL') {
     ];
 }
 
-/**
- * Get match by ID
- * @param int $fixtureId - API fixture ID
- */
+
 function getMatchById($fixtureId) {
     $result = makeFootballAPIRequest("/matches/{$fixtureId}", []);
     
@@ -446,17 +461,14 @@ function getMatchById($fixtureId) {
     ];
 }
 
-/**
- * Extract match statistics from API response
- * Note: Football-Data.org free tier may have limited statistics
- */
+
 function extractMatchStatistics($match) {
-    // If no statistics available, generate realistic mock data for finished matches
+    
     if ($match['status'] === 'FINISHED') {
         return generateMockStatistics($match);
     }
     
-    // Return empty stats structure for non-finished matches
+    
     return [
         'corners' => ['home' => null, 'away' => null],
         'corners_1h' => ['home' => null, 'away' => null],
@@ -477,9 +489,7 @@ function extractMatchStatistics($match) {
     ];
 }
 
-/**
- * Generate mock statistics for matches (fallback when API doesn't provide stats)
- */
+
 function generateMockStatistics($match) {
     $homeScore = $match['score']['fullTime']['home'] ?? 0;
     $awayScore = $match['score']['fullTime']['away'] ?? 0;
@@ -554,10 +564,7 @@ function generateMockStatistics($match) {
     ];
 }
 
-/**
- * Search for leagues
- * @param string $search - Search term (e.g., "Premier League", "La Liga")
- */
+
 function searchLeagues($search = '') {
     $params = [];
     if ($search) {
@@ -576,18 +583,13 @@ function searchLeagues($search = '') {
     ];
 }
 
-/**
- * Get league standings/table
- * @param string $leagueCode - League code (PL, PD, BL1, SA, FL1)
- * @param string $season - Season year (e.g., "2025" or "2025-2026")
- */
+
 function getLeagueStandings($leagueCode = 'PL', $season = null) {
     if ($season === null) {
-        // Default to current season (2025-2026)
+        
         $currentYear = (int)date('Y');
         $currentMonth = (int)date('m');
-        // If we're in the second half of the year (Aug-Dec), use current year as start
-        // Otherwise use previous year as start
+
         if ($currentMonth >= 8) {
             $season = $currentYear;
         } else {
@@ -595,10 +597,9 @@ function getLeagueStandings($leagueCode = 'PL', $season = null) {
         }
     }
     
-    // Convert season format if needed (2025-2026 -> 2025)
     if (strpos($season, '-') !== false) {
         $seasonParts = explode('-', $season);
-        $season = $seasonParts[0]; // Use first year for API
+        $season = $seasonParts[0];
     }
     
     $result = makeFootballAPIRequest("/competitions/{$leagueCode}/standings", [
@@ -648,10 +649,7 @@ function getLeagueStandings($leagueCode = 'PL', $season = null) {
     ];
 }
 
-/**
- * Get match lineups
- * @param int $fixtureId - API fixture ID
- */
+
 function getMatchLineups($fixtureId) {
     $result = makeFootballAPIRequest("/matches/{$fixtureId}", [], true, 300);
     

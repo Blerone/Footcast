@@ -618,6 +618,77 @@ p,span{
 }
 
 @media (max-width: 1000px) {
+  .nav,
+  .search-box,
+  .nav-link a {
+    display: none;
+  }
+
+  .header {
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(8px);
+  }
+
+  .header-inner {
+    align-items: center;
+    min-height: 28px;
+  }
+
+  .left-section {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .right-section {
+    margin-left: auto;
+  }
+
+  .header .container {
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .menu-toggle {
+    display: flex;
+    width: 28px;
+    height: 20px;
+  }
+
+  .mobile-nav {
+    position: fixed;
+    top: 40px;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    padding: 0.75rem 0;
+    background: linear-gradient(180deg, rgba(10, 10, 20, 0.98) 0%, rgba(0, 0, 0, 0.98) 100%);
+    border-top: 1px solid rgba(147, 51, 234, 0.35);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    z-index: 998;
+  }
+
+  .mobile-nav.open {
+    display: flex;
+  }
+
+  .mobile-nav .nav-link {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+  }
+
+  .mobile-nav .nav-link a {
+    display: block;
+    color: #e5e7eb;
+    padding: 14px 20px;
+  }
+
   .footer {
     padding: 2.5rem 6% 2rem;
     gap: 2.5rem;

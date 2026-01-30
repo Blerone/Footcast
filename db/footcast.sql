@@ -402,6 +402,141 @@ ALTER TABLE `promotions`
   ADD KEY `idx_promotions_sort` (`sort_order`);
 ALTER TABLE `promotions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+  
+CREATE TABLE `home_page_hero` (
+  `id` int(11) NOT NULL,
+  `sports_text` varchar(40) NOT NULL,
+  `bet_text` varchar(40) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `home_page_sections` (
+  `id` int(11) NOT NULL,
+  `trusted_by_title` varchar(120) NOT NULL,
+  `about_title` varchar(180) NOT NULL,
+  `about_highlight` varchar(120) NOT NULL,
+  `about_body` text NOT NULL,
+  `bet_steps_title` varchar(160) NOT NULL,
+  `popular_leagues_title` varchar(120) NOT NULL,
+  `favorites_title` varchar(120) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `home_page_steps` (
+  `id` int(11) NOT NULL,
+  `step_number` int(11) NOT NULL,
+  `step_title` varchar(160) NOT NULL,
+  `sort_order` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `home_page_banner` (
+  `id` int(11) NOT NULL,
+  `home_team` varchar(120) NOT NULL,
+  `away_team` varchar(120) NOT NULL,
+  `days_value` int(11) NOT NULL DEFAULT 0,
+  `hours_value` int(11) NOT NULL DEFAULT 0,
+  `minutes_value` int(11) NOT NULL DEFAULT 0,
+  `seconds_value` int(11) NOT NULL DEFAULT 0,
+  `days_label` varchar(30) NOT NULL DEFAULT 'Days',
+  `hours_label` varchar(30) NOT NULL DEFAULT 'Hours',
+  `minutes_label` varchar(30) NOT NULL DEFAULT 'Minutes',
+  `seconds_label` varchar(30) NOT NULL DEFAULT 'Seconds',
+  `odds_first` varchar(20) NOT NULL,
+  `odds_second` varchar(20) NOT NULL,
+  `odds_third` varchar(20) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `home_page_leagues` (
+  `id` int(11) NOT NULL,
+  `league_name` varchar(120) NOT NULL,
+  `stats_value` varchar(40) NOT NULL,
+  `stats_label` varchar(80) NOT NULL,
+  `top_scorer_label` varchar(120) NOT NULL,
+  `goals_text` varchar(40) NOT NULL,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `home_page_favorites` (
+  `id` int(11) NOT NULL,
+  `item_label` varchar(60) NOT NULL,
+  `item_name` varchar(120) NOT NULL,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+ALTER TABLE `home_page_hero`
+  ADD PRIMARY KEY (`id`);
+ALTER TABLE `home_page_sections`
+  ADD PRIMARY KEY (`id`);
+ALTER TABLE `home_page_steps`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_home_page_steps_sort` (`sort_order`);
+ALTER TABLE `home_page_banner`
+  ADD PRIMARY KEY (`id`);
+ALTER TABLE `home_page_leagues`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_home_page_leagues_active` (`is_active`),
+  ADD KEY `idx_home_page_leagues_sort` (`sort_order`);
+ALTER TABLE `home_page_favorites`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_home_page_favorites_active` (`is_active`),
+  ADD KEY `idx_home_page_favorites_sort` (`sort_order`);
+ALTER TABLE `home_page_hero`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `home_page_sections`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `home_page_steps`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `home_page_banner`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `home_page_leagues`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `home_page_favorites`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  
+CREATE TABLE `sports_page_sections` (
+  `id` int(11) NOT NULL,
+  `popular_sports_title` varchar(120) NOT NULL,
+  `top_leagues_title` varchar(120) NOT NULL,
+  `newsletter_title` varchar(160) NOT NULL,
+  `newsletter_placeholder` varchar(160) NOT NULL,
+  `newsletter_button_text` varchar(60) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `sports_page_sports` (
+  `id` int(11) NOT NULL,
+  `sport_name` varchar(120) NOT NULL,
+  `matches_count` int(11) NOT NULL DEFAULT 0,
+  `matches_label` varchar(40) NOT NULL DEFAULT 'matches',
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `sports_page_leagues` (
+  `id` int(11) NOT NULL,
+  `league_title` varchar(160) NOT NULL,
+  `league_country` varchar(120) NOT NULL,
+  `matches_count` int(11) NOT NULL DEFAULT 0,
+  `matches_label` varchar(40) NOT NULL DEFAULT 'matches',
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+ALTER TABLE `sports_page_sections`
+  ADD PRIMARY KEY (`id`);
+ALTER TABLE `sports_page_sports`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_sports_page_sports_active` (`is_active`),
+  ADD KEY `idx_sports_page_sports_sort` (`sort_order`);
+ALTER TABLE `sports_page_leagues`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_sports_page_leagues_active` (`is_active`),
+  ADD KEY `idx_sports_page_leagues_sort` (`sort_order`);
+ALTER TABLE `sports_page_sections`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `sports_page_sports`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `sports_page_leagues`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -95,8 +95,7 @@
         ];
     }
 
-    function fetchFootballMatches(string $fromDate, string $toDate, string $status, string $competitionId, ?string &$error): array
-    {
+    function fetchFootballMatches(string $fromDate, string $toDate, string $status, string $competitionId, ?string &$error): array{
         $error = null;
         $query = "status={$status}&dateFrom={$fromDate}&dateTo={$toDate}&competitions={$competitionId}";
         $url = FOOTBALL_API_URL . "/matches?{$query}";
@@ -235,7 +234,7 @@
                             <strong>Debug Info:</strong><br>
                             - Check your API key in <code>php/config/football_api.php</code><br>
                             - Ensure you have internet connectivity<br>
-                            - Test the API: <a href="test_matches_api.php" target="_blank">test_matches_api.php</a><br>
+                            
                             - API URL attempted: <?php echo htmlspecialchars($apiUrl ?? 'N/A', ENT_QUOTES, 'UTF-8'); ?>
                         </p>
                     <?php endif; ?>

@@ -6,7 +6,7 @@
                 <nav>
                 <button class="nav-link">
                     <button class="nav-link active"><a href="./index.php">Dashboard</a></button>
-                    <button class="nav-link active"><a href="../index.php">Home Page</a></button>
+                    <button class="nav-link active"><a href="./homepage.php">Home Page</a></button>
                     <button class="nav-link active"><a href="./users.php">Sports</a></button>
                     <button class="nav-link active"><a href="./promotions.php">Promotions</a></button>
                     <button class="nav-link active"><a href="./users.php">Users</a></button>

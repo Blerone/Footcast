@@ -51,6 +51,8 @@ usort($activeLeagues, fn($a, $b) => ($a['sort_order'] ?? 0) <=> ($b['sort_order'
   <title>Sports</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="./assets/css/sports.css" />
+  <link rel="stylesheet" href="./assets/css/matches.css">
+
 </head>
 <body>
   <?php 

@@ -3,6 +3,7 @@
 
     session_start();
     require_once __DIR__ . '/../db_connection.php';
+    require_once __DIR__ . '/assets/includes/ContactRepository.php';
 
     if (!isset($_SESSION['user_id'])) {
         header('Location: ../login.php');
@@ -116,6 +117,8 @@
     $totalWagered = $singleStats['wagered'] + $parlayStats['wagered'];
     $totalPayouts = $singleStats['payouts'] + $parlayStats['payouts'];
 
+    $contactRepository = new ContactRepository($db);
+    $contactMessages = $contactRepository->getRecent(8);
 
     $users = [];
     $usersSql = "
@@ -223,6 +226,36 @@
                 <div class="admin-stat-value"><?php echo number_format($totalMatches); ?></div>
                 <div class="admin-stat-sub">All tracked fixtures</div>
             </div>
+        </section>
+
+        <section class="admin-section admin-section-active">
+            <div class="admin-section-header">
+                <h2>Contact Messages</h2>
+                <p>Latest messages from the homepage form.</p>
+            </div>
+            <?php if (empty($contactMessages)): ?>
+                <p class="admin-coming-soon">No contact messages yet.</p>
+            <?php else: ?>
+                <div class="admin-contact-grid">
+                    <?php foreach ($contactMessages as $message): ?>
+                        <div class="admin-contact-card">
+                            <div class="admin-contact-header">
+                                <div class="admin-contact-name"><?php echo htmlspecialchars($message['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?></div>
+                                <div class="admin-contact-time">
+                                    <?php echo htmlspecialchars(date('M d, Y H:i', strtotime((string) ($message['created_at'] ?? ''))), ENT_QUOTES, 'UTF-8'); ?>
+                                </div>
+                            </div>
+                            <div class="admin-contact-email"><?php echo htmlspecialchars($message['email'] ?? '', ENT_QUOTES, 'UTF-8'); ?></div>
+                            <?php if (!empty($message['subject'])): ?>
+                                <div class="admin-contact-subject"><?php echo htmlspecialchars($message['subject'] ?? '', ENT_QUOTES, 'UTF-8'); ?></div>
+                            <?php endif; ?>
+                            <div class="admin-contact-message">
+                                <?php echo nl2br(htmlspecialchars($message['message'] ?? '', ENT_QUOTES, 'UTF-8')); ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </section>
 
         <section class="admin-section" id="matches-tab">

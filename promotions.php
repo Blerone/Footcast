@@ -30,10 +30,11 @@ foreach ($allPromotions as $promo) {
   <title>Promotions</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="./assets/css/promotions.css" />
+  <link rel="stylesheet" href="./assets/css/matches.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"/>
 </head>
 <body>
-  <?php include('./assets/php/header.php'); ?>
+<?php include('./assets/php/header.php'); ?>
   <main>
     <h3 class="page-title">Active Promotions</h3>
     <section class="promotions-grid">

@@ -151,6 +151,58 @@ body {
     font-weight: 600;
 }
 
+.admin-contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.admin-contact-card {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 16px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.admin-contact-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.admin-contact-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.admin-contact-time {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.admin-contact-email {
+    font-size: 12px;
+    color: #cbd5f5;
+    word-break: break-word;
+}
+
+.admin-contact-subject {
+    font-size: 13px;
+    color: #f8fafc;
+}
+
+.admin-contact-message {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: #cbd5f5;
+    word-break: break-word;
+}
+
 @media (max-width: 900px) {
     .admin-hero {
         flex-direction: column;

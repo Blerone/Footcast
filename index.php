@@ -1,101 +1,154 @@
 <?php
-require_once __DIR__ . '/db_connection.php';
-require_once __DIR__ . '/admin-dashboard/assets/includes/HomepageRepository.php';
+  session_start();
+  require_once __DIR__ . '/db_connection.php';
+  require_once __DIR__ . '/admin-dashboard/assets/includes/HomepageRepository.php';
+  require_once __DIR__ . '/admin-dashboard/assets/includes/ContactRepository.php';
 
-$db = footcast_db();
-$homepageRepository = new HomepageRepository($db);
+  $db = footcast_db();
+  $homepageRepository = new HomepageRepository($db);
 
-$heroRows = $homepageRepository->getHeroRows();
-$sectionsRows = $homepageRepository->getSectionsRows();
-$stepsRows = $homepageRepository->getStepsRows();
-$bannerRows = $homepageRepository->getBannerRows();
-$leaguesRows = $homepageRepository->getLeaguesRows();
-$favoritesRows = $homepageRepository->getFavoritesRows();
+  $heroRows = $homepageRepository->getHeroRows();
+  $sectionsRows = $homepageRepository->getSectionsRows();
+  $stepsRows = $homepageRepository->getStepsRows();
+  $bannerRows = $homepageRepository->getBannerRows();
+  $leaguesRows = $homepageRepository->getLeaguesRows();
+  $favoritesRows = $homepageRepository->getFavoritesRows();
 
-$db->close();
+  $contactStatus = null;
+  $contactErrors = [];
+  $contactForm = [
+    'name' => '',
+    'email' => '',
+    'subject' => '',
+    'message' => '',
+  ];
 
-$hero = $heroRows[0] ?? [
-  'sports_text' => 'SPORTS',
-  'bet_text' => 'BET',
-];
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['contact_form'] ?? '') === '1') {
+    $contactForm['name'] = trim((string) ($_POST['name'] ?? ''));
+    $contactForm['email'] = trim((string) ($_POST['email'] ?? ''));
+    $contactForm['subject'] = trim((string) ($_POST['subject'] ?? ''));
+    $contactForm['message'] = trim((string) ($_POST['message'] ?? ''));
 
-$sections = $sectionsRows[0] ?? [
-  'trusted_by_title' => 'Trusted By',
-  'about_title' => 'One click from',
-  'about_highlight' => 'Winning It All',
-  'about_body' => 'FootCast is your go-to spot for football betting done right. Place smart bets, follow live stats, and stay ahead with real-time insights. From major leagues to local matches, FootCast keeps every game exciting where your passion for football meets the thrill of winning.',
-  'bet_steps_title' => 'How to place a BET ?',
-  'popular_leagues_title' => 'Popular Leagues',
-  'favorites_title' => 'Fan’s FAVORITE',
-];
+    if ($contactForm['name'] === '') {
+      $contactErrors[] = 'Name is required.';
+    }
+    if ($contactForm['email'] === '' || !filter_var($contactForm['email'], FILTER_VALIDATE_EMAIL)) {
+      $contactErrors[] = 'A valid email is required.';
+    }
+    if ($contactForm['message'] === '') {
+      $contactErrors[] = 'Message is required.';
+    }
 
-$banner = $bannerRows[0] ?? [
-  'home_team' => 'Real Madrid',
-  'away_team' => 'Barcelona',
-  'days_value' => 3,
-  'hours_value' => 12,
-  'minutes_value' => 47,
-  'seconds_value' => 32,
-  'days_label' => 'Days',
-  'hours_label' => 'Hours',
-  'minutes_label' => 'Minutes',
-  'seconds_label' => 'Seconds',
-  'odds_first' => '1.4X',
-  'odds_second' => '2.3X',
-  'odds_third' => '3.4X',
-];
-
-$stepsDefaults = [
-  ['step_number' => 1, 'step_title' => 'Create an Account', 'sort_order' => 1],
-  ['step_number' => 2, 'step_title' => 'Find your Team', 'sort_order' => 2],
-  ['step_number' => 3, 'step_title' => 'Place your BET', 'sort_order' => 3],
-  ['step_number' => 4, 'step_title' => 'You won? Withdraw Now!', 'sort_order' => 4],
-];
-
-$steps = $stepsRows ?: $stepsDefaults;
-usort($steps, fn($a, $b) => ($a['sort_order'] ?? 0) <=> ($b['sort_order'] ?? 0));
-
-$leaguesDefaults = [
-  ['league_name' => 'Premier League', 'stats_value' => '204', 'stats_label' => 'active players', 'top_scorer_label' => 'Top Goal Scorer', 'goals_text' => '60 G/A'],
-  ['league_name' => 'Seria A', 'stats_value' => '194', 'stats_label' => 'active players', 'top_scorer_label' => 'Top Goal Scorer', 'goals_text' => '30 G/A'],
-  ['league_name' => 'Budensliga', 'stats_value' => '194', 'stats_label' => 'active players', 'top_scorer_label' => 'Top Goal Scorer', 'goals_text' => '30 G/A'],
-  ['league_name' => 'La Liga', 'stats_value' => '194', 'stats_label' => 'active players', 'top_scorer_label' => 'Top Goal Scorer', 'goals_text' => '30 G/A'],
-];
-
-$activeLeagues = array_values(array_filter($leaguesRows, fn($row) => (int) ($row['is_active'] ?? 0) === 1));
-usort($activeLeagues, fn($a, $b) => ($a['sort_order'] ?? 0) <=> ($b['sort_order'] ?? 0));
-
-$favoritesDefaults = [
-  ['item_label' => 'Player', 'item_name' => 'Haaland'],
-  ['item_label' => 'Coach', 'item_name' => 'Maresca'],
-  ['item_label' => 'Club', 'item_name' => 'Chelsea'],
-  ['item_label' => 'Club', 'item_name' => 'Real Madrid'],
-  ['item_label' => 'Club', 'item_name' => 'Bayern Munich'],
-  ['item_label' => 'Player', 'item_name' => 'Mbappe'],
-  ['item_label' => 'Player', 'item_name' => 'Estêvão'],
-  ['item_label' => 'Club', 'item_name' => 'Inter Milan'],
-  ['item_label' => 'Coach', 'item_name' => 'Xabi Alonso'],
-];
-
-$activeFavorites = array_values(array_filter($favoritesRows, fn($row) => (int) ($row['is_active'] ?? 0) === 1));
-usort($activeFavorites, fn($a, $b) => ($a['sort_order'] ?? 0) <=> ($b['sort_order'] ?? 0));
-
-function highlightText(string $text, string $keyword): string{
-  if ($keyword === '' || strpos($text, $keyword) === false) {
-    return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+    if (!$contactErrors) {
+      $contactRepository = new ContactRepository($db);
+      $contactStatus = $contactRepository->create([
+        'name' => $contactForm['name'],
+        'email' => $contactForm['email'],
+        'subject' => $contactForm['subject'],
+        'message' => $contactForm['message'],
+        'status' => 'new',
+      ]) ? 'success' : 'error';
+      if ($contactStatus === 'success') {
+        $contactForm = [
+          'name' => '',
+          'email' => '',
+          'subject' => '',
+          'message' => '',
+        ];
+        $_SESSION['contact_success'] = true;
+        header('Location: ' . strtok($_SERVER['REQUEST_URI'], '?'));
+        exit;
+      }
+    }
   }
-  $parts = explode($keyword, $text);
-  $escaped = array_map(fn($part) => htmlspecialchars($part, ENT_QUOTES, 'UTF-8'), $parts);
-  return implode('<span>' . htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') . '</span>', $escaped);
-}
 
-function pickText(array $row, string $key, string $fallback): string{
-  $value = $row[$key] ?? '';
-  if (!is_string($value) || trim($value) === '') {
-    return $fallback;
+  $contactFlash = !empty($_SESSION['contact_success']);
+  if ($contactFlash) {
+    unset($_SESSION['contact_success']);
   }
-  return $value;
-}
+
+  $hero = $heroRows[0] ?? [
+    'sports_text' => 'SPORTS',
+    'bet_text' => 'BET',
+  ];
+
+  $sections = $sectionsRows[0] ?? [
+    'trusted_by_title' => 'Trusted By',
+    'about_title' => 'One click from',
+    'about_highlight' => 'Winning It All',
+    'about_body' => 'FootCast is your go-to spot for football betting done right. Place smart bets, follow live stats, and stay ahead with real-time insights. From major leagues to local matches, FootCast keeps every game exciting where your passion for football meets the thrill of winning.',
+    'bet_steps_title' => 'How to place a BET ?',
+    'popular_leagues_title' => 'Popular Leagues',
+    'favorites_title' => 'Fan’s FAVORITE',
+  ];
+
+  $banner = $bannerRows[0] ?? [
+    'home_team' => 'Real Madrid',
+    'away_team' => 'Barcelona',
+    'days_value' => 3,
+    'hours_value' => 12,
+    'minutes_value' => 47,
+    'seconds_value' => 32,
+    'days_label' => 'Days',
+    'hours_label' => 'Hours',
+    'minutes_label' => 'Minutes',
+    'seconds_label' => 'Seconds',
+    'odds_first' => '1.4X',
+    'odds_second' => '2.3X',
+    'odds_third' => '3.4X',
+  ];
+
+  $stepsDefaults = [
+    ['step_number' => 1, 'step_title' => 'Create an Account', 'sort_order' => 1],
+    ['step_number' => 2, 'step_title' => 'Find your Team', 'sort_order' => 2],
+    ['step_number' => 3, 'step_title' => 'Place your BET', 'sort_order' => 3],
+    ['step_number' => 4, 'step_title' => 'You won? Withdraw Now!', 'sort_order' => 4],
+  ];
+
+  $steps = $stepsRows ?: $stepsDefaults;
+  usort($steps, fn($a, $b) => ($a['sort_order'] ?? 0) <=> ($b['sort_order'] ?? 0));
+
+  $leaguesDefaults = [
+    ['league_name' => 'Premier League', 'stats_value' => '204', 'stats_label' => 'active players', 'top_scorer_label' => 'Top Goal Scorer', 'goals_text' => '60 G/A'],
+    ['league_name' => 'Seria A', 'stats_value' => '194', 'stats_label' => 'active players', 'top_scorer_label' => 'Top Goal Scorer', 'goals_text' => '30 G/A'],
+    ['league_name' => 'Budensliga', 'stats_value' => '194', 'stats_label' => 'active players', 'top_scorer_label' => 'Top Goal Scorer', 'goals_text' => '30 G/A'],
+    ['league_name' => 'La Liga', 'stats_value' => '194', 'stats_label' => 'active players', 'top_scorer_label' => 'Top Goal Scorer', 'goals_text' => '30 G/A'],
+  ];
+
+  $activeLeagues = array_values(array_filter($leaguesRows, fn($row) => (int) ($row['is_active'] ?? 0) === 1));
+  usort($activeLeagues, fn($a, $b) => ($a['sort_order'] ?? 0) <=> ($b['sort_order'] ?? 0));
+
+  $favoritesDefaults = [
+    ['item_label' => 'Player', 'item_name' => 'Haaland'],
+    ['item_label' => 'Coach', 'item_name' => 'Maresca'],
+    ['item_label' => 'Club', 'item_name' => 'Chelsea'],
+    ['item_label' => 'Club', 'item_name' => 'Real Madrid'],
+    ['item_label' => 'Club', 'item_name' => 'Bayern Munich'],
+    ['item_label' => 'Player', 'item_name' => 'Mbappe'],
+    ['item_label' => 'Player', 'item_name' => 'Estêvão'],
+    ['item_label' => 'Club', 'item_name' => 'Inter Milan'],
+    ['item_label' => 'Coach', 'item_name' => 'Xabi Alonso'],
+  ];
+
+  $activeFavorites = array_values(array_filter($favoritesRows, fn($row) => (int) ($row['is_active'] ?? 0) === 1));
+  usort($activeFavorites, fn($a, $b) => ($a['sort_order'] ?? 0) <=> ($b['sort_order'] ?? 0));
+
+  function highlightText(string $text, string $keyword): string{
+    if ($keyword === '' || strpos($text, $keyword) === false) {
+      return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+    }
+    $parts = explode($keyword, $text);
+    $escaped = array_map(fn($part) => htmlspecialchars($part, ENT_QUOTES, 'UTF-8'), $parts);
+    return implode('<span>' . htmlspecialchars($keyword, ENT_QUOTES, 'UTF-8') . '</span>', $escaped);
+  }
+
+  function pickText(array $row, string $key, string $fallback): string{
+    $value = $row[$key] ?? '';
+    if (!is_string($value) || trim($value) === '') {
+      return $fallback;
+    }
+    return $value;
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -115,15 +168,23 @@ function pickText(array $row, string $key, string $fallback): string{
  ?>
   <div class="main-content">
     <div class="content-wrapper">
-      <div class="purple-section">
-        <div class="hero-text">
-          <h2 class="sports-text"><?php echo htmlspecialchars(pickText($hero, 'sports_text', 'SPORTS'), ENT_QUOTES, 'UTF-8'); ?></h2>
-          <h2 class="bet-text"><?php echo htmlspecialchars(pickText($hero, 'bet_text', 'BET'), ENT_QUOTES, 'UTF-8'); ?></h2>
+      <section class="hero-banner">
+        <div class="hero-layout">
+          <div class="hero-left">
+            <h1>
+              Welcome to <br>
+              <span class="hero-accent"><?php echo htmlspecialchars(pickText($hero, 'sports_text', 'SPORTS'), ENT_QUOTES, 'UTF-8'); ?></span>
+              <?php echo htmlspecialchars(pickText($hero, 'bet_text', 'BET'), ENT_QUOTES, 'UTF-8'); ?>
+            </h1>
+            <p>Play like a pro. Win like a legend.</p>
+            <a class="hero-cta" href="./signup.php">Join Now</a>
+          </div>
+          <div class="hero-right">
+            <div class="hero-circle"></div>
+            <img class="hero-player" src="./assets/images/players/enzo.png" alt="Player">
+          </div>
         </div>
-        <div class="player-right">
-          <img src="./assets/images/players/enzo.png" alt="Enzo">
-        </div>
-      </div>
+      </section>
     </div>
   </div>
 
@@ -453,8 +514,40 @@ function pickText(array $row, string $key, string $fallback): string{
     </div>
   </section>
 
+  <section class="contact-section">
+    <div class="contact-inner">
+      <h2 class="contact-title">Contact Us</h2>
+      <form class="contact-form" method="post" action="">
+        <input type="hidden" name="contact_form" value="1">
+        <div class="contact-fields">
+          <div class="contact-row">
+            <input type="text" name="name" placeholder="Full name" value="<?php echo htmlspecialchars($contactForm['name'], ENT_QUOTES, 'UTF-8'); ?>" required>
+            <input type="email" name="email" placeholder="Email address" value="<?php echo htmlspecialchars($contactForm['email'], ENT_QUOTES, 'UTF-8'); ?>" required>
+          </div>
+          <input type="text" name="subject" placeholder="Subject (optional)" value="<?php echo htmlspecialchars($contactForm['subject'], ENT_QUOTES, 'UTF-8'); ?>">
+          <textarea name="message" rows="4" placeholder="Your message" required><?php echo htmlspecialchars($contactForm['message'], ENT_QUOTES, 'UTF-8'); ?></textarea>
+        </div>
+        <?php if ($contactStatus === 'error'): ?>
+          <div class="contact-alert error">Something went wrong. Please try again.</div>
+        <?php endif; ?>
+        <?php if ($contactErrors): ?>
+          <div class="contact-alert error">
+            <?php echo htmlspecialchars(implode(' ', $contactErrors), ENT_QUOTES, 'UTF-8'); ?>
+          </div>
+        <?php endif; ?>
+        <button class="contact-submit" type="submit">Send Message</button>
+      </form>
+    </div>
+  </section>
+
   <?php
+    footcast_db_close($db);
     include('./assets/php/footer.php');
   ?>
+  <?php if ($contactFlash): ?>
+    <script>
+      alert('Message sent successfully.');
+    </script>
+  <?php endif; ?>
 </body>
 </html>

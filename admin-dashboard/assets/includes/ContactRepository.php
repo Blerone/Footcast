@@ -52,4 +52,26 @@ final class ContactRepository{
         $stmt->close();
         return $rows;
     }
+
+    public function getAll(): array
+    {
+        $stmt = $this->db->prepare(
+            'SELECT id, name, email, subject, message, status, created_at
+             FROM contact_messages
+             ORDER BY created_at DESC'
+        );
+        if (!$stmt) {
+            return [];
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $rows = [];
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $rows[] = $row;
+            }
+        }
+        $stmt->close();
+        return $rows;
+    }
 }

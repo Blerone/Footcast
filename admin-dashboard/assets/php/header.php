@@ -10,6 +10,7 @@
                     <button class="nav-link active"><a href="./users.php">Sports</a></button>
                     <button class="nav-link active"><a href="./promotions.php">Promotions</a></button>
                     <button class="nav-link active"><a href="./users.php">Users</a></button>
+                    <button class="nav-link active"><a href="./contact.php">Contact</a></button>
                     <button class="nav-link active"><a href="./bets.php">Bets</a></button>
                     <button class="nav-link active"><a href="./lineups.php">Lineups</a></button>
                 </nav>
@@ -40,6 +41,7 @@
         <a class="nav-link" href="../index.php">Home</a>
         <a class="nav-link" href="./index.php">Overview</a>
         <a class="nav-link" href="./users.php">Users</a>
+        <a class="nav-link" href="./contact.php">Contact</a>
         <a class="nav-link" href="./bets.php">Bets</a>
         <a class="nav-link" href="../matches.php">Matches</a>
     </div>

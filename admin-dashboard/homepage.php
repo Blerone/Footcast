@@ -86,7 +86,6 @@
                 </select>
             </div>
 
-            <br>
             <div class="lineup-section<?php echo $activeSection === 'hero' ? ' is-active' : ''; ?>" data-section="hero">
                 <div class="admin-section-header">
                     <div>

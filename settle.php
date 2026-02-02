@@ -4,7 +4,7 @@
 
     require_once __DIR__ . '/config/database.php';
     require_once __DIR__ . '/config/football_api.php';
-    require_once __DIR__ . '/settle_bets.php';
+    require_once __DIR__ . '/assets/includes/BetSettlementService.php';
 
     header('Content-Type: application/json; charset=utf-8');
 
@@ -20,7 +20,8 @@
         exit;
     }
 
-    $conn = getDBConnection();
+    $conn = Database::getConnection();
+    $settlementService = new BetSettlementService($conn);
 
     $stats = [
         'bets_processed'   => 0,
@@ -57,7 +58,7 @@
                 $apiFixtureId = (int) $matchRow['api_fixture_id'];
 
                 if (!isset($processedMatches[$matchId])) {
-                    $processedMatches[$matchId] = getMatchStatistics($conn, $matchId, $apiFixtureId);
+                    $processedMatches[$matchId] = $settlementService->getMatchStatistics($matchId, $apiFixtureId);
                 }
                 $statistics = $processedMatches[$matchId];
 
@@ -74,7 +75,7 @@
                 $betsRes = $betsStmt->get_result();
 
                 while ($bet = $betsRes->fetch_assoc()) {
-                    $evaluation = evaluateBet($bet, $matchRow, $statistics);
+                    $evaluation = BetSettlementService::evaluateBet($bet, $matchRow, $statistics);
                     $betWon = (bool) ($evaluation['won'] ?? false);
                     $newStatus = $betWon ? 'won' : 'lost';
 
@@ -125,7 +126,7 @@
                 $apiFixtureId = (int) $s['api_fixture_id'];
 
                 if (!isset($processedMatches[$matchId])) {
-                    $processedMatches[$matchId] = getMatchStatistics($conn, $matchId, $apiFixtureId);
+                    $processedMatches[$matchId] = $settlementService->getMatchStatistics($matchId, $apiFixtureId);
                 }
                 $statistics = $processedMatches[$matchId];
 
@@ -136,7 +137,7 @@
                     'away_score_1h'  => $s['away_score_1h'],
                 ];
                 $betData = ['bet_type' => $s['bet_type']];
-                $evaluation = evaluateBet($betData, $matchData, $statistics);
+                $evaluation = BetSettlementService::evaluateBet($betData, $matchData, $statistics);
                 $status = ($evaluation['won'] ?? false) ? 'won' : 'lost';
 
                 $u = $conn->prepare('UPDATE parlay_selections SET status = ? WHERE id = ?');
@@ -210,6 +211,6 @@
             'stats'   => $stats,
         ]);
     } finally {
-        closeDBConnection($conn);
+        Database::closeConnection($conn);
     }
 ?>
